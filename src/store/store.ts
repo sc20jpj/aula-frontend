@@ -3,11 +3,11 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web and AsyncStorage for react-native
 
-// import userReducer from './userSlice';
+import authReducer from './auth/authSlice';
 // import postsReducer from './postsSlice';
 
 const rootReducer = combineReducers({
-//   user: userReducer,
+  auth: authReducer,
 //   posts: postsReducer,
 //   // Add other reducers here
 });
@@ -21,6 +21,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persistedReducer,
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
 
 const persistor = persistStore(store);

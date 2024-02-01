@@ -1,6 +1,6 @@
 {
   "auth": {
-    "aulafrontend3ea08167": {
+    "aulafrontend95ac163f": {
       "customAuth": false,
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
@@ -9,35 +9,35 @@
     }
   },
   "parameters": {
-    "AMPLIFY_auth_aulafrontend3ea08167_nativeClientId": {
+    "AMPLIFY_auth_aulafrontend95ac163f_nativeClientId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "aulafrontend3ea08167"
+          "resourceName": "aulafrontend95ac163f"
         }
       ]
     },
-    "AMPLIFY_auth_aulafrontend3ea08167_userPoolId": {
+    "AMPLIFY_auth_aulafrontend95ac163f_userPoolId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "aulafrontend3ea08167"
+          "resourceName": "aulafrontend95ac163f"
         }
       ]
     },
-    "AMPLIFY_auth_aulafrontend3ea08167_userPoolName": {
+    "AMPLIFY_auth_aulafrontend95ac163f_userPoolName": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "aulafrontend3ea08167"
+          "resourceName": "aulafrontend95ac163f"
         }
       ]
     },
-    "AMPLIFY_auth_aulafrontend3ea08167_webClientId": {
+    "AMPLIFY_auth_aulafrontend95ac163f_webClientId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "aulafrontend3ea08167"
+          "resourceName": "aulafrontend95ac163f"
         }
       ]
     }

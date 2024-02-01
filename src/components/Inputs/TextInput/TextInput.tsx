@@ -3,27 +3,29 @@ import styles from './TextInput.module.scss';  // Note the use of module.scss ex
 
 interface TextInputProps {
     title: string;
+    isPassword: boolean
     onChange: (value: string) => void;
-
 
 }
 
 
 function TextInput(props: TextInputProps) {
+
+
+    const { title,isPassword ,onChange } = props;
+
     
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value;
-        onChange(inputValue);
-    };
-    const { title, onChange } = props;
-
+       onChange(inputValue);
+      };
+    
     return (
         <>
             <p>{title}</p>
+
             <input
-                type="text"
-                id="username"
-                name="username"
+                type={isPassword ? 'password' : 'text'}
                 onChange={handleInputChange}
             />
         </>
