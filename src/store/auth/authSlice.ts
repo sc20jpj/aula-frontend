@@ -66,6 +66,22 @@ export const sendSignIn = createAsyncThunk<
 );
 
 
+export const autoSignIn = createAsyncThunk<
+    SignInOutput,
+    SignInInput
+>(
+    'auth/sendSignIn',
+    (signInInput, thunkAPI) => {
+
+        return signIn(signInInput)
+            .then((response) => {
+
+                return response;
+            })
+    }
+);
+
+
 
 export const AuthSlice = createSlice({
     name: 'auth',
@@ -93,7 +109,7 @@ export const AuthSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(sendSignUp.fulfilled, (state, action) => {
             state.loggedIn = true
-            // state.isSignUpComplete = action.payload.isSignedIn
+            state.isSignUpComplete = action.payload.isSignUpComplete
 
         })
         builder.addCase(sendSignUp.rejected, (state, action) => {

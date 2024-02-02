@@ -1,25 +1,28 @@
 // App.tsx
 
 import React from 'react';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-
-import { store, persistor } from '@store/store'; // Assuming you have a Redux store with persistor configured
-import { isLoggedIn } from '@store/auth/authSlice';
+import { auth } from '@store/auth/authSlice';
 import SignUp from '@components/SignUp/SignUp';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useAppSelector } from '@store/hooks';
 
 function App() {
 
-  const loggedIn = useAppSelector(isLoggedIn)
+  const state = useAppSelector(auth)
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <div >
-          {loggedIn ? <p>hello</p> : <SignUp />}
-        </div>
-      </PersistGate>
-    </Provider>
+
+    <Router>
+      <Routes>
+
+        <Route path={"/"}  element={<SignUp/>}>
+        </Route>
+
+
+
+      </Routes>
+
+    </Router>
+
   );
 }
 

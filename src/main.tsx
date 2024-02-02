@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App  from './App'
+import App from './App'
 import './index.css'
 import { Amplify } from 'aws-amplify';
 import amplifyconfig from './amplifyconfiguration.json';
@@ -15,8 +15,7 @@ Amplify.configure(amplifyconfig);
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
 
-
-<Provider store={store}>
+    <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <App />
       </PersistGate>
