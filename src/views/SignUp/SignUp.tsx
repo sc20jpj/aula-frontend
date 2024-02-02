@@ -1,4 +1,4 @@
-import TextInput from '../Inputs/TextInput/TextInput';
+import TextInput from '../../components/Inputs/TextInput/TextInput';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from '@components/SignUp/SignUp.module.scss'
 import { SignUpInput, SignInOutput, } from 'aws-amplify/auth';
@@ -8,7 +8,8 @@ import {
   setNickname,
   setPassword,
   sendSignUp,
-  auth
+  auth,
+  clearAuth
 
 } from '@store/auth/authSlice'
 import { useAppDispatch } from '@store/hooks';
@@ -36,6 +37,8 @@ function SignUp() {
     dispatch(sendSignUp(userData))
       .then((res) => {
         console.log("Success:", res);
+        dispatch(clearAuth())
+
       })
       .catch((error) => {
         // Handle error here
@@ -47,13 +50,14 @@ function SignUp() {
   return (
     <>
       <>
-      
-        <TextInput title="email" isPassword={false} onChange={(value) => dispatch(setUsername(value))} />
+
+        <TextInput title="email" isPassword={false} value={state.username} onChange={(value) => dispatch(setUsername(value))} />
         <p>This is how you will appear to other users</p>
-        <TextInput title="nickname" isPassword={false} onChange={(value) => dispatch(setNickname(value))} />
+        <TextInput title="nickname" value={state.nickname} isPassword={false} onChange={(value) => dispatch(setNickname(value))} />
         <p>This is how you will appear to teachers</p>
-        <TextInput title="name" isPassword={false} onChange={(value) => dispatch(setNickname(value))} />
-        <TextInput title="password" isPassword={true} onChange={(value) => dispatch(setPassword(value))} />
+        <TextInput title="name" isPassword={false} value={state.name}  onChange={(value) => dispatch(setNickname(value))}/>
+
+        <TextInput title="password" value={state.password} isPassword={true} onChange={(value) => dispatch(setPassword(value))} />
 
       </>
       <button onClick={() => handleSignUpClick()}>submit</button>

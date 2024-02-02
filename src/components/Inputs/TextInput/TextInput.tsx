@@ -4,6 +4,7 @@ import styles from './TextInput.module.scss';  // Note the use of module.scss ex
 interface TextInputProps {
     title: string;
     isPassword: boolean
+    value: string
     onChange: (value: string) => void;
 
 }
@@ -12,7 +13,7 @@ interface TextInputProps {
 function TextInput(props: TextInputProps) {
 
 
-    const { title,isPassword ,onChange } = props;
+    const { title,isPassword,value,onChange } = props;
 
     
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +28,7 @@ function TextInput(props: TextInputProps) {
             <input
                 type={isPassword ? 'password' : 'text'}
                 onChange={handleInputChange}
+                value={value}
             />
         </>
     )

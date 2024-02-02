@@ -13,11 +13,11 @@ interface AuthState {
     nickname: string
     isSignUpComplete: boolean
     error: any
+    loading: boolean
 
 }
 
 
-// Define the initial state using that type
 const initialState: AuthState = {
     loggedIn: false,
     teacher: false,
@@ -26,8 +26,8 @@ const initialState: AuthState = {
     nickname: "",
     name: "",
     isSignUpComplete: false,
-    error: null
-
+    error: null,
+    loading: false
 }
 
 
@@ -59,27 +59,14 @@ export const sendSignIn = createAsyncThunk<
 
         return signIn(signInInput)
             .then((response) => {
-
+                console.log(response)
                 return response;
             })
     }
 );
 
 
-export const autoSignIn = createAsyncThunk<
-    SignInOutput,
-    SignInInput
->(
-    'auth/sendSignIn',
-    (signInInput, thunkAPI) => {
 
-        return signIn(signInInput)
-            .then((response) => {
-
-                return response;
-            })
-    }
-);
 
 
 
@@ -100,16 +87,21 @@ export const AuthSlice = createSlice({
         setName: (state, action: PayloadAction<string>) => {
             state.name = action.payload;
         },
-        clearAuth: (state, action) => {
+        clearAuth: (state) => {
             state.password = "";
             state.nickname = "";
             state.username = "";
+            state.nickname = ""
         },
     },
     extraReducers: (builder) => {
         builder.addCase(sendSignUp.fulfilled, (state, action) => {
             state.loggedIn = true
             state.isSignUpComplete = action.payload.isSignUpComplete
+
+        })
+        builder.addCase(sendSignUp.pending, (state, action) => {
+            state.loading = true
 
         })
         builder.addCase(sendSignUp.rejected, (state, action) => {
@@ -125,6 +117,7 @@ export const {
     setUsername,
     setPassword,
     setNickname,
+    clearAuth
 } = AuthSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
