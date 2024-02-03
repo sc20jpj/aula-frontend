@@ -10,7 +10,9 @@
       "@store/*": ["src/store/*"],
       "@components/*": ["src/components/*"],
       "@views/*": ["src/views/*"],
-      "@lib": ["src/lib"],
+      "@lib": ["src/lib/*"],
+      "@enums": ["src/enums/*"],
+
     },
     "esModuleInterop": true,
     "strict": true,

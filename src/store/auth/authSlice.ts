@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store';
 import { signUp, SignUpInput, signIn, SignInOutput, SignUpOutput, SignInInput } from 'aws-amplify/auth';
 import { useSelector } from 'react-redux';
-
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 interface AuthState {
     loggedIn: boolean
@@ -14,9 +14,10 @@ interface AuthState {
     isSignUpComplete: boolean
     error: any
     loading: boolean
+    idToken: any,
+    accessToken: any,
 
 }
-
 
 const initialState: AuthState = {
     loggedIn: false,
@@ -27,7 +28,9 @@ const initialState: AuthState = {
     name: "",
     isSignUpComplete: false,
     error: null,
-    loading: false
+    loading: false,
+    idToken: null,
+    accessToken: null
 }
 
 
@@ -66,7 +69,17 @@ export const sendSignIn = createAsyncThunk<
 );
 
 
+export const getCurrentSession = createAsyncThunk(
+    'auth/sendSignIn',
+    (signInInput, thunkAPI) => {
 
+        return fetchAuthSession()
+            .then((response) => {
+                console.log(response.tokens)
+                return response;
+            })
+    }
+);
 
 
 
@@ -109,6 +122,11 @@ export const AuthSlice = createSlice({
             state.error = action.error.message
 
         })
+        builder.addCase(getCurrentSession.fulfilled, (state, action) => {
+            state.idToken = action.payload.tokens?.idToken
+            state.accessToken = action.payload.tokens?.accessToken
+
+        })
     },
 
 })
@@ -117,7 +135,7 @@ export const {
     setUsername,
     setPassword,
     setNickname,
-    clearAuth
+    clearAuth,
 } = AuthSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type

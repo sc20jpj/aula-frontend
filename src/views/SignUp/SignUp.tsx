@@ -2,6 +2,7 @@ import TextInput from '../../components/Inputs/TextInput/TextInput';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from '@components/SignUp/SignUp.module.scss'
 import { SignUpInput, SignInOutput, } from 'aws-amplify/auth';
+import RoutesChoice from '@enums/Routes'
 
 import {
   setUsername,
@@ -13,6 +14,7 @@ import {
 
 } from '@store/auth/authSlice'
 import { useAppDispatch } from '@store/hooks';
+import { Link } from 'react-router-dom';
 
 function SignUp() {
 
@@ -52,12 +54,16 @@ function SignUp() {
       <>
 
         <TextInput title="email" isPassword={false} value={state.username} onChange={(value) => dispatch(setUsername(value))} />
+        
         <p>This is how you will appear to other users</p>
+      
         <TextInput title="nickname" value={state.nickname} isPassword={false} onChange={(value) => dispatch(setNickname(value))} />
         <p>This is how you will appear to teachers</p>
         <TextInput title="name" isPassword={false} value={state.name}  onChange={(value) => dispatch(setNickname(value))}/>
 
         <TextInput title="password" value={state.password} isPassword={true} onChange={(value) => dispatch(setPassword(value))} />
+
+        <Link to={RoutesChoice.SignIn}>Sign In</Link>
 
       </>
       <button onClick={() => handleSignUpClick()}>submit</button>

@@ -14,6 +14,7 @@ export default defineConfig({
     "@components": path.resolve(__dirname, "src/components"),
     "@lib": path.resolve(__dirname, "src/lib"),
     "@assests": path.resolve(__dirname, "src/assests"),
+    "@enums": path.resolve(__dirname, "src/enums"),
     "@": path.resolve(__dirname, "src/"),
     }}
 });
