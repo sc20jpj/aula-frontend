@@ -26,6 +26,7 @@ function SignUp() {
   const navigate = useNavigate()
   const [error, setError] = useState<String>("");
 
+
   const isPasswordValid = (password: string) => {
 
 
@@ -82,7 +83,7 @@ function SignUp() {
             console.log(res)
             setError("")
             dispatch(clearAuth())
-            dispatch(sendAutoSignIn())
+            // dispatch(sendAutoSignIn())
             navigate(RoutesChoice.SignIn)
             return res
           })
@@ -91,10 +92,7 @@ function SignUp() {
             setError("There was an error signing up from our service. Please re-enter and try again.")
           });
 
-
       }
-
-
     }
 
 
@@ -114,12 +112,9 @@ function SignUp() {
 
         <TextInput title="password" value={state.password} isPassword={true} onChange={(value) => dispatch(setPassword(value))} />
 
-
-
       </>
       <button onClick={() => handleSignUpClick()}>submit</button>
       {error}
-
 
       <Link to={RoutesChoice.SignIn}>Sign In</Link>
     </>

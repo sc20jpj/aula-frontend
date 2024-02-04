@@ -20,7 +20,7 @@ import { fetchAuthSession } from 'aws-amplify/auth';
 interface AuthState {
     loggedIn: boolean
     teacher: boolean
-    cognitoUsername: string
+    cognitoID?: string
     email?: string
     password?: string
     name?: string
@@ -32,7 +32,7 @@ interface AuthState {
 const initialState: AuthState = {
     loggedIn: false,
     teacher: false,
-    cognitoUsername: "",
+    cognitoID: "",
     email: "",
     password: "",
     nickname: "",
@@ -156,8 +156,8 @@ export const AuthSlice = createSlice({
         setEmail: (state, action) => {
             state.email = action.payload;
         },
-        setCognitoUsername: (state, action) => {
-            state.cognitoUsername = action.payload;
+        setCognitoID: (state, action) => {
+            state.cognitoID = action.payload;
         },
         setPassword: (state, action: PayloadAction<string>) => {
             state.password = action.payload;
@@ -198,6 +198,8 @@ export const AuthSlice = createSlice({
             state.name = action.payload.name
             state.nickname = action.payload.nickname
             state.email = action.payload.email
+            state.cognitoID = action.payload.sub
+
             
         })
     },
