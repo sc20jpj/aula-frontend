@@ -18,9 +18,11 @@ function StudentPortal() {
 
     useEffect(() => {
 
-        
+
         if (state.name === "" || state.nickname === "" || state.email === "") {
-            dispatch(getUserAttributes()).then((response) => {
+            dispatch(getUserAttributes())
+            .unwrap()
+            .then((response) => {
                 console.log(response)
             }).catch((error) => {
                 console.log(error)
@@ -29,6 +31,8 @@ function StudentPortal() {
 
 
     }, []);
+
+
     const signOut = () => {
         dispatch(sendSignOut())
         navigate(RoutesChoice.SignIn)
@@ -36,6 +40,7 @@ function StudentPortal() {
 
     return (
         <>
+
             <>
                 <p>Welcome {state.name}</p>
                 <Link to={RoutesChoice.SignUp}>SignUp</Link>

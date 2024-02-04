@@ -79,11 +79,11 @@ function SignUp() {
           }
         }
         dispatch(sendSignUp(userData))
+          .unwrap()
           .then((res) => {
             console.log(res)
             setError("")
             dispatch(clearAuth())
-            // dispatch(sendAutoSignIn())
             navigate(RoutesChoice.SignIn)
             return res
           })

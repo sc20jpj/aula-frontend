@@ -15,13 +15,14 @@ import {
 } from '@store/auth/authSlice'
 
 import { useAppDispatch } from '@store/hooks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function SignIn() {
 
     const dispatch = useAppDispatch()
     const state = useSelector(auth);
     const navigate = useNavigate()
+    const [error, setError] = useState<String>("");
 
     useEffect(() => {
         if (state.loggedIn == true) {
@@ -34,26 +35,35 @@ function SignIn() {
     }, []);
 
     const handleSignInClick = async () => {
-        // Replace with actual user input or data needed for sign-up
-        if (state.email && state.password) {
+
+        if (!state.email) {
+            setError("Please enter an email ")
+        }
+        else if (!state.password) {
+            setError("Please enter a password")
+        }
+        else {
             const userData: SignInInput = {
                 username: state.email,
                 password: state.password,
-
             };
 
             dispatch(sendSignIn(userData))
+                .unwrap()
                 .then((res) => {
                     dispatch(clearAuth())
+                    console.log(res)
                     navigate(RoutesChoice.AppBase)
+                    return res
 
                 })
                 .catch((error) => {
+                    console.log("error reached")
+                    setError("email and password incorrect")
                 });
         }
+    }
 
-
-    };
 
     return (
         <>
@@ -63,9 +73,11 @@ function SignIn() {
             </>
             <button onClick={() => handleSignInClick()}>submit</button>
             <Link to={RoutesChoice.SignUp}>Sign Up</Link>
+            <p>{error}</p>
 
         </>
     )
-}
+};
+
 
 export default SignIn

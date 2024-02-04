@@ -90,11 +90,10 @@ export const sendSignIn = createAsyncThunk<
 
         return signIn(signInInput)
             .then((response) => {
-                return response;
+                return thunkAPI.fulfillWithValue(response);;
             })
             .catch((error) => {
-                return thunkAPI.rejectWithValue(error);
-
+                return thunkAPI.rejectWithValue("Email or password is incorrect");
             });
     }
 );
