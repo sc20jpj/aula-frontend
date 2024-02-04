@@ -6,13 +6,14 @@ import RoutesChoice from '@enums/Routes'
 import { Link, useNavigate } from 'react-router-dom';
 
 import {
-    setUsername,
+    setEmail,
     setPassword,
     sendSignIn,
     auth,
     clearAuth,
     getCurrentSession
 } from '@store/auth/authSlice'
+
 import { useAppDispatch } from '@store/hooks';
 import { useEffect } from 'react';
 
@@ -26,30 +27,38 @@ function SignIn() {
         if (state.loggedIn == true) {
             navigate(RoutesChoice.AppBase)
         }
+        else {
+            dispatch(clearAuth())
+        }
 
     }, []);
 
     const handleSignInClick = async () => {
         // Replace with actual user input or data needed for sign-up
-        const userData: SignInInput = {
-            username: state.username,
-            password: state.password,
+        if (state.email && state.password) {
+            const userData: SignInInput = {
+                username: state.email,
+                password: state.password,
 
-        };
+            };
 
-        dispatch(sendSignIn(userData))
-            .then((res) => {
-                console.log("Success:", res);
-                dispatch(clearAuth())
-            })
-            .catch((error) => {
-            });
+            dispatch(sendSignIn(userData))
+                .then((res) => {
+                    dispatch(clearAuth())
+                    navigate(RoutesChoice.AppBase)
+
+                })
+                .catch((error) => {
+                });
+        }
+
+
     };
 
     return (
         <>
             <>
-                <TextInput title="email" isPassword={false} value={state.username} onChange={(value) => dispatch(setUsername(value))} />
+                <TextInput title="email" isPassword={false} value={state.email} onChange={(value) => dispatch(setEmail(value))} />
                 <TextInput title="password" isPassword={true} value={state.password} onChange={(value) => dispatch(setPassword(value))} />
             </>
             <button onClick={() => handleSignInClick()}>submit</button>

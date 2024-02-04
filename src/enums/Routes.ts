@@ -1,8 +1,11 @@
 // routes.ts
 enum RoutesChoice {
     SignIn = '/signin',
-    SignUp = '/',
+    SignUp = '/signUp',
     AppBase = '/app',
+    Unauthorised = '/unauthorised',
+    Incomplete = '/incomplete'
+
 
 }
 

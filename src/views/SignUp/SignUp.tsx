@@ -1,73 +1,127 @@
 import TextInput from '../../components/Inputs/TextInput/TextInput';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styles from '@components/SignUp/SignUp.module.scss'
 import { SignUpInput, SignInOutput, } from 'aws-amplify/auth';
 import RoutesChoice from '@enums/Routes'
 
 import {
-  setUsername,
+  setEmail,
   setNickname,
   setPassword,
   sendSignUp,
   auth,
-  clearAuth
+  clearAuth,
+  setName,
+  sendAutoSignIn
 
 } from '@store/auth/authSlice'
 import { useAppDispatch } from '@store/hooks';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 function SignUp() {
 
   const dispatch = useAppDispatch()
   const state = useSelector(auth);
+  const navigate = useNavigate()
+  const [error, setError] = useState<String>("");
+
+  const isPasswordValid = (password: string) => {
+
+
+    const passwordRegex = /^(?=.*[!@#$%^&*()-_+=<>?]).*(?=.*\d).{8,}$/;
+
+    return passwordRegex.test(password);
+  }
+  const isEmailValid = (password: string) => {
+
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    return emailRegex.test(password);
+  }
 
   const handleSignUpClick = async () => {
-    // Replace with actual user input or data needed for sign-up
-    const userData: SignUpInput = {
-      username: state.username,
-      password: state.password,
 
-      options: {
-        userAttributes: {
-          name: state.username,
-          nickname: state.nickname,
-        }
+    // Replace with actual user input or data needed for sign-up
+
+    if (!state.nickname) {
+      setError("Please enter a nickname")
+    }
+    else if (!state.name) {
+      setError("Please enter a name")
+    }
+    else if (!state.password) {
+      setError("Please enter a password")
+    }
+    else if (!state.email) {
+      setError("Please enter an email ")
+    }
+    else {
+
+      if (isEmailValid(state.email) == false) {
+        setError("Please enter a valid email")
+      }
+      else if (isPasswordValid(state.password) == false) {
+        setError("Please enter a valid password, Passwords must contain 8 characters a symbol and a number")
       }
 
-    };
+      else {
+        const userData: SignUpInput = {
+          username: state.email,
+          password: state.password,
 
-    dispatch(sendSignUp(userData))
-      .then((res) => {
-        console.log("Success:", res);
-        dispatch(clearAuth())
+          options: {
+            userAttributes: {
+              name: state.email,
+              nickname: state.nickname,
+            }
+          }
+        }
+        dispatch(sendSignUp(userData))
+          .then((res) => {
+            console.log(res)
+            setError("")
+            dispatch(clearAuth())
+            dispatch(sendAutoSignIn())
+            navigate(RoutesChoice.SignIn)
+            return res
+          })
+          .catch((error) => {
+            console.log(error)
+            setError("There was an error signing up from our service. Please re-enter and try again.")
+          });
 
-      })
-      .catch((error) => {
-        // Handle error here
-        console.error("Error:", error);
-        // You can dispatch another action or perform further error handling
-      });
+
+      }
+
+
+    }
+
+
   };
 
   return (
     <>
       <>
 
-        <TextInput title="email" isPassword={false} value={state.username} onChange={(value) => dispatch(setUsername(value))} />
-        
+        <TextInput title="email" isPassword={false} value={state.email} onChange={(value) => dispatch(setEmail(value))} />
+
         <p>This is how you will appear to other users</p>
-      
+
         <TextInput title="nickname" value={state.nickname} isPassword={false} onChange={(value) => dispatch(setNickname(value))} />
         <p>This is how you will appear to teachers</p>
-        <TextInput title="name" isPassword={false} value={state.name}  onChange={(value) => dispatch(setNickname(value))}/>
+        <TextInput title="name" isPassword={false} value={state.name} onChange={(value) => dispatch(setName(value))} />
 
         <TextInput title="password" value={state.password} isPassword={true} onChange={(value) => dispatch(setPassword(value))} />
 
-        <Link to={RoutesChoice.SignIn}>Sign In</Link>
+
 
       </>
       <button onClick={() => handleSignUpClick()}>submit</button>
-      <p>{state.error}</p>
+      {error}
+
+
+      <Link to={RoutesChoice.SignIn}>Sign In</Link>
     </>
   )
 }

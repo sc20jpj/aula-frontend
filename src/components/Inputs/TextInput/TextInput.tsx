@@ -1,4 +1,4 @@
-import styles from './TextInput.module.scss';  // Note the use of module.scss extension
+import styles from '@components/Inputs/TextInput.module.scss';  // Note the use of module.scss extension
 
 
 interface TextInputProps {

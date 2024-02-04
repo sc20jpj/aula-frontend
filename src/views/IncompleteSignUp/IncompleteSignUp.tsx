@@ -3,21 +3,22 @@ import { useAppDispatch } from '@store/hooks';
 import {
     auth
 } from '@store/auth/authSlice'
-import { Link, Route, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import RoutesChoice from '@enums/Routes';
-import { useEffect } from 'react';
 
-function Unauthorised() {
+function IncompleteSignUp() {
 
     const dispatch = useAppDispatch()
     const state = useSelector(auth);
 
 
+    console.log("incomplete reached")
 
     return (
         <>
             <>
-                <p>You don't have persmissions to view this page</p>
+                <p>Please complete your sign up. Their should be a link in your email address to complete sign up </p>
+                <p>Click the link and finish signing up  </p>
                 <Link to={RoutesChoice.SignIn}>Sign In</Link>
             </>
 
@@ -25,4 +26,4 @@ function Unauthorised() {
     )
 }
 
-export default Unauthorised
+export default IncompleteSignUp

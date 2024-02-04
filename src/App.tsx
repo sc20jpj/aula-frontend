@@ -8,35 +8,30 @@ import SignIn from '@views/SignIn/SignIn';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import RoutesChoice from '@enums/Routes';
-import LoggedInWrapper from '@components/LoggedInWrap/LoggedInWrapper';
+import LoggedInWrapper from '@components/LoggedInWrapper/LoggedInWrapper';
 import StudentPortal from '@views/StudentPortal/StudentPortal';
+import Unauthorised from '@views/UnAuthorisedPage/UnAuthorisedPage';
+import IncompleteSignUp from '@views/IncompleteSignUp/IncompleteSignUp';
 
 function App() {
   const state = useAppSelector(auth);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    console.log(state.accessToken);
 
-    if (state.accessToken == null || state.idToken == null) {
-      dispatch(getCurrentSession());
-      console.log(state.accessToken);
-      console.log("ran");
-    }
-  }, []);
 
   return (
     <Router>
       <Routes>
         <Route path={RoutesChoice.SignUp} element={<SignUp />} />
         <Route path={RoutesChoice.SignIn} element={<SignIn />} />
-
+        <Route path={RoutesChoice.Unauthorised} element={<Unauthorised />} />
+        <Route path={RoutesChoice.Incomplete} element={<IncompleteSignUp />} />
 
         <Route path={RoutesChoice.AppBase} element={
-
-          <LoggedInWrapper ><StudentPortal /></LoggedInWrapper>
+         <LoggedInWrapper><StudentPortal /></LoggedInWrapper> 
 
         }>
+
         </Route>
 
       </Routes>
