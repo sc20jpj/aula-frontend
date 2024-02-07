@@ -11,7 +11,6 @@ function Button(props: ButtonProps) {
 
   return (
     <>
-      <p>{title}</p>
       <button onClick={onClick}>{title}</button>
     </>
   );

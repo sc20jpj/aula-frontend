@@ -11,7 +11,7 @@ import RoutesChoice from '@enums/Routes';
 import LoggedInWrapper from '@components/LoggedInWrapper/LoggedInWrapper';
 import StudentPortal from '@views/StudentPortal/StudentPortal';
 import Unauthorised from '@views/UnAuthorisedPage/UnAuthorisedPage';
-import IncompleteSignUp from '@views/IncompleteSignUp/IncompleteSignUp';
+import VerficationCode from '@views/VerificationCode/VerificationCode';
 
 function App() {
   const state = useAppSelector(auth);
@@ -25,7 +25,7 @@ function App() {
         <Route path={RoutesChoice.SignUp} element={<SignUp />} />
         <Route path={RoutesChoice.SignIn} element={<SignIn />} />
         <Route path={RoutesChoice.Unauthorised} element={<Unauthorised />} />
-        <Route path={RoutesChoice.Incomplete} element={<IncompleteSignUp />} />
+        <Route path={RoutesChoice.Incomplete} element={<VerficationCode />} />
 
         <Route path={RoutesChoice.AppBase} element={
          <LoggedInWrapper><StudentPortal /></LoggedInWrapper> 

@@ -12,6 +12,7 @@ export default defineConfig({
     "@views": path.resolve(__dirname, "src/views"),
     "@store": path.resolve(__dirname, "src/store"),
     "@components": path.resolve(__dirname, "src/components"),
+    "@config": path.resolve(__dirname, "src/config"),
     "@lib": path.resolve(__dirname, "src/lib"),
     "@assests": path.resolve(__dirname, "src/assests"),
     "@enums": path.resolve(__dirname, "src/enums"),

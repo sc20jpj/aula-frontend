@@ -9,6 +9,7 @@
       "@*": ["src/*"],
       "@store/*": ["src/store/*"],
       "@components/*": ["src/components/*"],
+      "@config/*": ["src/config/*"],
       "@views/*": ["src/views/*"],
       "@lib": ["src/lib/*"],
       "@enums": ["src/enums/*"],

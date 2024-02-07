@@ -7,7 +7,7 @@ import { Link, Route, useNavigate } from 'react-router-dom';
 import RoutesChoice from '@enums/Routes';
 import React, { useEffect } from 'react';
 import Unauthorised from '@views/UnAuthorisedPage/UnAuthorisedPage';
-import IncompleteSignUp from '@views/IncompleteSignUp/IncompleteSignUp';
+import VerficationCode from '@views/VerificationCode/VerificationCode';
 
 
 
@@ -21,32 +21,15 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
     const { children } = props;
 
 
-    // const navigate = useNavigate()
-    // const checkAuthStatus = async () => {
-    //     if (state.loggedIn === false && state.isSignUpComplete === true) {
-    //         navigate(RoutesChoice.Unauthorised)
-    //     }
-    //     if (state.loggedIn === false && state.isSignUpComplete === false) {
-    //         console.log("ran")
-    //         navigate(RoutesChoice.Incomplete)
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     checkAuthStatus()
-
-    // }, []);
-
     return (
         <>
             { state.loggedIn == false && state.isSignUpComplete === true ? (
                 <Unauthorised/>
-            ): state.loggedIn === false && state.isSignUpComplete === false ? (
-                <IncompleteSignUp/>
+            ): state.loggedIn === false && state.isSignUpSent === true && state.isSignUpComplete  === false?  (
+                <VerficationCode/>
             ): (
                 children
-            
-
+        
 
             )}
           

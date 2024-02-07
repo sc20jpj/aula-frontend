@@ -3,7 +3,6 @@ import styles from '@components/Inputs/NumberInput/NumberInput.module.scss';  //
 
 interface NumberInputProps {
     title: string;
-    isPassword: boolean
     onChange: (value: string) => void;
 
 }

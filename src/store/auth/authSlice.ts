@@ -11,34 +11,44 @@ import {
     signOut,
     fetchUserAttributes,
     FetchUserAttributesOutput,
-    autoSignIn
+    autoSignIn,
+    confirmSignUp,
+    ConfirmSignUpOutput,
+    ConfirmSignUpInput,
+    resendSignUpCode,
+    ResendSignUpCodeOutput,
+    ResendSignUpCodeInput
 } from 'aws-amplify/auth';
 
 import { useSelector } from 'react-redux';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
 interface AuthState {
-    loggedIn: boolean
-    teacher: boolean
-    cognitoID?: string
-    email?: string
-    password?: string
-    name?: string
-    nickname?: string
-    isSignUpComplete: boolean
-    loading: boolean
+    loggedIn: boolean;
+    teacher: boolean;
+    email?: string;
+    checkEmail?: string;
+    password?: string;
+    name?: string;
+    nickname?: string;
+    isSignUpSent: boolean;
+    isSignUpComplete: boolean;
+    loading: boolean;
+    code?: string;
 }
 
 const initialState: AuthState = {
     loggedIn: false,
     teacher: false,
-    cognitoID: "",
+    checkEmail: "",
     email: "",
     password: "",
     nickname: "",
-    name: "",
+    name: "",    
+    isSignUpSent: false,
     isSignUpComplete: false,
     loading: false,
+    code: ""
 }
 
 
@@ -79,6 +89,9 @@ export const sendAutoSignIn = createAsyncThunk(
             });
     }
 );
+
+
+
 
 
 export const sendSignIn = createAsyncThunk<
@@ -129,6 +142,37 @@ FetchUserAttributesOutput
             });
     }
 );
+export const resendVerificationCode = createAsyncThunk<
+ResendSignUpCodeOutput,
+ResendSignUpCodeInput
+>(
+    'auth/resendVerificationCode',
+    (verifcationResendInput,thunkAPI) => {
+        return resendSignUpCode(verifcationResendInput)
+            .then((response) => {
+                return thunkAPI.fulfillWithValue(response);;
+            })
+            .catch((error) => {
+                return thunkAPI.rejectWithValue(error);
+            });
+    }
+);
+
+export const checkVerificatonCode = createAsyncThunk<
+ConfirmSignUpOutput,
+ConfirmSignUpInput
+>(
+    'auth/checkVerificationCode',
+    (verificationInput,thunkAPI) => {
+        return confirmSignUp(verificationInput)
+            .then((response) => {
+                return thunkAPI.fulfillWithValue(response);;
+            })
+            .catch((error) => {
+                return thunkAPI.rejectWithValue(error);
+            });
+    }
+);
 
 
 export const getCurrentSession = createAsyncThunk(
@@ -155,8 +199,8 @@ export const AuthSlice = createSlice({
         setEmail: (state, action) => {
             state.email = action.payload;
         },
-        setCognitoID: (state, action) => {
-            state.cognitoID = action.payload;
+        setCheckEmail: (state, action) => {
+            state.checkEmail = action.payload;
         },
         setPassword: (state, action: PayloadAction<string>) => {
             state.password = action.payload;
@@ -166,6 +210,9 @@ export const AuthSlice = createSlice({
         },
         setName: (state, action: PayloadAction<string>) => {
             state.name = action.payload;
+        },
+        setCode: (state, action: PayloadAction<string>) => {
+            state.code = action.payload;
         },
 
         clearAuth: (state) => {
@@ -177,7 +224,8 @@ export const AuthSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(sendSignUp.fulfilled, (state, action) => {
-            state.isSignUpComplete= true
+            state.isSignUpSent= true
+            state.checkEmail = state.email
         })
         builder.addCase(sendSignOut.fulfilled, (state, action) => {
             state.loggedIn = false
@@ -185,19 +233,16 @@ export const AuthSlice = createSlice({
         builder.addCase(sendSignUp.pending, (state, action) => {
             state.loading = true
         })
-        builder.addCase(sendSignIn.fulfilled, (state, action) => {
-            state.loggedIn = true
-
-            //  This should only be done in development 
-            // the intended flow is that the sign Up be completed by a lambda that sends the user back to our deployed site
-            //  can't test this locally 
+        builder.addCase(checkVerificatonCode.fulfilled, (state, action) => {
             state.isSignUpComplete = true
+        })
+        builder.addCase(sendAutoSignIn.fulfilled, (state, action) => {
+            state.loggedIn = true
         })
         builder.addCase(getUserAttributes.fulfilled, (state, action) => {
             state.name = action.payload.name
             state.nickname = action.payload.nickname
             state.email = action.payload.email
-            state.cognitoID = action.payload.sub
 
             
         })
@@ -211,6 +256,7 @@ export const {
     setNickname,
     clearAuth,
     setName,
+    setCode,
 
 } = AuthSlice.actions
 

@@ -34,6 +34,8 @@ function StudentPortal() {
 
 
     const signOut = () => {
+
+        
         dispatch(sendSignOut())
         navigate(RoutesChoice.SignIn)
     }

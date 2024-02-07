@@ -17,7 +17,9 @@ import {
 } from '@store/auth/authSlice'
 import { useAppDispatch } from '@store/hooks';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { API } from '@lib/APi';
+import Button from '@components/Button/Button';
 
 function SignUp() {
 
@@ -26,6 +28,15 @@ function SignUp() {
   const navigate = useNavigate()
   const [error, setError] = useState<String>("");
 
+  useEffect(() => {
+    if (state.loggedIn == true) {
+        navigate(RoutesChoice.AppBase)
+    }
+    else {
+        dispatch(clearAuth())
+    }
+
+}, []);
 
   const isPasswordValid = (password: string) => {
 
@@ -75,17 +86,22 @@ function SignUp() {
             userAttributes: {
               name: state.email,
               nickname: state.nickname,
-            }
+            },
+
+            autoSignIn: true
+
           }
         }
+        console.log(userData)
+
+
+
         dispatch(sendSignUp(userData))
           .unwrap()
           .then((res) => {
             console.log(res)
             setError("")
-            dispatch(clearAuth())
-            navigate(RoutesChoice.SignIn)
-            return res
+            navigate(RoutesChoice.Incomplete)
           })
           .catch((error) => {
             console.log(error)
@@ -113,7 +129,7 @@ function SignUp() {
         <TextInput title="password" value={state.password} isPassword={true} onChange={(value) => dispatch(setPassword(value))} />
 
       </>
-      <button onClick={() => handleSignUpClick()}>submit</button>
+      <Button title="submit" onClick={() => handleSignUpClick()}></Button>
       {error}
 
       <Link to={RoutesChoice.SignIn}>Sign In</Link>
