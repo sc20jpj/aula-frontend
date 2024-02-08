@@ -9,6 +9,7 @@ import {
     SignUpOutput, 
     SignInInput,
     signOut,
+    SignOutInput,
     fetchUserAttributes,
     FetchUserAttributesOutput,
     autoSignIn,
@@ -17,11 +18,13 @@ import {
     ConfirmSignUpInput,
     resendSignUpCode,
     ResendSignUpCodeOutput,
-    ResendSignUpCodeInput
+    ResendSignUpCodeInput,
+    fetchAuthSession,
+    JWT,
+    AuthTokens,
+    decodeJWT
 } from 'aws-amplify/auth';
-
 import { useSelector } from 'react-redux';
-import { fetchAuthSession } from 'aws-amplify/auth';
 
 interface AuthState {
     loggedIn: boolean;
@@ -35,6 +38,9 @@ interface AuthState {
     isSignUpComplete: boolean;
     loading: boolean;
     code?: string;
+    idToken?: string;
+    accessToken?: string;
+    cognito_username?: string
 }
 
 const initialState: AuthState = {
@@ -48,7 +54,11 @@ const initialState: AuthState = {
     isSignUpSent: false,
     isSignUpComplete: false,
     loading: false,
-    code: ""
+    code: "",
+    idToken: undefined,
+    accessToken: undefined,
+    // only to be used for dev purposes
+    cognito_username: ""
 }
 
 
@@ -59,11 +69,6 @@ export const sendSignUp = createAsyncThunk<
     'auth/sendSignUp',
     (signUpInput, thunkAPI) => {
         
-
-
-        // if (signUpInput.password  ) (
-
-        // )
         return signUp(signUpInput)
             .then((response) => {
 
@@ -103,21 +108,24 @@ export const sendSignIn = createAsyncThunk<
 
         return signIn(signInInput)
             .then((response) => {
-                return thunkAPI.fulfillWithValue(response);;
+                return thunkAPI.fulfillWithValue(response);
             })
             .catch((error) => {
+                console.log(error)
                 return thunkAPI.rejectWithValue("Email or password is incorrect");
             });
     }
 );
 
-export const sendSignOut = createAsyncThunk(
+export const sendSignOut = createAsyncThunk<
+void
+>(
     'auth/sendSignOut',
     (_,thunkAPI) => {
 
         return signOut()
             .then((response) => {
-                return response;
+                return thunkAPI.fulfillWithValue(response);
             })
             .catch((error) => {
                 return thunkAPI.rejectWithValue(error);
@@ -135,7 +143,7 @@ FetchUserAttributesOutput
         console.log()
         return fetchUserAttributes()
             .then((response) => {
-                return response;
+                return thunkAPI.fulfillWithValue(response);
             })
             .catch((error) => {
                 return thunkAPI.rejectWithValue(error);
@@ -175,13 +183,15 @@ ConfirmSignUpInput
 );
 
 
-export const getCurrentSession = createAsyncThunk(
+export const getCurrentSession = createAsyncThunk<
+AuthTokens | undefined
+>(
     'auth/getCurrentSession',
-    (signInInput, thunkAPI) => {
+    (_, thunkAPI) => {
 
         return fetchAuthSession()
             .then((response) => {
-                return response;
+                return thunkAPI.fulfillWithValue(response.tokens);
             })
             .catch((error) => {
                 return thunkAPI.rejectWithValue(error);
@@ -226,9 +236,12 @@ export const AuthSlice = createSlice({
         builder.addCase(sendSignUp.fulfilled, (state, action) => {
             state.isSignUpSent= true
             state.checkEmail = state.email
+            state.cognito_username = action.payload.userId
         })
         builder.addCase(sendSignOut.fulfilled, (state, action) => {
             state.loggedIn = false
+            state.accessToken = ""
+            state.idToken = ""
         })
         builder.addCase(sendSignUp.pending, (state, action) => {
             state.loading = true
@@ -239,12 +252,23 @@ export const AuthSlice = createSlice({
         builder.addCase(sendAutoSignIn.fulfilled, (state, action) => {
             state.loggedIn = true
         })
+        builder.addCase(sendSignIn.fulfilled, (state, action) => {
+            state.loggedIn = true
+        })
+        builder.addCase(getCurrentSession.fulfilled, (state, action) => {
+            if (action.payload) {
+                state.idToken = action.payload.idToken?.toString()
+                const var2 = action.payload?.accessToken?.toString()
+                console.log("JWT is " ,var2)
+                state.accessToken = var2
+            }
+
+        })
         builder.addCase(getUserAttributes.fulfilled, (state, action) => {
             state.name = action.payload.name
             state.nickname = action.payload.nickname
             state.email = action.payload.email
-
-            
+            state.cognito_username = action.payload.sub
         })
     },
 

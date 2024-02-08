@@ -1,12 +1,13 @@
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@store/hooks';
 import {
-    auth, getUserAttributes, sendSignOut,
+    auth, getCurrentSession, getUserAttributes, sendSignOut,
 } from '@store/auth/authSlice'
 import { Link, Route, useNavigate } from 'react-router-dom';
 import RoutesChoice from '@enums/Routes';
 import Button from '@components/Button/Button'
 import { useEffect } from 'react';
+import { API } from '@lib/APi';
 
 function StudentPortal() {
 
@@ -17,14 +18,34 @@ function StudentPortal() {
 
 
     useEffect(() => {
+        dispatch(getCurrentSession())
+        .unwrap()
+        .then((response) => {
+            return API.getTest()
+        })
+        .catch((error) => {
+            console.log(error)
+        })
 
 
-        if (state.name === "" || state.nickname === "" || state.email === "") {
+
+        if (!state.cognito_username) {
             dispatch(getUserAttributes())
             .unwrap()
             .then((response) => {
                 console.log(response)
-            }).catch((error) => {
+                const result = dispatch(getCurrentSession())
+                return result
+            })
+            .then((res) => {
+                const apiResult = API.getTest()
+                return apiResult
+            })
+            .then((res) => {
+                const apiResult = console.log("api result is ")
+                return apiResult
+            })
+            .catch((error) => {
                 console.log(error)
             })
         }

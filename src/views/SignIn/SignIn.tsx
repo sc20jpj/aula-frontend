@@ -1,7 +1,7 @@
 import TextInput from '../../components/Inputs/TextInput/TextInput';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from '@components/SignIn/SignIn.module.scss'
-import { SignInInput, SignInOutput, } from 'aws-amplify/auth';
+import { SignInInput, SignInOutput, signOut, } from 'aws-amplify/auth';
 import RoutesChoice from '@enums/Routes'
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -11,11 +11,13 @@ import {
     sendSignIn,
     auth,
     clearAuth,
-    getCurrentSession
+    getCurrentSession,
+    sendSignOut
 } from '@store/auth/authSlice'
 
 import { useAppDispatch } from '@store/hooks';
 import { useEffect, useState } from 'react';
+import Button from '@components/Button/Button';
 
 function SignIn() {
 
@@ -47,20 +49,22 @@ function SignIn() {
                 username: state.email,
                 password: state.password,
             };
-
-            dispatch(sendSignIn(userData))
-                .unwrap()
-                .then((res) => {
-                    dispatch(clearAuth())
-                    console.log(res)
-                    navigate(RoutesChoice.AppBase)
-                    return res
-
-                })
-                .catch((error) => {
-                    console.log("error reached")
-                    setError("email and password incorrect")
-                });
+            dispatch(sendSignOut())
+            .unwrap()
+            .then((res) => {
+                const result  = dispatch(sendSignIn(userData))
+                return result
+            })
+            .then((res) => {
+                dispatch(clearAuth())
+                console.log(res)
+                navigate(RoutesChoice.AppBase)
+            })            
+            .catch((error) => {
+                console.log(error)
+                console.log("error reached")
+                setError("email and password incorrect")
+            });
         }
     }
 
@@ -71,7 +75,7 @@ function SignIn() {
                 <TextInput title="email" isPassword={false} value={state.email} onChange={(value) => dispatch(setEmail(value))} />
                 <TextInput title="password" isPassword={true} value={state.password} onChange={(value) => dispatch(setPassword(value))} />
             </>
-            <button onClick={() => handleSignInClick()}>submit</button>
+            <Button title="submit" onClick={() => handleSignInClick()}></Button>
             <Link to={RoutesChoice.SignUp}>Sign Up</Link>
             <p>{error}</p>
 

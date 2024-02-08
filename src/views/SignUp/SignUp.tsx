@@ -29,12 +29,9 @@ function SignUp() {
   const [error, setError] = useState<String>("");
 
   useEffect(() => {
-    if (state.loggedIn == true) {
-        navigate(RoutesChoice.AppBase)
-    }
-    else {
-        dispatch(clearAuth())
-    }
+
+    dispatch(clearAuth())
+    
 
 }, []);
 
@@ -81,7 +78,6 @@ function SignUp() {
         const userData: SignUpInput = {
           username: state.email,
           password: state.password,
-
           options: {
             userAttributes: {
               name: state.email,
@@ -93,8 +89,6 @@ function SignUp() {
           }
         }
         console.log(userData)
-
-
 
         dispatch(sendSignUp(userData))
           .unwrap()

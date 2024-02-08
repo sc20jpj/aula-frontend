@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@store/hooks';
 import {
-    auth, checkVerificatonCode, clearAuth, resendVerificationCode, sendAutoSignIn, setCode, setEmail
+    auth, checkVerificatonCode, clearAuth, resendVerificationCode, sendAutoSignIn, sendSignOut, setCode, setEmail
 } from '@store/auth/authSlice'
 import { Link, Route, useNavigate } from 'react-router-dom';
 import RoutesChoice from '@enums/Routes';
@@ -41,7 +41,10 @@ function VerficationCode() {
             setError("Please enter a code")
         }
         else {
-            if (state.email && state.name && state.nickname) {
+            console.log("userId is ", state.cognito_username)
+            console.log("name is ", state.name)
+
+            if (state.email && state.name && state.nickname && state.cognito_username) {
                 const confirmData: ConfirmSignUpInput = {
                     username: state.email,
                     confirmationCode: state.code
@@ -50,15 +53,18 @@ function VerficationCode() {
                 const newUser: UserRequest = {
                     email: state.email,
                     name: state.name,
-                    nickname: state.nickname
+                    nickname: state.nickname,
+                    cognito_username: state.cognito_username
                 }
                 dispatch(checkVerificatonCode(confirmData))
                     .unwrap()
                     .then((res) => {
-                        console.log(res)
-                        dispatch(clearAuth())
-                        const signInresult = dispatch(sendAutoSignIn())
-                        return signInresult
+                        const signOutresult = dispatch(sendSignOut())
+                        return signOutresult
+                    })
+                    .then((res) => {
+                        const signInResult = dispatch(sendAutoSignIn())
+                        return signInResult
                     })
                     .then((res) => {
                         console.log(res)
@@ -66,6 +72,7 @@ function VerficationCode() {
                         return apiResult
                     })
                     .then((res) => {
+                        dispatch(clearAuth())
                         navigate(RoutesChoice.AppBase)
                     })
                     .catch((error) => {
