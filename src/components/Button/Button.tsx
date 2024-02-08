@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './TextInput.module.scss';
+import styles from '@components/Button/Button.module.scss';
 
 interface ButtonProps {
   title: string;
@@ -11,7 +11,7 @@ function Button(props: ButtonProps) {
 
   return (
     <>
-      <button onClick={onClick}>{title}</button>
+      <button  onClick={onClick} className={styles.button}>{title}</button>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import TextInput from '../../components/Inputs/TextInput/TextInput';
 import { useDispatch, useSelector } from 'react-redux';
-import styles from '@components/SignIn/SignIn.module.scss'
+import styles from '@views/SignIn/SignIn.module.scss'
 import { SignInInput, SignInOutput, signOut, } from 'aws-amplify/auth';
 import RoutesChoice from '@enums/Routes'
 import { Link, useNavigate } from 'react-router-dom';
@@ -50,33 +50,42 @@ function SignIn() {
                 password: state.password,
             };
             dispatch(sendSignIn(userData))
-            .unwrap()
+                .unwrap()
 
-            .then((res) => {
-                dispatch(clearAuth())
-                console.log(res)
-                navigate(RoutesChoice.AppBase)
-            })            
-            .catch((error) => {
-                console.log(error)
-                console.log("error reached")
-                setError("email and password incorrect")
-            });
+                .then((res) => {
+                    dispatch(clearAuth())
+                    console.log(res)
+                    navigate(RoutesChoice.AppBase)
+                })
+                .catch((error) => {
+                    console.log(error)
+                    console.log("error reached")
+                    setError("email and password incorrect")
+                });
         }
     }
 
 
     return (
-        <>
-            <>
-                <TextInput title="email" isPassword={false} value={state.email} onChange={(value) => dispatch(setEmail(value))} />
-                <TextInput title="password" isPassword={true} value={state.password} onChange={(value) => dispatch(setPassword(value))} />
-            </>
-            <Button title="submit" onClick={() => handleSignInClick()}></Button>
-            <Link to={RoutesChoice.SignUp}>Sign Up</Link>
-            <p>{error}</p>
+        <div className={styles.authContainer}>
+            <div className={styles.auth}>
+                <h1>Sign In</h1>
 
-        </>
+                <div>
+                    <TextInput title="email" isPassword={false} value={state.email} onChange={(value) => dispatch(setEmail(value))} />
+                    <TextInput title="password" isPassword={true} value={state.password} onChange={(value) => dispatch(setPassword(value))} />
+                </div>
+
+                <div className={styles.buttonContainer}>
+
+                    <Button title="submit" onClick={() => handleSignInClick()}></Button>
+                </div>
+
+                <Link to={RoutesChoice.SignUp}>Sign Up</Link>
+                <p>{error}</p>
+
+            </div>
+        </div>
     )
 };
 

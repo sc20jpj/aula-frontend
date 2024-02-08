@@ -1,0 +1,16 @@
+.button {
+    height: 2em;
+    width: 6em;
+    border-radius: 30px;
+    background-color: rgba(0, 179, 255, 0.76);
+    text-align: center;
+    border: none;
+    color: white;
+    padding: 5px;
+}
+
+.button:hover {
+    /* Optional hover styles */
+    background-color: #0056b3;
+    /* Example hover background color */
+}
