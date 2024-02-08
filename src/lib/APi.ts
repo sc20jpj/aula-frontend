@@ -23,9 +23,9 @@ axiosInstance.interceptors.request.use(config => {
             config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
 
-        if (config.method !== 'get' && config.data) {
-            config.headers['Content-Type'] = 'application/json';
-        }
+
+        config.headers['Content-Type'] = 'application/json';
+        
 
 
     }

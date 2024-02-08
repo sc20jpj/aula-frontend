@@ -49,12 +49,9 @@ function SignIn() {
                 username: state.email,
                 password: state.password,
             };
-            dispatch(sendSignOut())
+            dispatch(sendSignIn(userData))
             .unwrap()
-            .then((res) => {
-                const result  = dispatch(sendSignIn(userData))
-                return result
-            })
+
             .then((res) => {
                 dispatch(clearAuth())
                 console.log(res)

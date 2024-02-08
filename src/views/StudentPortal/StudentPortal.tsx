@@ -28,7 +28,6 @@ function StudentPortal() {
         })
 
 
-
         if (!state.cognito_username) {
             dispatch(getUserAttributes())
             .unwrap()
@@ -58,7 +57,11 @@ function StudentPortal() {
 
         
         dispatch(sendSignOut())
-        navigate(RoutesChoice.SignIn)
+        .unwrap()
+        .then((res) => {
+            navigate(RoutesChoice.SignIn)
+        })
+        
     }
 
     return (

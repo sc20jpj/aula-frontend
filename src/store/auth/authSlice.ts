@@ -104,8 +104,9 @@ export const sendSignIn = createAsyncThunk<
     SignInInput
 >(
     'auth/sendSignIn',
-    (signInInput, thunkAPI) => {
-
+    async (signInInput, thunkAPI) => {
+        await thunkAPI.dispatch(sendSignOut)
+        
         return signIn(signInInput)
             .then((response) => {
                 return thunkAPI.fulfillWithValue(response);
