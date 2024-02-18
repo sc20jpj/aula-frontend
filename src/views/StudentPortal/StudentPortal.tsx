@@ -16,43 +16,6 @@ function StudentPortal() {
     const navigate = useNavigate()
 
 
-
-    useEffect(() => {
-        dispatch(getCurrentSession())
-        .unwrap()
-        .then((response) => {
-            return API.getTest()
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-
-
-        if (!state.cognito_username) {
-            dispatch(getUserAttributes())
-            .unwrap()
-            .then((response) => {
-                console.log(response)
-                const result = dispatch(getCurrentSession())
-                return result
-            })
-            .then((res) => {
-                const apiResult = API.getTest()
-                return apiResult
-            })
-            .then((res) => {
-                const apiResult = console.log("api result is ")
-                return apiResult
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-        }
-
-
-    }, []);
-
-
     const signOut = () => {
 
         

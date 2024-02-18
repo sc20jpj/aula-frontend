@@ -2,10 +2,13 @@
 enum RoutesChoice {
     SignIn = '/signin',
     SignUp = '/signUp',
-    AppBase = '/app',
+    StudentPortal = '/student',
     Unauthorised = '/unauthorised',
-    Incomplete = '/incomplete'
-
+    Incomplete = '/incomplete',
+    AddModule = '/teacher/add-module',
+    ViewClasses='/teacher/view-classes',
+    TeacherPortal='/teacher',
+    AddToModule = '/teacher/add-to-module/:moduleId'
 
 }
 

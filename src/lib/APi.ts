@@ -1,17 +1,15 @@
 import { CONFIG } from '@config/config';
 import { auth, getCurrentSession } from '@store/auth/authSlice';
 import { useAppDispatch } from '@store/hooks';
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance,AxiosError } from 'axios';
 import { useSelector } from 'react-redux';
-import {store} from "@store/store"
+import { store } from "@store/store"
 
 export const axiosInstance = axios.create({
     // headers: {
-	// 	Accept: 'application/json',
-	// },
+    // 	Accept: 'application/json',
+    // },
 });
-
-
 
 axiosInstance.interceptors.request.use(config => {
     const state = store.getState(); // Access the Redux state
@@ -25,7 +23,7 @@ axiosInstance.interceptors.request.use(config => {
 
 
         config.headers['Content-Type'] = 'application/json';
-        
+
 
 
     }
@@ -36,18 +34,37 @@ axiosInstance.interceptors.request.use(config => {
 
 
 
+
 export class API {
-    static getUserClasses(userId: string) {
-        // Use template literals to interpolate the userId into the URL
-        return axiosInstance.get(`/${CONFIG.BASE_URL}/${userId}`);
-    }
 
     static postNewUser(newUser: UserRequest): Promise<UserResponse> {
 
         return new Promise<UserResponse>((resolve, reject) => {
-            axiosInstance.post(`${CONFIG.BASE_URL}/users/new-user`, newUser)
+            axiosInstance.post(`${CONFIG.BASE_URL}/users`, newUser)
                 .then((res) => {
-                    resolve(res.data);
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+    static getUser(): Promise<UserResponse> {
+        return new Promise<UserResponse>((resolve, reject) => {
+            axiosInstance.get(`${CONFIG.BASE_URL}/users/check-auth`)
+                .then((res) => {
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+    static getTest(): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            axiosInstance.get(`${CONFIG.BASE_URL}/users`)
+                .then((res) => {
+                    resolve(res);
                 })
                 .catch((error) => {
                     reject(error);
@@ -55,11 +72,80 @@ export class API {
         });
     }
 
-    static getTest(): Promise<any> {
-        return new Promise<any>((resolve, reject) => {
-            axiosInstance.get(`${CONFIG.BASE_URL}/users`)
+
+
+    static getAllUsersOnModule(moduleId: string): Promise<UserOnModuleResponse> {
+        return new Promise<UserOnModuleResponse>((resolve, reject) => {
+            
+            axiosInstance.get(`${CONFIG.BASE_URL}/users/${moduleId}`)
                 .then((res) => {
-                    resolve(res); 
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    static postModule(newModule: ModuleRequest): Promise<ModuleRequest> {
+        return new Promise<ModuleRequest>((resolve, reject) => {
+            axiosInstance.post(`${CONFIG.BASE_URL}/modules`, newModule)
+                .then((res) => {
+                    resolve(res.data.data);
+                    
+                })
+                .catch((error: AxiosError) => {
+                    console.log(error.response?.status)
+                    if (error.response?.status == 409) {
+                        reject("Module already exists. Check the module code and try again.")
+                    }
+                });
+        });
+    }
+
+    static getAllModules(): Promise<ModuleRequest[]> {
+        return new Promise<ModuleRequest[]>((resolve, reject) => {
+            axiosInstance.get(`${CONFIG.BASE_URL}/modules/all`)
+                .then((res) => {
+                    resolve(res.data.data.modules);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    static getAllUserModules(userId: string): Promise<ModuleResponse[]> {
+        return new Promise<ModuleResponse[]>((resolve, reject) => {
+            axiosInstance.get(`${CONFIG.BASE_URL}/modules`)
+                .then((res) => {
+                    resolve(res.data.data.modules);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+    
+    static postUserModule(moduleId: string, newUserModule: UserModuleRequest): Promise<UserResponse[]> {
+        return new Promise<UserResponse[]>((resolve, reject) => {
+
+            axiosInstance.post(`${CONFIG.BASE_URL}/user-modules/${moduleId}`,newUserModule)
+                .then((res) => {
+                    resolve(res.data.data.users);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    static deleteModule(moduleId: string): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+
+            axiosInstance.delete(`${CONFIG.BASE_URL}/modules/${moduleId}`)
+                .then((res) => {
+                    resolve(res.data);
                 })
                 .catch((error) => {
                     reject(error);

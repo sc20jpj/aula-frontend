@@ -27,8 +27,11 @@ function SignIn() {
     const [error, setError] = useState<String>("");
 
     useEffect(() => {
-        if (state.loggedIn == true) {
-            navigate(RoutesChoice.AppBase)
+        if (state.loggedIn == true && state.teacher == false) {
+            navigate(RoutesChoice.StudentPortal)
+        }
+        else if (state.loggedIn == true && state.teacher == true) {
+            navigate(RoutesChoice.TeacherPortal)
         }
         else {
             dispatch(clearAuth())
@@ -55,7 +58,13 @@ function SignIn() {
                 .then((res) => {
                     dispatch(clearAuth())
                     console.log(res)
-                    navigate(RoutesChoice.AppBase)
+                    if (state.teacher) {
+                        navigate(RoutesChoice.TeacherPortal)
+                    }
+                    else{
+                        navigate(RoutesChoice.StudentPortal)
+                    }
+                  
                 })
                 .catch((error) => {
                     console.log(error)

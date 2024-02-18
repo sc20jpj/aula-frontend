@@ -1,55 +1,72 @@
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@store/hooks';
 import {
-    auth
+    auth, getCurrentSession
 } from '@store/auth/authSlice'
 import { Link, Route, useNavigate } from 'react-router-dom';
-import RoutesChoice from '@enums/Routes';
 import React, { useEffect } from 'react';
 import Unauthorised from '@views/UnAuthorisedPage/UnAuthorisedPage';
 import VerficationCode from '@views/VerificationCode/VerificationCode';
 import NavBar from '@components/NavBar/NavBar';
+import RoutesChoice from '@enums/Routes';
+import { checkUser } from '@store/user/UserSlice';
 
 
 
-interface LoggedInWrapperProps {
+interface TeacherWrapperProps {
     children: React.ReactNode
 }
-function LoggedInWrapper(props: LoggedInWrapperProps) {
+function TeacherWrapper(props: TeacherWrapperProps) {
 
     const dispatch = useAppDispatch()
     const state = useSelector(auth);
     const { children } = props;
+    useEffect(() => {
+        dispatch(getCurrentSession())
+            .unwrap()
+            .then((response) => {
+                const res = dispatch(checkUser())
+                return res
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        }, [])
     const NavBarLinks: AppLinks[] = [
         {
-          url: RoutesChoice.SignIn,
+          url: RoutesChoice.AddModule,
           label: "Add Module"
         },
         {
-          url: RoutesChoice.SignUp,
-          label: "View Classes" // Corrected label
-        }
-      ]
-      console.log(state.teacher)
+            url: RoutesChoice.ViewClasses,
+            label: "View classes"
+          },
+          {
+            url: RoutesChoice.TeacherPortal,
+            label: "Home"
+          },
 
+      ]
     return (
         <>
-            {!state.loggedIn || state.teacher ? (
+            {!state.loggedIn || (state.loggedIn && !state.teacher) ? (
                 <Unauthorised />
             ) : state.isSignUpSent && !state.isSignUpComplete ? (
                 <VerficationCode />
             ) : (
-                state.loggedIn && state.isSignUpSent && state.isSignUpComplete  && !state.teacher && (
+                state.loggedIn && state.teacher && state.isSignUpSent && state.isSignUpComplete  && (
                     <>
                     <NavBar links={NavBarLinks} />
                     {children}
                     </>
+                   
                 )
  
             )}
-          
+
+
         </>
     )
 }
 
-export default LoggedInWrapper;
+export default TeacherWrapper;

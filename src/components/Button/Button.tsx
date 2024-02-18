@@ -11,7 +11,7 @@ function Button(props: ButtonProps) {
 
   return (
     <>
-      <button  onClick={onClick} className={styles.button}>{title}</button>
+      <button  onClick={onClick} className={styles.button}> {title} </button>
     </>
   );
 }
