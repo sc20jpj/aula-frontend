@@ -5,7 +5,7 @@ import { API } from '@lib/APi';
 import TextInput from '@components/Inputs/TextInput/TextInput';
 import Button from '@components/Button/Button';
 import RoutesChoice from '@enums/Routes';
-
+import styles from "@views/AddModule/AddModule.module.scss"
 
 function AddModule() {
 
@@ -29,7 +29,7 @@ function AddModule() {
                 name: name,
                 code: code
             }
-    
+
             API.postModule(module)
                 .then((res) => {
                     navigate(RoutesChoice.TeacherPortal)
@@ -44,17 +44,25 @@ function AddModule() {
     return (
         <>
 
-            <h1>Add module</h1>
 
-            <TextInput title='Name' onChange={(value) => setName(value)} ></TextInput>
-            <TextInput title='Code' onChange={(value) => setCode(value)} ></TextInput>
+            <div className={styles.container}>
+                <h1>Add module</h1>
 
-            <Button title="submit" onClick={() => handleSubmit()}></Button>
+                <div className={styles.inputContainer}>
+                    <TextInput title='Name' onChange={(value) => setName(value)} ></TextInput>
+                    <TextInput title='Code' onChange={(value) => setCode(value)} ></TextInput>
 
-            {error && (
-                <p>{error}</p>
-            )}
+                    {error && (
+                        <p>{error}</p>
+                    )}
+                    <div className={styles.buttonContainer}>
+                        <Button title="submit" onClick={() => handleSubmit()}></Button>
+                    </div>
+                </div>
+            </div>
+
         </>
+
     )
 }
 

@@ -20,6 +20,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { API } from '@lib/APi';
 import Button from '@components/Button/Button';
+import NavBar from '@components/NavBar/NavBar';
 
 function SignUp() {
 
@@ -110,6 +111,7 @@ function SignUp() {
 
   return (
     <>
+      <NavBar></NavBar>
 
       <div className={styles.authContainer}>
         <div className={styles.auth}>

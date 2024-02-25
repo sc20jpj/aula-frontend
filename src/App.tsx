@@ -40,9 +40,14 @@ function App() {
 
         } />
 
+        <Route path={RoutesChoice.StudentPortal} element={
+          <LoggedInWrapper studentOnly={true}><TeacherPortal /></LoggedInWrapper>
+
+        } />
+
 
         <Route path={RoutesChoice.ViewClasses} element={
-          <TeacherWrapper>  <ViewClasses /></TeacherWrapper>
+          <LoggedInWrapper studentOnly={false}>  <ViewClasses /></LoggedInWrapper>
 
         } />
 

@@ -1,53 +1,106 @@
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@store/hooks';
 import {
-    auth
+    auth, getCurrentSession
 } from '@store/auth/authSlice'
-import { Link, Route, useNavigate } from 'react-router-dom';
 import RoutesChoice from '@enums/Routes';
 import React, { useEffect } from 'react';
 import Unauthorised from '@views/UnAuthorisedPage/UnAuthorisedPage';
 import VerficationCode from '@views/VerificationCode/VerificationCode';
 import NavBar from '@components/NavBar/NavBar';
-
+import { checkUser } from '@store/user/UserSlice';
+import styles from "@components/LoggedInWrapper/LoggedInWrapper.module.scss"
 
 
 interface LoggedInWrapperProps {
     children: React.ReactNode
+    studentOnly: boolean
 }
 function LoggedInWrapper(props: LoggedInWrapperProps) {
 
     const dispatch = useAppDispatch()
     const state = useSelector(auth);
-    const { children } = props;
-    const NavBarLinks: AppLinks[] = [
-        {
-          url: RoutesChoice.SignIn,
-          label: "Add Module"
-        },
-        {
-          url: RoutesChoice.SignUp,
-          label: "View Classes" // Corrected label
-        }
-      ]
-      console.log(state.teacher)
+    const { children, studentOnly } = props;
+
+
+    useEffect(() => {
+        dispatch(getCurrentSession())
+            .unwrap()
+            .then((response) => {
+                const res = dispatch(checkUser())
+                return res
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [])
+
+    var navBarLinks: AppLinks[] = []
+    if (state.teacher) {
+        navBarLinks = [
+            {
+                url: RoutesChoice.TeacherPortal,
+                label: "Home"
+            },
+            {
+                url: RoutesChoice.ViewClasses,
+                label: "View Classes" // Corrected label
+            },
+            {
+                url: RoutesChoice.AddModule,
+                label: "Add module" // Corrected label
+            },
+        ]
+    }
+    else {
+        navBarLinks = [
+            {
+                url: RoutesChoice.StudentPortal,
+                label: "Home"
+            },
+            {
+                url: RoutesChoice.ViewClasses,
+                label: "View Classes" // Corrected label
+            }
+        ]
+
+    }
+
+
+
 
     return (
         <>
-            {!state.loggedIn || state.teacher ? (
+
+            <NavBar links={navBarLinks} />
+
+
+
+            
+            {!state.loggedIn || (state.teacher && studentOnly) === true ? (
                 <Unauthorised />
             ) : state.isSignUpSent && !state.isSignUpComplete ? (
                 <VerficationCode />
             ) : (
-                state.loggedIn && state.isSignUpSent && state.isSignUpComplete  && !state.teacher && (
+                state.loggedIn && state.isSignUpSent && state.isSignUpComplete && !studentOnly && (
                     <>
-                    <NavBar links={NavBarLinks} />
-                    {children}
+                    
+                        <div className={styles.container}>
+                        
+                            <div className={styles.main}>
+                                {children}
+                            </div>
+                            
+                        </div>
+
+
+
                     </>
                 )
- 
+
             )}
-          
+        
+
         </>
     )
 }

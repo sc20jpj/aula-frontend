@@ -10,7 +10,7 @@ import VerficationCode from '@views/VerificationCode/VerificationCode';
 import NavBar from '@components/NavBar/NavBar';
 import RoutesChoice from '@enums/Routes';
 import { checkUser } from '@store/user/UserSlice';
-
+import styles from "@components/LoggedInWrapper/LoggedInWrapper.module.scss"
 
 
 interface TeacherWrapperProps {
@@ -31,37 +31,45 @@ function TeacherWrapper(props: TeacherWrapperProps) {
             .catch((error) => {
                 console.log(error)
             })
-        }, [])
-    const NavBarLinks: AppLinks[] = [
+    }, [])
+    const navBarLinks: AppLinks[] = [
         {
-          url: RoutesChoice.AddModule,
-          label: "Add Module"
+            url: RoutesChoice.AddModule,
+            label: "Add Module"
         },
         {
             url: RoutesChoice.ViewClasses,
             label: "View classes"
-          },
-          {
+        },
+        {
             url: RoutesChoice.TeacherPortal,
             label: "Home"
-          },
+        },
 
-      ]
+    ]
     return (
         <>
+            <NavBar links={navBarLinks} />
+
             {!state.loggedIn || (state.loggedIn && !state.teacher) ? (
                 <Unauthorised />
             ) : state.isSignUpSent && !state.isSignUpComplete ? (
                 <VerficationCode />
             ) : (
-                state.loggedIn && state.teacher && state.isSignUpSent && state.isSignUpComplete  && (
+                state.loggedIn && state.teacher && state.isSignUpSent && state.isSignUpComplete && (
                     <>
-                    <NavBar links={NavBarLinks} />
-                    {children}
+                        <div className={styles.container}>
+                        
+                        <div className={styles.main}>
+                            {children}
+                        </div>
+                        
+                    </div>
+
                     </>
-                   
+
                 )
- 
+
             )}
 
 

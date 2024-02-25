@@ -18,6 +18,7 @@ import {
 import { useAppDispatch } from '@store/hooks';
 import { useEffect, useState } from 'react';
 import Button from '@components/Button/Button';
+import NavBar from '@components/NavBar/NavBar';
 
 function SignIn() {
 
@@ -54,17 +55,16 @@ function SignIn() {
             };
             dispatch(sendSignIn(userData))
                 .unwrap()
-
                 .then((res) => {
                     dispatch(clearAuth())
                     console.log(res)
                     if (state.teacher) {
                         navigate(RoutesChoice.TeacherPortal)
                     }
-                    else{
+                    else {
                         navigate(RoutesChoice.StudentPortal)
                     }
-                  
+
                 })
                 .catch((error) => {
                     console.log(error)
@@ -76,23 +76,29 @@ function SignIn() {
 
 
     return (
-        <div className={styles.authContainer}>
-            <div className={styles.auth}>
-                <h1>Sign In</h1>
+        <div>
 
-                <div>
-                    <TextInput title="email" isPassword={false} value={state.email} onChange={(value) => dispatch(setEmail(value))} />
-                    <TextInput title="password" isPassword={true} value={state.password} onChange={(value) => dispatch(setPassword(value))} />
+
+            <NavBar></NavBar>
+            <div className={styles.authContainer}>
+
+                <div className={styles.auth}>
+                    <h1>Sign In</h1>
+
+                    <div>
+                        <TextInput title="email" isPassword={false} value={state.email} onChange={(value) => dispatch(setEmail(value))} />
+                        <TextInput title="password" isPassword={true} value={state.password} onChange={(value) => dispatch(setPassword(value))} />
+                    </div>
+
+                    <div className={styles.buttonContainer}>
+
+                        <Button title="submit" onClick={() => handleSignInClick()}></Button>
+                    </div>
+
+                    <Link to={RoutesChoice.SignUp}>Sign Up</Link>
+                    <p>{error}</p>
+
                 </div>
-
-                <div className={styles.buttonContainer}>
-
-                    <Button title="submit" onClick={() => handleSignInClick()}></Button>
-                </div>
-
-                <Link to={RoutesChoice.SignUp}>Sign Up</Link>
-                <p>{error}</p>
-
             </div>
         </div>
     )

@@ -5,3 +5,4 @@ interface SignUpPayload {
     nickname: string;
 
 }
+

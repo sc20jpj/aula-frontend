@@ -58,10 +58,12 @@ function AddStudent() {
         const newUserModuleRequest: UserModuleRequest = {
             users: selectedUserModules
         }
-        API.postUserModule(moduleId, newUserModuleRequest)
+        API.postUserModules(moduleId, newUserModuleRequest)
             .then((res) => {
+
                 // Assuming res contains the data to be appended to the users array
                 setUsersOn(prevUsers => [...prevUsers, ...res]);
+                
             })
             .catch((error) => {
                 console.log(error);

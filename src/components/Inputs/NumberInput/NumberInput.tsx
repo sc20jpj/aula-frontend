@@ -16,8 +16,11 @@ function NumberInput(props: NumberInputProps) {
     
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value;
-       onChange(inputValue);
-      };
+    
+        onChange(inputValue);
+    }
+
+    
     
     return (
         <>

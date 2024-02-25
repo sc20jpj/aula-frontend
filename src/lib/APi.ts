@@ -27,7 +27,6 @@ axiosInstance.interceptors.request.use(config => {
 
 
     }
-    console.log(config.headers)
 
     return config;
 });
@@ -127,7 +126,7 @@ export class API {
         });
     }
     
-    static postUserModule(moduleId: string, newUserModule: UserModuleRequest): Promise<UserResponse[]> {
+    static postUserModules(moduleId: string, newUserModule: UserModuleRequest): Promise<UserResponse[]> {
         return new Promise<UserResponse[]>((resolve, reject) => {
 
             axiosInstance.post(`${CONFIG.BASE_URL}/user-modules/${moduleId}`,newUserModule)

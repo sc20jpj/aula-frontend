@@ -231,6 +231,7 @@ export const AuthSlice = createSlice({
             state.nickname = "";
             state.email = "";
             state.name = ""
+            state.teacher = false
         },
     },
     extraReducers: (builder) => {

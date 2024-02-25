@@ -50,6 +50,7 @@ function ViewClasses() {
 
     const handleRedirect = (moduleId?: string) => {
         if (moduleId) {
+            
             const path = generatePath(RoutesChoice.AddToModule, { moduleId });
             navigate(path);
 
@@ -62,11 +63,10 @@ function ViewClasses() {
 
             {modules ? (
                 modules.map((module, index) => (
-                    <div key={index} className={styles.moduleWrapper}> {/* Wrapper for each module box */}
+                    <div key={index} className={styles.moduleWrapper}>
                         
                         <ModuleBox module={module} onClick={() => handleRedirect(module.id)} />
 
-                    
                     </div>
                 ))
             ) : (
