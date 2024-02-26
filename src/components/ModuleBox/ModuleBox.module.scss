@@ -1,0 +1,21 @@
+
+.moduleBox {
+    max-width: 1200px;
+    width: 80%;
+    display: flex;
+    font-size:8pt;
+    justify-content: space-between;
+    flex-direction: column;
+    border: 1px solid #bbb8b8;
+    margin-right: 50px;
+    margin-top: 25px;
+    padding: 20px;
+
+    &:hover {
+        background-color: #f0f0f0;
+    }
+}
+
+.moduleTitle {
+    /* Add styles for module title */
+}

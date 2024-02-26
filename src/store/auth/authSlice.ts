@@ -1,15 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store';
 
-import { 
-    signUp, 
-    SignUpInput, 
-    signIn, 
-    SignInOutput, 
-    SignUpOutput, 
+import {
+    signUp,
+    SignUpInput,
+    signIn,
+    SignInOutput,
+    SignUpOutput,
     SignInInput,
     signOut,
-    SignOutInput,
     fetchUserAttributes,
     FetchUserAttributesOutput,
     autoSignIn,
@@ -20,9 +19,7 @@ import {
     ResendSignUpCodeOutput,
     ResendSignUpCodeInput,
     fetchAuthSession,
-    JWT,
     AuthTokens,
-    decodeJWT
 } from 'aws-amplify/auth';
 import { useSelector } from 'react-redux';
 
@@ -50,7 +47,7 @@ const initialState: AuthState = {
     email: "",
     password: "",
     nickname: "",
-    name: "",    
+    name: "",
     isSignUpSent: false,
     isSignUpComplete: false,
     loading: false,
@@ -68,7 +65,7 @@ export const sendSignUp = createAsyncThunk<
 >(
     'auth/sendSignUp',
     (signUpInput, thunkAPI) => {
-        
+
         return signUp(signUpInput)
             .then((response) => {
 
@@ -82,7 +79,7 @@ export const sendSignUp = createAsyncThunk<
 
 export const sendAutoSignIn = createAsyncThunk(
     'auth/autoSignIn',
-    (sendAutoSignInInput,thunkAPI) => {
+    (sendAutoSignInInput, thunkAPI) => {
 
         return autoSignIn()
             .then((response) => {
@@ -106,10 +103,13 @@ export const sendSignIn = createAsyncThunk<
     'auth/sendSignIn',
     async (signInInput, thunkAPI) => {
         await thunkAPI.dispatch(sendSignOut)
-        
+
         return signIn(signInInput)
-            .then((response) => {
+            .then(async (response) => {
+
+
                 return thunkAPI.fulfillWithValue(response);
+
             })
             .catch((error) => {
                 console.log(error)
@@ -119,10 +119,10 @@ export const sendSignIn = createAsyncThunk<
 );
 
 export const sendSignOut = createAsyncThunk<
-void
+    void
 >(
     'auth/sendSignOut',
-    (_,thunkAPI) => {
+    (_, thunkAPI) => {
 
         return signOut()
             .then((response) => {
@@ -136,11 +136,11 @@ void
 );
 
 export const getUserAttributes = createAsyncThunk<
-FetchUserAttributesOutput
+    FetchUserAttributesOutput
 >(
-    
+
     'auth/getUserAttributes',
-    (_,thunkAPI) => {
+    (_, thunkAPI) => {
         console.log()
         return fetchUserAttributes()
             .then((response) => {
@@ -152,11 +152,11 @@ FetchUserAttributesOutput
     }
 );
 export const resendVerificationCode = createAsyncThunk<
-ResendSignUpCodeOutput,
-ResendSignUpCodeInput
+    ResendSignUpCodeOutput,
+    ResendSignUpCodeInput
 >(
     'auth/resendVerificationCode',
-    (verifcationResendInput,thunkAPI) => {
+    (verifcationResendInput, thunkAPI) => {
         return resendSignUpCode(verifcationResendInput)
             .then((response) => {
                 return thunkAPI.fulfillWithValue(response);;
@@ -168,11 +168,11 @@ ResendSignUpCodeInput
 );
 
 export const checkVerificatonCode = createAsyncThunk<
-ConfirmSignUpOutput,
-ConfirmSignUpInput
+    ConfirmSignUpOutput,
+    ConfirmSignUpInput
 >(
     'auth/checkVerificationCode',
-    (verificationInput,thunkAPI) => {
+    (verificationInput, thunkAPI) => {
         return confirmSignUp(verificationInput)
             .then((response) => {
                 return thunkAPI.fulfillWithValue(response);;
@@ -185,7 +185,7 @@ ConfirmSignUpInput
 
 
 export const getCurrentSession = createAsyncThunk<
-AuthTokens | undefined
+    AuthTokens | undefined
 >(
     'auth/getCurrentSession',
     (_, thunkAPI) => {
@@ -231,11 +231,12 @@ export const AuthSlice = createSlice({
             state.nickname = "";
             state.email = "";
             state.name = ""
+            state.teacher = false
         },
     },
     extraReducers: (builder) => {
         builder.addCase(sendSignUp.fulfilled, (state, action) => {
-            state.isSignUpSent= true
+            state.isSignUpSent = true
             state.checkEmail = state.email
             state.cognito_username = action.payload.userId
         })
@@ -246,6 +247,8 @@ export const AuthSlice = createSlice({
         })
         builder.addCase(sendSignUp.pending, (state, action) => {
             state.loading = true
+            
+            
         })
         builder.addCase(checkVerificatonCode.fulfilled, (state, action) => {
             state.isSignUpComplete = true
@@ -259,9 +262,21 @@ export const AuthSlice = createSlice({
         builder.addCase(getCurrentSession.fulfilled, (state, action) => {
             if (action.payload) {
                 state.idToken = action.payload.idToken?.toString()
-                const var2 = action.payload?.accessToken?.toString()
-                console.log("JWT is " ,var2)
-                state.accessToken = var2
+                const accessTokenString = action.payload?.accessToken?.toString()
+
+                // this code isnt great its basically tricking the typescript compiler
+                // cognito lack of supprt for typescript necesitates this
+                if (typeof action.payload.accessToken.payload === 'object') {
+                    const groups = action.payload.accessToken.payload["cognito:groups"];
+                    if (Array.isArray(groups) && groups.includes("teachers")) {
+                        state.teacher = true;
+                    } else {
+                        console.log("didn't work")
+                        state.teacher = false;
+                    }
+                }
+
+                state.accessToken = accessTokenString
             }
 
         })
@@ -270,6 +285,7 @@ export const AuthSlice = createSlice({
             state.nickname = action.payload.nickname
             state.email = action.payload.email
             state.cognito_username = action.payload.sub
+            console.log("user attributes are", action.payload)
         })
     },
 

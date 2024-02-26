@@ -1,0 +1,30 @@
+.auth {
+    border: 1px solid rgba(187, 184, 184, 0.528); // Adjust opacity for a fainter border
+    display: flex;
+    flex-direction: column; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 25px;
+    width: fit-content;
+    margin-bottom: 25px;
+    justify-content: center; /* Add this line */
+
+    
+}
+
+.authContainer {
+    display: flex;
+    justify-content: center; /* Add this line */
+    padding-top: 4em;
+    z-index: 10;
+}
+
+.buttonContainer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: right;
+}
+
+.error {
+    display: flex;
+    justify-content: center;
+}

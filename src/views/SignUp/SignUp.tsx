@@ -1,6 +1,6 @@
 import TextInput from '../../components/Inputs/TextInput/TextInput';
 import { useSelector } from 'react-redux';
-import styles from '@components/SignUp/SignUp.module.scss'
+import styles from '@views/SignUp/SignUp.module.scss'
 import { SignUpInput, SignInOutput, } from 'aws-amplify/auth';
 import RoutesChoice from '@enums/Routes'
 
@@ -20,6 +20,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { API } from '@lib/APi';
 import Button from '@components/Button/Button';
+import NavBar from '@components/NavBar/NavBar';
 
 function SignUp() {
 
@@ -31,9 +32,9 @@ function SignUp() {
   useEffect(() => {
 
     dispatch(clearAuth())
-    
 
-}, []);
+
+  }, []);
 
   const isPasswordValid = (password: string) => {
 
@@ -110,23 +111,34 @@ function SignUp() {
 
   return (
     <>
-      <>
+      <NavBar></NavBar>
 
-        <TextInput title="email" isPassword={false} value={state.email} onChange={(value) => dispatch(setEmail(value))} />
+      <div className={styles.authContainer}>
+        <div className={styles.auth}>
+          <h1>Sign Up</h1>
+          <>
+            <TextInput title="email" isPassword={false} value={state.email} onChange={(value) => dispatch(setEmail(value))} />
 
-        <p>This is how you will appear to other users</p>
+            <p>This is how you will appear to other users</p>
 
-        <TextInput title="nickname" value={state.nickname} isPassword={false} onChange={(value) => dispatch(setNickname(value))} />
-        <p>This is how you will appear to teachers</p>
-        <TextInput title="name" isPassword={false} value={state.name} onChange={(value) => dispatch(setName(value))} />
+            <TextInput title="nickname" value={state.nickname} isPassword={false} onChange={(value) => dispatch(setNickname(value))} />
+            <p>This is how you will appear to teachers</p>
+            <TextInput title="name" isPassword={false} value={state.name} onChange={(value) => dispatch(setName(value))} />
 
-        <TextInput title="password" value={state.password} isPassword={true} onChange={(value) => dispatch(setPassword(value))} />
+            <TextInput title="password" value={state.password} isPassword={true} onChange={(value) => dispatch(setPassword(value))} />
 
-      </>
-      <Button title="submit" onClick={() => handleSignUpClick()}></Button>
-      {error}
+          </>
+          <div className={styles.buttonContainer}>
+            <Button title="submit" onClick={() => handleSignUpClick()}></Button>
+          </div>
+          <p className={styles.error}>{error}</p>
 
-      <Link to={RoutesChoice.SignIn}>Sign In</Link>
+          <Link to={RoutesChoice.SignIn}>Sign In</Link>
+        </div>
+      </div>
+
+
+
     </>
   )
 }

@@ -1,37 +1,36 @@
-import styles from '@components/Inputs/TextInput.module.scss';  // Note the use of module.scss extension
+// TextInput.tsx
 
+import React from 'react';
+import styles from '@components/Inputs/TextInput/TextInput.module.scss'; // Import SCSS file
 
 interface TextInputProps {
-    title: string;
-    isPassword: boolean
-    value: string
-    onChange: (value: string) => void;
-
+  title: string;
+  isPassword?: boolean;
+  value?: string;
+  onChange: (value: string) => void;
 }
-
 
 function TextInput(props: TextInputProps) {
+  const { title, isPassword, value, onChange } = props;
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    onChange(inputValue);
+  };
 
-    const { title,isPassword,value,onChange } = props;
+  return (
+    <div className={styles.textInput}>
+      <p>{title}</p>
 
-    
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const inputValue = event.target.value;
-       onChange(inputValue);
-      };
-    
-    return (
-        <>
-            <p>{title}</p>
-
-            <input
-                type={isPassword ? 'password' : 'text'}
-                onChange={handleInputChange}
-                value={value}
-            />
-        </>
-    )
+      <input
+        type={isPassword ? 'password' : 'text'}
+        className={styles.input}
+        onChange={handleInputChange}
+        value={value}
+      />
+    </div>
+  );
 }
 
-export default TextInput
+export default TextInput;
+

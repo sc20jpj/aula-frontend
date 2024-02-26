@@ -73,7 +73,7 @@ function VerficationCode() {
                     })
                     .then((res) => {
                         dispatch(clearAuth())
-                        navigate(RoutesChoice.AppBase)
+                        navigate(RoutesChoice.StudentPortal)
                     })
                     .catch((error) => {
                         console.log(error)
