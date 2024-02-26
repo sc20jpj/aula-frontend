@@ -10,6 +10,7 @@ import VerficationCode from '@views/VerificationCode/VerificationCode';
 import NavBar from '@components/NavBar/NavBar';
 import { checkUser } from '@store/user/UserSlice';
 import styles from "@components/LoggedInWrapper/LoggedInWrapper.module.scss"
+import { useNavigate } from 'react-router-dom';
 
 
 interface LoggedInWrapperProps {
@@ -20,6 +21,7 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
 
     const dispatch = useAppDispatch()
     const state = useSelector(auth);
+    const navigate = useNavigate()
     const { children, studentOnly } = props;
 
 
@@ -28,6 +30,11 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
             .unwrap()
             .then((response) => {
                 const res = dispatch(checkUser())
+                if (state.teacher) {
+                    navigate(RoutesChoice.TeacherPortal);
+                } else {
+                    navigate(RoutesChoice.StudentPortal);
+                }
                 return res
             })
             .catch((error) => {
@@ -69,6 +76,7 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
 
 
 
+
     return (
         <>
 
@@ -76,21 +84,21 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
 
 
 
-            
+
             {!state.loggedIn || (state.teacher && studentOnly) === true ? (
                 <Unauthorised />
             ) : state.isSignUpSent && !state.isSignUpComplete ? (
                 <VerficationCode />
             ) : (
-                state.loggedIn && state.isSignUpSent && state.isSignUpComplete && !studentOnly && (
+                state.loggedIn && state.isSignUpSent && state.isSignUpComplete && (
                     <>
-                    
+
                         <div className={styles.container}>
-                        
+
                             <div className={styles.main}>
                                 {children}
                             </div>
-                            
+
                         </div>
 
 
@@ -99,7 +107,7 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
                 )
 
             )}
-        
+
 
         </>
     )

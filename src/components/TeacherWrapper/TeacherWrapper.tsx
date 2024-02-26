@@ -34,16 +34,17 @@ function TeacherWrapper(props: TeacherWrapperProps) {
     }, [])
     const navBarLinks: AppLinks[] = [
         {
-            url: RoutesChoice.AddModule,
-            label: "Add Module"
+            url: RoutesChoice.TeacherPortal,
+            label: "Home"
         },
         {
             url: RoutesChoice.ViewClasses,
             label: "View classes"
         },
+
         {
-            url: RoutesChoice.TeacherPortal,
-            label: "Home"
+            url: RoutesChoice.AddModule,
+            label: "Add module"
         },
 
     ]

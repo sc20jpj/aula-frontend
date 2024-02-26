@@ -141,8 +141,6 @@ function AddStudent() {
 
                         )}
                     </div>
-
-
                 </>
             ) : (
                 <p>All avaliable users have been added </p>

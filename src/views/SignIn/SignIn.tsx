@@ -12,7 +12,8 @@ import {
     auth,
     clearAuth,
     getCurrentSession,
-    sendSignOut
+    sendSignOut,
+    isTeacher
 } from '@store/auth/authSlice'
 
 import { useAppDispatch } from '@store/hooks';
@@ -26,7 +27,7 @@ function SignIn() {
     const state = useSelector(auth);
     const navigate = useNavigate()
     const [error, setError] = useState<String>("");
-
+    const teacher = useSelector(isTeacher)
     useEffect(() => {
         if (state.loggedIn == true && state.teacher == false) {
             navigate(RoutesChoice.StudentPortal)
@@ -40,7 +41,7 @@ function SignIn() {
 
     }, []);
 
-    const handleSignInClick = async () => {
+    const handleSignInClick =  () => {
 
         if (!state.email) {
             setError("Please enter an email ")
@@ -56,21 +57,26 @@ function SignIn() {
             dispatch(sendSignIn(userData))
                 .unwrap()
                 .then((res) => {
-                    dispatch(clearAuth())
-                    console.log(res)
+                    return dispatch(clearAuth())
+                })
+                .then( (res) => {
+                    return  dispatch(getCurrentSession())
+                })
+                .then((res) => {
+                    console.log(state.teacher)
                     if (state.teacher) {
-                        navigate(RoutesChoice.TeacherPortal)
+                        navigate(RoutesChoice.TeacherPortal);
+                    } else {
+                        navigate(RoutesChoice.StudentPortal);
                     }
-                    else {
-                        navigate(RoutesChoice.StudentPortal)
-                    }
-
                 })
                 .catch((error) => {
                     console.log(error)
                     console.log("error reached")
                     setError("email and password incorrect")
                 });
+
+
         }
     }
 

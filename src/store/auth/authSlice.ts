@@ -9,7 +9,6 @@ import {
     SignUpOutput,
     SignInInput,
     signOut,
-    SignOutInput,
     fetchUserAttributes,
     FetchUserAttributesOutput,
     autoSignIn,
@@ -20,9 +19,7 @@ import {
     ResendSignUpCodeOutput,
     ResendSignUpCodeInput,
     fetchAuthSession,
-    JWT,
     AuthTokens,
-    decodeJWT
 } from 'aws-amplify/auth';
 import { useSelector } from 'react-redux';
 
@@ -108,8 +105,11 @@ export const sendSignIn = createAsyncThunk<
         await thunkAPI.dispatch(sendSignOut)
 
         return signIn(signInInput)
-            .then((response) => {
+            .then(async (response) => {
+
+
                 return thunkAPI.fulfillWithValue(response);
+
             })
             .catch((error) => {
                 console.log(error)
@@ -247,6 +247,8 @@ export const AuthSlice = createSlice({
         })
         builder.addCase(sendSignUp.pending, (state, action) => {
             state.loading = true
+            
+            
         })
         builder.addCase(checkVerificatonCode.fulfilled, (state, action) => {
             state.isSignUpComplete = true
@@ -264,7 +266,6 @@ export const AuthSlice = createSlice({
 
                 // this code isnt great its basically tricking the typescript compiler
                 // cognito lack of supprt for typescript necesitates this
-
                 if (typeof action.payload.accessToken.payload === 'object') {
                     const groups = action.payload.accessToken.payload["cognito:groups"];
                     if (Array.isArray(groups) && groups.includes("teachers")) {

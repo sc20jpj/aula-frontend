@@ -8,13 +8,17 @@ import { user } from '@store/user/UserSlice';
 import { useSelector } from 'react-redux';
 import { useNavigate, generatePath } from 'react-router-dom';
 import RoutesChoice from '@enums/Routes';
+import { auth } from '@store/auth/authSlice';
 
 
 function ViewClasses() {
     const [modules, setModules] = useState<ModuleRequest[]>();
+    const state = useSelector(auth);
 
     const navigate = useNavigate()
     const current_user = useSelector(user)
+
+
     useEffect(() => {
         getModules();
     }, []);
@@ -36,6 +40,7 @@ function ViewClasses() {
 
     };
 
+
     const deleteModule = (moduleId: string) => {
         API.deleteModule(moduleId)
             .then((res) => {
@@ -47,7 +52,6 @@ function ViewClasses() {
                 console.log(error);
             });
     };
-
     const handleRedirect = (moduleId?: string) => {
         if (moduleId) {
             
@@ -63,9 +67,15 @@ function ViewClasses() {
 
             {modules ? (
                 modules.map((module, index) => (
+
                     <div key={index} className={styles.moduleWrapper}>
-                        
-                        <ModuleBox module={module} onClick={() => handleRedirect(module.id)} />
+                        {state.teacher ?  (
+                             <ModuleBox module={module} onClick={() => handleRedirect(module.id)} />
+
+                        ): (
+                            <ModuleBox module={module} />
+
+                        )}
 
                     </div>
                 ))

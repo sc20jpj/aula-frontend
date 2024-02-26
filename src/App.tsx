@@ -41,7 +41,7 @@ function App() {
         } />
 
         <Route path={RoutesChoice.StudentPortal} element={
-          <LoggedInWrapper studentOnly={true}><TeacherPortal /></LoggedInWrapper>
+          <LoggedInWrapper studentOnly={true}><StudentPortal /></LoggedInWrapper>
 
         } />
 

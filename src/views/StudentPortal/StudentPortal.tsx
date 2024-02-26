@@ -8,14 +8,20 @@ import RoutesChoice from '@enums/Routes';
 import Button from '@components/Button/Button'
 import { useEffect } from 'react';
 import { API } from '@lib/APi';
+import { user } from '@store/user/UserSlice';
 
 function StudentPortal() {
 
     const dispatch = useAppDispatch()
     const state = useSelector(auth);
     const navigate = useNavigate()
+    const current_user = useSelector(user);
 
-
+    useEffect (() => {
+        if(state.teacher) {
+            navigate(RoutesChoice.TeacherPortal)
+        }
+    },[])
     const signOut = () => {
 
         
@@ -31,7 +37,7 @@ function StudentPortal() {
         <>
 
             <>
-                <p>Welcome {state.name}</p>
+                <p>Welcome {current_user?.name}</p>
                 <Link to={RoutesChoice.SignUp}>SignUp</Link>
 
                 <Button onClick={() => signOut()} title='Sign Out' />
