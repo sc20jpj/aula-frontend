@@ -8,8 +8,8 @@ enum RoutesChoice {
     AddModule = '/teacher/add-module',
     ViewClasses='/classes',
     TeacherPortal='/teacher',
-    AddToModule = '/teacher/add-to-module/:moduleId'
-
+    AddLesson = '/teacher/add-lesson/:moduleId',
+    ViewFullClass = '/teacher/view-full-class/:moduleId'
 }
 
 export default RoutesChoice;

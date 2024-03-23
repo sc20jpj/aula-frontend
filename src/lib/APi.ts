@@ -152,30 +152,30 @@ export class API {
         });
     }
 
-    // static getLessons(moduleId: string): Promise<LessonResponse[]> {
-    //     return new Promise<ModuleResponse[]>((resolve, reject) => {
-    //         axiosInstance.get(`${CONFIG.BASE_URL}/modules`)
-    //             .then((res) => {
-    //                 resolve(res.data.data.modules);
-    //             })
-    //             .catch((error) => {
-    //                 reject(error);
-    //             });
-    //     });
-    // }
+    static getAllLessonsForModule(moduleId: string): Promise<ModuleWithLessonsResponse> {
+        return new Promise<ModuleWithLessonsResponse>((resolve, reject) => {
+            axiosInstance.get(`${CONFIG.BASE_URL}/lessons/all/${moduleId}`)
+                .then((res) => {
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
     
-    // static postUserModules(moduleId: string, newUserModule: UserModuleRequest): Promise<UserResponse[]> {
-    //     return new Promise<UserResponse[]>((resolve, reject) => {
+    static postLesson(moduleId: string, newUserModule: LessonRequest): Promise<LessonResponse> {
+        return new Promise<LessonResponse>((resolve, reject) => {
 
-    //         axiosInstance.post(`${CONFIG.BASE_URL}/user-modules/${moduleId}`,newUserModule)
-    //             .then((res) => {
-    //                 resolve(res.data.data.users);
-    //             })
-    //             .catch((error) => {
-    //                 reject(error);
-    //             });
-    //     });
-    // }
+            axiosInstance.post(`${CONFIG.BASE_URL}/lessons/${moduleId}`,newUserModule)
+                .then((res) => {
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
 
 
 }

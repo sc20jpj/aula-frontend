@@ -1,21 +1,21 @@
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@store/hooks';
 import {
-    auth, getCurrentSession, getUserAttributes, sendSignOut,
+    auth
 } from '@store/auth/authSlice'
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import RoutesChoice from '@enums/Routes';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import Button from '@components/Button/Button'
 import { useEffect, useState } from 'react';
 import { API } from '@lib/APi';
-import styles from '@components/MultiSelect/MultiSelect.module.scss';
-import Async, { useAsync } from 'react-select/async';
-import { user } from '@store/user/UserSlice';
+
 
 import Select, { ActionMeta, OnChangeValue } from 'react-select'
+import RoutesChoice from '@enums/Routes';
+import AccordionContainer from '@components/AccordionContainer/AccodionContainer';
+import DocViewer from 'react-doc-viewer';
 
 
-function AddStudent() {
+function ViewFullClass() {
 
     const dispatch = useAppDispatch()
     const state = useSelector(auth);
@@ -24,9 +24,11 @@ function AddStudent() {
     const [options, setOptions] = useState<Option[]>([])
     const [usersOn, setUsersOn] = useState<UserResponse[]>([])
     const [selectedUserModules, setSelectedUserModules] = useState<UserModule[]>([]);
+    const [lessons, setLessons] = useState<LessonWithFiles[]>([]);
+
+
     const params = useParams();
     const [moduleId, setModuleId] = useState('');
-
 
 
     // Your component code...
@@ -52,7 +54,16 @@ function AddStudent() {
 
 
 
+    const handleRedirect = () => {
+        if (moduleId) {
+            console.log("Ran")
+            console.log(moduleId)
+            const path = generatePath(RoutesChoice.AddLesson, { moduleId });
+            navigate(path);
 
+        }
+
+    };
     const sendUserModules = async () => {
         if (!selectedUserModules) return;
         const newUserModuleRequest: UserModuleRequest = {
@@ -63,7 +74,21 @@ function AddStudent() {
 
                 // Assuming res contains the data to be appended to the users array
                 setUsersOn(prevUsers => [...prevUsers, ...res]);
-                
+
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const getAllLessonsForModule = async () => {
+
+
+        API.getAllLessonsForModule(moduleId)
+            .then((res) => {
+
+                setLessons(prevLessons => [...prevLessons, ...res.lessons]);
+
             })
             .catch((error) => {
                 console.log(error);
@@ -81,10 +106,9 @@ function AddStudent() {
     useEffect(() => {
         if (moduleId) {
             getUsersOnModule();
+            getAllLessonsForModule();
         }
     }, [moduleId]);
-
-
 
 
     const getUsersOnModule = () => {
@@ -109,16 +133,7 @@ function AddStudent() {
                 console.log("error has occured")
             })
 
-
-
-
-
     };
-
-
-
-
-
 
 
     return (
@@ -147,38 +162,68 @@ function AddStudent() {
             )}
 
             {usersOn && usersOn.length > 0 ? (
-                <table>
-                    <thead>Students</thead>
-                    <tbody>
 
-                        <tr><td>Name</td></tr>
-                        <tr><td>email</td></tr>
-                        <tr><td>nickname</td></tr>
+                <AccordionContainer title='Students on module'>
+                    <table>
 
-                        {usersOn.map((user, index) => (
-                            <>
-                                <tr>
-                                    <td>{user.name}</td>
-                                </tr>
+                        <tbody>
 
-                                <tr>
-                                    <td>{user.email}</td>
-                                </tr>
+                            <tr><td>Name</td></tr>
+                            <tr><td>email</td></tr>
+                            <tr><td>nickname</td></tr>
 
-                                <tr>
-                                    <td>{user.nickname}</td>
-                                </tr>
-                            </>
+                            {usersOn.map((user, index) => (
+                                <>
+                                    <tr>
+                                        <td>{user.name}</td>
+                                    </tr>
 
-                        ))}
-                    </tbody>
-                </table>
+                                    <tr>
+                                        <td>{user.email}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{user.nickname}</td>
+                                    </tr>
+                                </>
+
+                            ))}
+                        </tbody>
+                    </table>
+                </AccordionContainer>
+
+
+
             ) : (
                 <p>There are no users signed up to this class yet</p>
             )}
 
-        </>
-    )
-}
+            {lessons && lessons.length > 0 ? (
+                <AccordionContainer title="Lessons">
+                    {lessons.map((lesson, index) => (
+                        
+                            <AccordionContainer title={lesson.name}>
+                
+                                <p>{lesson.description}</p>
 
-export default AddStudent
+                                {lesson.files.map((document, docIndex) => (
+                                    <AccordionContainer key={docIndex} title={document.name}>
+
+                                        <DocViewer documents={[{ uri: document.s3_url }]} />
+                                    </AccordionContainer>
+                                ))}
+                            </AccordionContainer>
+                
+                    ))}
+                </AccordionContainer>
+            ) : (
+                <p>There are no lessons for this class yet</p>
+            )}
+
+
+            <Button title='Add lesson' onClick={() => handleRedirect()} />
+
+        </>
+    );
+}
+export default ViewFullClass;

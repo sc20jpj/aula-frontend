@@ -1,0 +1,18 @@
+.accordionContainer {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.accordionHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+}
+
+.accordionContent {
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}

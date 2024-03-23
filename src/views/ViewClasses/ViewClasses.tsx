@@ -55,7 +55,7 @@ function ViewClasses() {
     const handleRedirect = (moduleId?: string) => {
         if (moduleId) {
             
-            const path = generatePath(RoutesChoice.AddToModule, { moduleId });
+            const path = generatePath(RoutesChoice.ViewFullClass, { moduleId });
             navigate(path);
 
         }

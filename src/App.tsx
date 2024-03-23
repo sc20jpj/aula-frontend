@@ -14,9 +14,9 @@ import VerficationCode from '@views/VerificationCode/VerificationCode';
 import ViewClasses from '@views/ViewClasses/ViewClasses';
 import TeacherWrapper from '@components/TeacherWrapper/TeacherWrapper';
 import TeacherPortal from '@views/TeacherPortal/TeacherPortal';
-import NavBar from '@components/NavBar/NavBar';
 import AddModule from '@views/AddModule/AddModule';
 import ViewFullClass from '@views/ViewFullClass/ViewFullClass';
+import AddLesson from '@views/AddLesson/AddLesson';
 
 function App() {
   const state = useAppSelector(auth);
@@ -34,7 +34,7 @@ function App() {
         <Route path={RoutesChoice.Incomplete} element={<VerficationCode />} />
 
 
-    
+
         <Route path={RoutesChoice.TeacherPortal} element={
           <TeacherWrapper><TeacherPortal /></TeacherWrapper>
 
@@ -51,7 +51,7 @@ function App() {
 
         } />
 
-        <Route path={RoutesChoice.AddToModule} element={
+        <Route path={RoutesChoice.ViewFullClass} element={
           <TeacherWrapper>  <ViewFullClass /></TeacherWrapper>
 
         } />
@@ -59,6 +59,11 @@ function App() {
 
         <Route path={RoutesChoice.AddModule} element={
           <TeacherWrapper><AddModule /></TeacherWrapper>
+
+        } />
+
+        <Route path={RoutesChoice.AddLesson} element={
+          <TeacherWrapper><AddLesson /></TeacherWrapper>
 
         } />
 
