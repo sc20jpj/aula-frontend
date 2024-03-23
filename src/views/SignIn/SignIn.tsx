@@ -27,7 +27,8 @@ function SignIn() {
     const state = useSelector(auth);
     const navigate = useNavigate()
     const [error, setError] = useState<String>("");
-    const teacher = useSelector(isTeacher)
+
+
     useEffect(() => {
         if (state.loggedIn == true && state.teacher == false) {
             navigate(RoutesChoice.StudentPortal)
@@ -59,16 +60,24 @@ function SignIn() {
                 .then((res) => {
                     return dispatch(clearAuth())
                 })
-                .then( (res) => {
-                    return  dispatch(getCurrentSession())
-                })
                 .then((res) => {
-                    console.log(state.teacher)
-                    if (state.teacher) {
-                        navigate(RoutesChoice.TeacherPortal);
-                    } else {
-                        navigate(RoutesChoice.StudentPortal);
-                    }
+            
+                    return dispatch(getCurrentSession())
+                    .then((response) => {
+        
+                        if (state.teacher) {
+                            navigate(RoutesChoice.TeacherPortal);
+                        } else {
+                            navigate(RoutesChoice.StudentPortal);
+                        }
+                        return res
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+        
+
+                    
                 })
                 .catch((error) => {
                     console.log(error)

@@ -6,7 +6,7 @@ enum RoutesChoice {
     Unauthorised = '/unauthorised',
     Incomplete = '/incomplete',
     AddModule = '/teacher/add-module',
-    ViewClasses='/view-classes',
+    ViewClasses='/classes',
     TeacherPortal='/teacher',
     AddToModule = '/teacher/add-to-module/:moduleId'
 

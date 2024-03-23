@@ -17,6 +17,7 @@ function NavBar(props: NavBarProps) {
   const navigate = useNavigate();
 
   const handleRedirect = (url: string) => {
+    console.log("running")
     navigate(url);
   };
 
