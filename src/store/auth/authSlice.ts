@@ -270,6 +270,7 @@ export const AuthSlice = createSlice({
                     const groups = action.payload.accessToken.payload["cognito:groups"];
                     if (Array.isArray(groups) && groups.includes("teachers")) {
                         state.teacher = true;
+                        console.log("is teacher")
                     } else {
                         console.log("didn't work")
                         state.teacher = false;

@@ -15,8 +15,9 @@ interface UserResponse {
 interface UserOnModuleResponse {
     users_on: UserResponse[]
     users_not_on: UserResponse[]
+    module: ModuleRequest
+    teacher: string
 }
-
 
 interface UserModuleRequest {
     users: UserModule[]

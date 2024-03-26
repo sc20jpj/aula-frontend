@@ -30,11 +30,7 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
             .unwrap()
             .then((response) => {
                 const res = dispatch(checkUser())
-                if (state.teacher) {
-                    navigate(RoutesChoice.TeacherPortal);
-                } else {
-                    navigate(RoutesChoice.StudentPortal);
-                }
+
                 return res
             })
             .catch((error) => {
@@ -85,7 +81,7 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
 
 
 
-            {!state.loggedIn || (state.teacher && studentOnly) === true ? (
+            {!state.loggedIn ? (
                 <Unauthorised />
             ) : state.isSignUpSent && !state.isSignUpComplete ? (
                 <VerficationCode />

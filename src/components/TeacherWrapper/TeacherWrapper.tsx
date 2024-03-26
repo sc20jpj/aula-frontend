@@ -41,7 +41,6 @@ function TeacherWrapper(props: TeacherWrapperProps) {
             url: RoutesChoice.ViewClasses,
             label: "View classes"
         },
-
         {
             url: RoutesChoice.AddModule,
             label: "Add module"

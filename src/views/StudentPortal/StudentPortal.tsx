@@ -18,6 +18,7 @@ function StudentPortal() {
     const current_user = useSelector(user);
 
     useEffect (() => {
+        console.log("teacher : ",state.teacher)
         if(state.teacher) {
             navigate(RoutesChoice.TeacherPortal)
         }
@@ -37,7 +38,7 @@ function StudentPortal() {
         <>
 
             <>
-                <p>Welcome {current_user?.name}</p>
+                <p>Welcome {current_user?.name} to your student portal</p>
                 <Link to={RoutesChoice.SignUp}>SignUp</Link>
 
                 <Button onClick={() => signOut()} title='Sign Out' />

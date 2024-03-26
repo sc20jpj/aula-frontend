@@ -54,28 +54,26 @@ function ViewClasses() {
     };
     const handleRedirect = (moduleId?: string) => {
         if (moduleId) {
-            
-            const path = generatePath(RoutesChoice.AddToModule, { moduleId });
+
+            const path = generatePath(RoutesChoice.ViewFullClass, { moduleId });
             navigate(path);
 
         }
 
     };
     return (
-        <div className={styles.moduleContainer} >
 
+
+
+        <div className={styles.moduleContainer} >
+            <h1>Modules</h1>
 
             {modules ? (
                 modules.map((module, index) => (
 
                     <div key={index} className={styles.moduleWrapper}>
-                        {state.teacher ?  (
-                             <ModuleBox module={module} onClick={() => handleRedirect(module.id)} />
 
-                        ): (
-                            <ModuleBox module={module} />
-
-                        )}
+                        <ModuleBox module={module} onClick={() => handleRedirect(module.id)} />
 
                     </div>
                 ))

@@ -152,4 +152,30 @@ export class API {
         });
     }
 
+    static getAllLessonsForModule(moduleId: string): Promise<ModuleWithLessonsResponse> {
+        return new Promise<ModuleWithLessonsResponse>((resolve, reject) => {
+            axiosInstance.get(`${CONFIG.BASE_URL}/lessons/all/${moduleId}`)
+                .then((res) => {
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+    
+    static postLesson(moduleId: string, newUserModule: LessonRequest): Promise<LessonResponse> {
+        return new Promise<LessonResponse>((resolve, reject) => {
+
+            axiosInstance.post(`${CONFIG.BASE_URL}/lessons/${moduleId}`,newUserModule)
+                .then((res) => {
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+
 }
