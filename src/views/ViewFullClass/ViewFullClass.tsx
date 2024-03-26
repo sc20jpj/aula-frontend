@@ -12,7 +12,10 @@ import { API } from '@lib/APi';
 import Select, { ActionMeta, OnChangeValue } from 'react-select'
 import RoutesChoice from '@enums/Routes';
 import AccordionContainer from '@components/AccordionContainer/AccodionContainer';
-import DocViewer from 'react-doc-viewer';
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import UserTable from '@components/UserTable/UserTable';
 
 
 function ViewFullClass() {
@@ -23,8 +26,12 @@ function ViewFullClass() {
 
     const [options, setOptions] = useState<Option[]>([])
     const [usersOn, setUsersOn] = useState<UserResponse[]>([])
+    const [module, setModule] = useState<ModuleRequest>()
+    const [teacherName, setTeacherName] = useState<string>()
+
     const [selectedUserModules, setSelectedUserModules] = useState<UserModule[]>([]);
     const [lessons, setLessons] = useState<LessonWithFiles[]>([]);
+    const [loading, setLoading] = useState<Boolean>(false);
 
 
     const params = useParams();
@@ -52,8 +59,6 @@ function ViewFullClass() {
     }
 
 
-
-
     const handleRedirect = () => {
         if (moduleId) {
             console.log("Ran")
@@ -63,7 +68,7 @@ function ViewFullClass() {
 
         }
 
-    };
+    }
     const sendUserModules = async () => {
         if (!selectedUserModules) return;
         const newUserModuleRequest: UserModuleRequest = {
@@ -86,6 +91,7 @@ function ViewFullClass() {
 
         API.getAllLessonsForModule(moduleId)
             .then((res) => {
+
 
                 setLessons(prevLessons => [...prevLessons, ...res.lessons]);
 
@@ -119,6 +125,9 @@ function ViewFullClass() {
         API.getAllUsersOnModule(moduleId)
             .then((res) => {
                 console.log("users on module")
+
+                setModule(res.module)
+                setTeacherName(res.teacher)
                 setUsersOn(res.users_on)
 
                 const newOptions = res.users_not_on.map(user => ({
@@ -139,91 +148,130 @@ function ViewFullClass() {
     return (
         <>
 
-
-            {options && options.length > 0 ? (
+            {module && teacherName && (
                 <>
-                    <div>
-                        <h2>Add To module</h2>
-                        <Select
-                            isClearable={true}
-                            isMulti={true}
-                            options={options}
-                            onChange={addUsersToModule}
+                    <h1>{module.name}</h1>
 
-                        />
-                        {selectedUserModules && selectedUserModules.length > 0 && (
-                            <Button title='Add' onClick={() => sendUserModules()}></Button>
+                    <p>Taught by {teacherName}</p>
 
-                        )}
-                    </div>
-                </>
-            ) : (
-                <p>All avaliable users have been added </p>
-            )}
-
-            {usersOn && usersOn.length > 0 ? (
-
-                <AccordionContainer title='Students on module'>
-                    <table>
-
-                        <tbody>
-
-                            <tr><td>Name</td></tr>
-                            <tr><td>email</td></tr>
-                            <tr><td>nickname</td></tr>
-
-                            {usersOn.map((user, index) => (
+                    {state.teacher && (
+                        <>
+                            {options && options.length > 0 ? (
                                 <>
-                                    <tr>
-                                        <td>{user.name}</td>
-                                    </tr>
+                                    <div>
+                                        <h2>Add To module</h2>
+                                        <Select
+                                            isClearable={true}
+                                            isMulti={true}
+                                            options={options}
+                                            onChange={addUsersToModule}
 
-                                    <tr>
-                                        <td>{user.email}</td>
-                                    </tr>
+                                        />
+                                        {selectedUserModules && selectedUserModules.length > 0 && (
+                                            <Button title='Add' onClick={() => sendUserModules()}></Button>
 
-                                    <tr>
-                                        <td>{user.nickname}</td>
-                                    </tr>
+                                        )}
+                                    </div>
                                 </>
+                            ) : (
+                                <p>All avaliable users have been added </p>
+                            )}
 
-                            ))}
-                        </tbody>
-                    </table>
-                </AccordionContainer>
+                            {usersOn && state.teacher == true && usersOn.length > 0 ? (
+
+                                <AccordionContainer title='Students on module'>
+                                    <UserTable users={usersOn}></UserTable>
+                                </AccordionContainer>
 
 
 
-            ) : (
-                <p>There are no users signed up to this class yet</p>
+                            ) : (
+                                <p>There are no users signed up to this class yet</p>
+                            )}
+
+
+                            <Button title='Add lesson' onClick={() => handleRedirect()} />
+                        </>
+
+                    )}
+
+                    {loading ? (
+                        <>
+                            <FontAwesomeIcon icon={faSpinner} className='fa-spin' />
+                        </>
+                    ) : (
+
+                        <>
+
+                            {/* this could probably be a component */}
+                            {lessons && lessons.length > 0 ? (
+                                <AccordionContainer title="Lessons">
+                                    {lessons.map((lesson, index) => (
+
+                                        <AccordionContainer title={lesson.name}>
+
+                                            <p>{lesson.description}</p>
+
+                                            {lesson.files.map((document, docIndex) => (
+
+
+                                                <AccordionContainer key={docIndex} title={document.name}>
+
+                                                    {document.file_type != "application/pdf" ? (
+                                                        <div>
+                                                            <DocViewer
+                                                                documents={[
+                                                                    { uri: document.s3_url, fileType: document.file_type }
+                                                                ]}
+                                                                prefetchMethod="GET"
+                                                                pluginRenderers={DocViewerRenderers}
+                                                            />
+
+
+
+                                                            <a href={document.s3_url}>Download</a>
+                                                        </div>
+
+                                                    ) : (
+                                                        <>
+                                                            <DocViewer
+                                                                documents={[
+                                                                    { uri: document.s3_url, fileType: document.file_type }
+                                                                ]}
+                                                                prefetchMethod="GET"
+                                                                pluginRenderers={DocViewerRenderers}
+                                                            />
+
+                                                        </>
+
+                                                    )}
+
+                                                </AccordionContainer>
+                                            ))}
+
+
+                                        </AccordionContainer>
+
+                                    ))}
+                                </AccordionContainer>
+                            ) : state.teacher ? (
+                                <p>There are no lessons for this class yet</p>
+                            ) : (
+                                <></>
+                            )}
+
+                        </>
+
+                    )}
+
+                </>
             )}
 
-            {lessons && lessons.length > 0 ? (
-                <AccordionContainer title="Lessons">
-                    {lessons.map((lesson, index) => (
-                        
-                            <AccordionContainer title={lesson.name}>
-                
-                                <p>{lesson.description}</p>
-
-                                {lesson.files.map((document, docIndex) => (
-                                    <AccordionContainer key={docIndex} title={document.name}>
-
-                                        <DocViewer documents={[{ uri: document.s3_url }]} />
-                                    </AccordionContainer>
-                                ))}
-                            </AccordionContainer>
-                
-                    ))}
-                </AccordionContainer>
-            ) : (
-                <p>There are no lessons for this class yet</p>
-            )}
 
 
-            <Button title='Add lesson' onClick={() => handleRedirect()} />
+
 
         </>
-    );
+    )
 }
 export default ViewFullClass;

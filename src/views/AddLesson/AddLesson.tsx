@@ -42,56 +42,57 @@ function AddStudent() {
                 description: description,
                 files: files
             }
+            console.log("the Lesson sent is " ,lesson)
             API.postLesson(moduleId,lesson)
                 .then((res) => {
                     navigate(RoutesChoice.TeacherPortal)
                 }).catch((res) => {
-                    console.log(res)
-                    setError(res)
+                    setError("Error uploding file")
                 })
         }
 
     }
     const handleFiletoBase64 = (fileList: FileList | null) => {
-
         if (fileList) {
-            const promises: Promise<Base64File>[] = [];
-
-            for (let i = 0; i < fileList.length; i++) {
-                const file = fileList[i];
+            const filesArray = Object.values(fileList);
+    
+            const  uploadedFiles =  [...files];
+            var fileError = ""
+            filesArray.forEach((file: File) => {
                 const reader = new FileReader();
-                const promise = new Promise<Base64File>((resolve, reject) => {
+                    reader.readAsDataURL(file);
                     reader.onload = () => {
                         if (reader.result) {
-                            const base64String = reader.result.toString();
+                            const base64String = reader.result.toString().split(',')[1];
                             const base64File: Base64File = {
                                 name: file.name,
+                                file_type: file.type,
                                 base64: base64String
                             };
-                            resolve(base64File);
+                            console.log(base64File)
+
+                            uploadedFiles.push(base64File)
+                           
                         } else {
-                            reject(new Error('Failed to read file'));
+                            
                         }
+
                     };
-                    reader.onerror = () => {
-                        reject(reader.error);
+                    reader.onerror = (error) => {
+                        fileError = "Error reading file"
+                        console.error('Error reading file:', reader.error);
                     };
-                    reader.readAsDataURL(file);
-                });
-                promises.push(promise);
+            
+                
+            });
+            if (fileError === "") {
+                setFiles(uploadedFiles)
             }
-
-            Promise.all(promises)
-                .then(base64Files => {
-                    setFiles(prevFiles => [...prevFiles, ...base64Files]);
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+      
+            
         }
-
-    }
-    useEffect(() => {
+    };
+        useEffect(() => {
         console.log(params.moduleId);
         if (params.moduleId) {
             setModuleId(params.moduleId);

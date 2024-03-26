@@ -24,15 +24,19 @@ interface LessonWithFiles {
     files: Document[]
 }
 
+
+
 interface Document {
     id: string,
     name: string,
     s3_url: string,
+    file_type: string
 }
 
 
 interface Base64File {
     name: string
+    file_type: string
     base64: string
 }
 interface LessonResponse {

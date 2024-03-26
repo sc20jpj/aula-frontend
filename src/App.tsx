@@ -52,7 +52,7 @@ function App() {
         } />
 
         <Route path={RoutesChoice.ViewFullClass} element={
-          <TeacherWrapper>  <ViewFullClass /></TeacherWrapper>
+          <LoggedInWrapper studentOnly={false}>  <ViewFullClass /></LoggedInWrapper>
 
         } />
 

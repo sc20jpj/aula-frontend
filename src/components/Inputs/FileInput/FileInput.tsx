@@ -22,27 +22,24 @@ function FileInput(props: FileInputProps) {
 
 
     return (
-        <>
-            <p>{title}</p>
-            {/*  this is a large list because this all of the types that React doc viewer accepts  */}
-            <input
-                id='fileUpload'
-                type='file'
-                onChange={handleInputChange}
-                multiple
-                accept='
-                applicatiapplication/vnd.openxmlformats-officedocument.presentationml.presentation,
-                application/pdf,
-                application/vnd.openxmlformats-officedocument.wordprocessingml.document,
-                image/jpg,
-                image/png,
-                application/vnd.openxmlformats-officedocument.spreadsheetml.sheet	'
-            />
 
-
-
-        </>
+        <input
+        id='fileUpload'
+        type='file'
+        onChange={handleInputChange}
+        multiple
+        accept='
+            application/vnd.openxmlformats-officedocument.presentationml.presentation,
+            application/pdf,
+            application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+            image/jpeg,
+            image/png,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        '
+    />
     )
+
+
 }
 
 export default FileInput
