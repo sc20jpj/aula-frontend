@@ -1,4 +1,3 @@
-/* ModuleBox.module.scss */
 
 .tableContainer {
     width: 100%;
@@ -6,27 +5,22 @@
 }
 
 .table {
-    width: 100%;
+    width: 40%;
     border-collapse: collapse;
-    background-color: #eaf2f8; /* Light blue */
+    background-color: #eaf2f8; 
+
 }
 
 .table th,
 .table td {
     padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #d0d0d0; /* Light grey */
+    border-bottom: 1px solid #d0d0d0; 
+    
 }
 
 .table th {
-    background-color: #00296f; /* Dark blue */
-    color: #ffffff; /* White text */
+    background-color: #00296f; 
+    color: #ffffff;
 }
 
-.table tbody tr:nth-child(even) {
-    background-color: #f0f6fc; /* Light blue */
-}
-
-.table tbody tr:nth-child(odd) {
-    background-color: #d9e8ff; /* Lighter blue */
-}

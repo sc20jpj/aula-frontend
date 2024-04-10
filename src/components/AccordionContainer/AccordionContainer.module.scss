@@ -1,9 +1,10 @@
 /* Styles for Accordion Container */
 .accordionContainer {
-    border: 1px solid #000000;
+    border: 1px solid #808080;
     margin-bottom: 20px;
     border-radius:  5px;
     overflow: hidden;
+    width: 80%;
 }
 
 /* Styles for Accordion Header */
@@ -14,16 +15,18 @@
     padding: 14px 20px;
     cursor: pointer;
     background-color: #ffffff;
-    border-bottom: 1px solid #ffffff;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.5s ease;
+
+  
 }
 
-/* Hover effect for Accordion Header */
 .accordionHeader:hover {
     background-color: #ffffff;
+    color: black;
+    background-color: #00296f;
+    color: #ffffff;
 }
 
-/* Styles for Accordion Content */
 .accordionContent {
     padding: 20px;
     background-color: #ffffff; /* Changed to white */

@@ -9,6 +9,9 @@ enum RoutesChoice {
     ViewClasses='/classes',
     TeacherPortal='/teacher',
     AddLesson = '/teacher/add-lesson/:moduleId',
+    ViewClassResults = '/teacher/view-class-results/:quizId',
+    AddQuiz = '/teacher/add-quiz/:moduleId',
+    TakeQuiz = '/teacher/take-quiz/:moduleId/:quizId',
     ViewFullClass = '/teacher/view-full-class/:moduleId'
 }
 

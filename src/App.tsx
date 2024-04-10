@@ -17,6 +17,9 @@ import TeacherPortal from '@views/TeacherPortal/TeacherPortal';
 import AddModule from '@views/AddModule/AddModule';
 import ViewFullClass from '@views/ViewFullClass/ViewFullClass';
 import AddLesson from '@views/AddLesson/AddLesson';
+import AddQuiz from '@views/AddQuiz/AddQuiz';
+import TakeQuiz from '@views/TakeQuiz/TakeQuiz';
+import ViewClassResults from '@views/ViewClassResults/ViewClassResults';
 
 function App() {
   const state = useAppSelector(auth);
@@ -57,8 +60,21 @@ function App() {
         } />
 
 
+        <Route path={RoutesChoice.TakeQuiz} element={
+          <LoggedInWrapper studentOnly={true}>  <TakeQuiz /></LoggedInWrapper>
+
+        } />
+
         <Route path={RoutesChoice.AddModule} element={
           <TeacherWrapper><AddModule /></TeacherWrapper>
+
+        } />
+        <Route path={RoutesChoice.ViewClassResults} element={
+          <TeacherWrapper><ViewClassResults /></TeacherWrapper>
+
+        } />
+        <Route path={RoutesChoice.AddQuiz} element={
+          <TeacherWrapper><AddQuiz /></TeacherWrapper>
 
         } />
 

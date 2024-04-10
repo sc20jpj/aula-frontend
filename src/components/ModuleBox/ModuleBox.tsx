@@ -4,7 +4,7 @@ import Button from '@components/Button/Button';
 
 
 interface ModuleBoxProps {
-    module: ModuleRequest
+    module: Module
     onClick?: () => void; // Change this to () => void for a generic function
 
 }
@@ -19,10 +19,11 @@ function ModuleBox(props: ModuleBoxProps) {
         <>
             
             <div onClick={onClick} className={styles.moduleBox}>
-                <h1 className={styles.moduleTitle}>
+                <h1>
                     {module.name}
                 </h1>
-                <h2>{module.code}</h2>
+                <p>{module.code}</p>
+                
 
 
             </div>

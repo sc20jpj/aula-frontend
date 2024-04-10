@@ -86,8 +86,8 @@ export class API {
         });
     }
 
-    static postModule(newModule: ModuleRequest): Promise<ModuleRequest> {
-        return new Promise<ModuleRequest>((resolve, reject) => {
+    static postModule(newModule: Module): Promise<Module> {
+        return new Promise<Module>((resolve, reject) => {
             axiosInstance.post(`${CONFIG.BASE_URL}/modules`, newModule)
                 .then((res) => {
                     resolve(res.data.data);
@@ -102,8 +102,8 @@ export class API {
         });
     }
 
-    static getAllModules(): Promise<ModuleRequest[]> {
-        return new Promise<ModuleRequest[]>((resolve, reject) => {
+    static getAllModules(): Promise<Module[]> {
+        return new Promise<Module[]>((resolve, reject) => {
             axiosInstance.get(`${CONFIG.BASE_URL}/modules/all`)
                 .then((res) => {
                     resolve(res.data.data.modules);
@@ -177,5 +177,66 @@ export class API {
         });
     }
 
+    static postQuiz(moduleId: string, newQuiz: QuizRequest): Promise<Quiz> {
+        return new Promise<Quiz>((resolve, reject) => {
+
+            axiosInstance.post(`${CONFIG.BASE_URL}/quizzes/${moduleId}`,newQuiz)
+                .then((res) => {
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    static getAllQuizzesforModule(moduleId: string): Promise<QuizResponse> {
+        return new Promise<QuizResponse>((resolve, reject) => {
+            axiosInstance.get(`${CONFIG.BASE_URL}/quizzes/all/${moduleId}`)
+                .then((res) => {
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+
+    static getFullQuiz(quizId: string): Promise<Quiz> {
+        return new Promise<Quiz>((resolve, reject) => {
+            axiosInstance.get(`${CONFIG.BASE_URL}/quizzes/${quizId}`)
+                .then((res) => {
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    static takeQuiz(quizId: string,userQuestionsData: UserQuestion): Promise<UserQuizTake> {
+        return new Promise<UserQuizTake>((resolve, reject) => {
+            axiosInstance.post(`${CONFIG.BASE_URL}/quizzes/take/${quizId}`,userQuestionsData)
+                .then((res) => {
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    static getAllUserQuizTakes(quizId: string): Promise<UserQuizTakeResponse> {
+        return new Promise<UserQuizTakeResponse>((resolve, reject) => {
+            axiosInstance.get(`${CONFIG.BASE_URL}/user_quiz_takes/all/${quizId}`)
+                .then((res) => {
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
 
 }
