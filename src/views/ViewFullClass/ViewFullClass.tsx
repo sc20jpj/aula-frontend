@@ -132,6 +132,7 @@ function ViewFullClass() {
                     points: res.points,
                     teacher: res.teacher
                 }
+                console.log(res.points)
                 setModule(module)
 
                 setLessons(res.lessons)
@@ -300,11 +301,13 @@ function ViewFullClass() {
                                                         <>
                                                             <DocViewer
                                                                 documents={[
-                                                                    { uri: document.s3_url, fileType: document.file_type }
+                                                                    { uri: document.s3_url, fileType: "pdf" }
                                                                 ]}
                                                                 prefetchMethod="GET"
                                                                 pluginRenderers={DocViewerRenderers}
                                                             />
+                                                            <p>Please use this download button instead</p>
+                                                              <a href={document.s3_url}>Download</a>
 
 
 

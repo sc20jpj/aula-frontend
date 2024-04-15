@@ -12,7 +12,7 @@ import { auth } from '@store/auth/authSlice';
 
 
 function ViewClasses() {
-    const [modules, setModules] = useState<Module[]>();
+    const [modules, setModules] = useState<ModuleResponse[]>();
     const state = useSelector(auth);
 
     const navigate = useNavigate()
