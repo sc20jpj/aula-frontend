@@ -25,13 +25,29 @@ function TeacherWrapper(props: TeacherWrapperProps) {
         dispatch(getCurrentSession())
             .unwrap()
             .then((response) => {
-                const res = dispatch(checkUser())
-                return res
+                const res = dispatch(checkUser());
+                return res;
             })
             .catch((error) => {
-                console.log(error)
+                console.log(error);
+            });
+
+
+            console.log("logged in is ",state.loggedIn,state.isSignUpSent)
+    }, []); // Add location.pathname as a dependency
+    useEffect(() => {
+        dispatch(getCurrentSession())
+            .unwrap()
+            .then((response) => {
+                const res = dispatch(checkUser());
+                return res;
             })
-    }, [])
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [location.pathname]); // Add location.pathname as a dependency
+
+
     const navBarLinks: AppLinks[] = [
         {
             url: RoutesChoice.TeacherPortal,

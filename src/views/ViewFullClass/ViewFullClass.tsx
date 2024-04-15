@@ -12,11 +12,13 @@ import { API } from '@lib/APi';
 import Select, { ActionMeta, OnChangeValue } from 'react-select'
 import RoutesChoice from '@enums/Routes';
 import AccordionContainer from '@components/AccordionContainer/AccodionContainer';
-import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import UserTable from '@components/UserTable/UserTable';
-
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
+import PointsBox from '@components/PointsBox/PointsBox';
+import styles from "@views/ViewFullClass/ViewFullClass.module.scss"
+import PointsBoxGroup from '@components/PointsBoxGroup/PointsBoxGroup';
 
 function ViewFullClass() {
 
@@ -26,11 +28,13 @@ function ViewFullClass() {
 
     const [options, setOptions] = useState<Option[]>([])
     const [usersOn, setUsersOn] = useState<UserResponse[]>([])
-    const [module, setModule] = useState<ModuleRequest>()
+    const [module, setModule] = useState<ModuleResponse>()
     const [teacherName, setTeacherName] = useState<string>()
 
     const [selectedUserModules, setSelectedUserModules] = useState<UserModule[]>([]);
     const [lessons, setLessons] = useState<LessonWithFiles[]>([]);
+    const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+
     const [loading, setLoading] = useState<Boolean>(false);
 
 
@@ -59,11 +63,41 @@ function ViewFullClass() {
     }
 
 
-    const handleRedirect = () => {
+    const handleRedirectLesson = () => {
         if (moduleId) {
             console.log("Ran")
             console.log(moduleId)
             const path = generatePath(RoutesChoice.AddLesson, { moduleId });
+            navigate(path);
+
+        }
+
+    }
+
+    const handleRedirectQuiz = () => {
+        if (moduleId) {
+            console.log("Ran")
+            console.log(moduleId)
+            const path = generatePath(RoutesChoice.AddQuiz, { moduleId });
+            navigate(path);
+
+        }
+
+    }
+
+
+    const handleRedirectTakeQuiz = (quizId: string) => {
+        if (moduleId) {
+            const path = generatePath(RoutesChoice.TakeQuiz, { moduleId, quizId, });
+            navigate(path);
+
+        }
+
+    }
+
+    const handleResultsRedirect = (quizId: string) => {
+        if (moduleId) {
+            const path = generatePath(RoutesChoice.ViewClassResults, { quizId, });
             navigate(path);
 
         }
@@ -92,8 +126,32 @@ function ViewFullClass() {
         API.getAllLessonsForModule(moduleId)
             .then((res) => {
 
+                const module: ModuleResponse = {
+                    name: res.name,
+                    code: res.code,
+                    points: res.points,
+                    teacher: res.teacher
+                }
+                console.log(res.points)
+                setModule(module)
 
-                setLessons(prevLessons => [...prevLessons, ...res.lessons]);
+                setLessons(res.lessons)
+
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+
+    const getAlQuizzesForModule = async () => {
+
+
+        API.getAllQuizzesforModule(moduleId)
+            .then((res) => {
+
+                setQuizzes(res.quizzes);
+                console.log(quizzes)
 
             })
             .catch((error) => {
@@ -111,20 +169,19 @@ function ViewFullClass() {
 
     useEffect(() => {
         if (moduleId) {
-            getUsersOnModule();
+            if (state.teacher) {
+                getUsersOnModule();
+            }
             getAllLessonsForModule();
+            getAlQuizzesForModule();
         }
     }, [moduleId]);
 
 
     const getUsersOnModule = () => {
-        console.log("moduleId is", moduleId)
 
-
-        console.log("moduleID is", moduleId)
         API.getAllUsersOnModule(moduleId)
             .then((res) => {
-                console.log("users on module")
 
                 setModule(res.module)
                 setTeacherName(res.teacher)
@@ -148,14 +205,25 @@ function ViewFullClass() {
     return (
         <>
 
-            {module && teacherName && (
+            {module && (
                 <>
-                    <h1>{module.name}</h1>
+                    <div className={styles.titleWrapper}>
+                        <h1>{module.name}</h1>
+                        {module.points && (
+                            <PointsBox points={module.points}></PointsBox>
 
-                    <p>Taught by {teacherName}</p>
+                        )}
+                    </div>
+
+
+                    <p>Taught by {module.teacher}</p>
+
 
                     {state.teacher && (
                         <>
+                            <Button title='Add lesson' onClick={() => handleRedirectLesson()} />
+
+                            <Button title='Add Quiz' onClick={() => handleRedirectQuiz()} />
                             {options && options.length > 0 ? (
                                 <>
                                     <div>
@@ -184,13 +252,11 @@ function ViewFullClass() {
                                 </AccordionContainer>
 
 
-
                             ) : (
                                 <p>There are no users signed up to this class yet</p>
                             )}
 
 
-                            <Button title='Add lesson' onClick={() => handleRedirect()} />
                         </>
 
                     )}
@@ -218,29 +284,32 @@ function ViewFullClass() {
                                                 <AccordionContainer key={docIndex} title={document.name}>
 
                                                     {document.file_type != "application/pdf" ? (
-                                                        <div>
-                                                            <DocViewer
-                                                                documents={[
-                                                                    { uri: document.s3_url, fileType: document.file_type }
-                                                                ]}
-                                                                prefetchMethod="GET"
-                                                                pluginRenderers={DocViewerRenderers}
-                                                            />
-
-
-
-                                                            <a href={document.s3_url}>Download</a>
-                                                        </div>
-
-                                                    ) : (
                                                         <>
                                                             <DocViewer
                                                                 documents={[
                                                                     { uri: document.s3_url, fileType: document.file_type }
                                                                 ]}
                                                                 prefetchMethod="GET"
+
                                                                 pluginRenderers={DocViewerRenderers}
                                                             />
+
+                                                            <a href={document.s3_url}>Download</a>
+                                                        </>
+
+                                                    ) : (
+                                                        <>
+                                                            <DocViewer
+                                                                documents={[
+                                                                    { uri: document.s3_url, fileType: "pdf" }
+                                                                ]}
+                                                                prefetchMethod="GET"
+                                                                pluginRenderers={DocViewerRenderers}
+                                                            />
+                                                            <p>Please use this download button instead</p>
+                                                              <a href={document.s3_url}>Download</a>
+
+
 
                                                         </>
 
@@ -257,7 +326,50 @@ function ViewFullClass() {
                             ) : state.teacher ? (
                                 <p>There are no lessons for this class yet</p>
                             ) : (
-                                <></>
+                                <p>There are no lessons for this class yet</p>
+                            )}
+
+
+                            {/* this could probably be a component */}
+                            {quizzes && quizzes.length > 0 ? (
+                                <AccordionContainer title="Quizzes">
+                                    {quizzes.map((quiz, index) => (
+                                        <>
+                                            <h4>{quiz.title}</h4>
+                                            <h4>{quiz.description}</h4>
+                                            {!state.teacher && !quiz.user_quiz_take && (
+
+
+                                                <Button title='Take Quiz' onClick={() => handleRedirectTakeQuiz(quiz.id!)}></Button>
+
+                                            )}
+                                            {quiz.user_quiz_take && !state.teacher && (
+                                                <>
+
+                                                    <div className={styles.score}>
+                                                        <p >Score</p>
+                                                        <PointsBoxGroup
+                                                            total_user_points={quiz.user_quiz_take.total_points}
+                                                            total_points={quiz.user_quiz_take.total_user_points}
+                                                        />
+                                                    </div>
+                                                </>
+                                            )}
+
+
+                                            {state.teacher && (
+                                                <Button title='Results' onClick={() => handleResultsRedirect(quiz.id!)}></Button>
+                                            )}
+
+
+                                        </>
+
+                                    ))}
+                                </AccordionContainer>
+                            ) : state.teacher ? (
+                                <p>There are no quizzes for this class yet</p>
+                            ) : (
+                                <p>There are no quizzes for this class yet</p>
                             )}
 
                         </>
@@ -266,10 +378,6 @@ function ViewFullClass() {
 
                 </>
             )}
-
-
-
-
 
         </>
     )

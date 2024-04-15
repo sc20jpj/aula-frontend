@@ -1,21 +1,22 @@
 
 .moduleBox {
-    max-width: 1200px;
-    width: 80%;
     display: flex;
-    font-size:8pt;
-    justify-content: space-between;
+    width: 60%;
+    height: 30%;
+    padding: 1%;
+    margin-bottom: 2%;
+    font-size: 0.75em;
     flex-direction: column;
-    border: 1px solid #000000;
-    margin-right: 50px;
-    margin-top: 25px;
-    padding: 20px;
+    border: 1px solid #808080; /* Updated border color to a sleeker gray */
+    border-radius:  5px;
 
     &:hover {
-        background-color: #f0f0f0;
+      background-color: #00296f;
+      color: white;
+      transition: background-color 0.5s ease;
     }
-}
-
-.moduleTitle {
-    /* Add styles for module title */
+  }
+.header {
+    display: flex;
+    align-items: center;
 }

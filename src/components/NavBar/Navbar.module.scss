@@ -12,8 +12,7 @@
   height: 4em;
   padding: 0 0.2em;
   z-index: 100;
-
-
+  
 
 }
 
@@ -24,7 +23,6 @@
 }
 
 
-
 .links {
   display: flex;
   padding-top: 8px;
@@ -32,23 +30,22 @@
 }
 
 .navButton {
-  height: 2em;
-  min-width: 8em;
-  border-radius: 15px;
+  height: auto; /* Allow height to adjust based on content */
+  min-width: 100px; /* Set a minimum width to ensure button remains clickable */
+  padding: 10px 20px; /* Adjust padding for better spacing */
+  border-radius: 8px; /* Reduced border-radius for less curvature */
   background-color: transparent;
   text-align: center;
   border: 1px solid transparent;
   color: white;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-  margin: 0 0.5em;
-  font-size: 1em;
+  transition: background-color 0.5s, ease 0.5s, border-color 0.5s;
+  margin: 0 10px; /* Increased margin for better spacing between buttons */
+  font-size: 16px; /* Adjust font size for better readability */
   line-height: 1.5;
 }
 
 .navButton:hover {
-  background-color: rgb(0, 81, 139);
-  color: white;
-  border-color: #ccc;
-
+  background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background on hover */
+  border-color: white; /* Change border color on hover */
 }
