@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { API } from '@lib/APi';
 
 interface UserState {
-    user?: UserResponse
+    user?: User
     module_id: string
 }
 
@@ -18,7 +18,7 @@ const initialState: UserState = {
 
 
 export const checkUser = createAsyncThunk<
-    UserResponse
+    User
 >(
     'User/resendVerificationCode',
     (_, thunkAPI) => {

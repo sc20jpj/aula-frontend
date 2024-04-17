@@ -9,6 +9,10 @@ import Button from '@components/Button/Button'
 import { useEffect } from 'react';
 import { API } from '@lib/APi';
 import { user } from '@store/user/UserSlice';
+import PointsBox from '@components/PointsBox/PointsBox';
+import PointsBoxList from '@components/PointsBoxList/PointsBoxList';
+import BadgeImage from '@components/BadgeImage/BadgeImage';
+import AccordionContainer from '@components/AccordionContainer/AccodionContainer';
 
 function StudentPortal() {
 
@@ -17,32 +21,67 @@ function StudentPortal() {
     const navigate = useNavigate()
     const current_user = useSelector(user);
 
-    useEffect (() => {
-        console.log("teacher : ",state.teacher)
-        if(state.teacher) {
+    useEffect(() => {
+        console.log("teacher : ", state.teacher)
+        if (state.teacher) {
             navigate(RoutesChoice.TeacherPortal)
         }
-    },[])
-    const signOut = () => {
+    }, [])
 
-        
-        dispatch(sendSignOut())
-        .unwrap()
-        .then((res) => {
-            navigate(RoutesChoice.SignIn)
-        })
-        
-    }
 
     return (
         <>
 
-            <>
-                <p>Welcome {current_user?.name} to your student portal</p>
+        
+
+                <h1>Welcome to the Aula project</h1>
+                <h2>Introduction</h2>
+                <p>This site is a test on gamification as part of a University of leeds dissertation on how
+                    gamification affects learning within higher education.</p>
+
+
+                <p> Please promptly complete any quizzes that you have been assigned to and try not to use any external material other than what's in your training.</p>
+
+                <p>Please ensure you have signed the consent forms and these will detail how your personal data will be used</p>
+
+                <p>As for passwords all passwords are securely stored on AWS cognito and haven't been kept by the student</p>
                 <Link to={RoutesChoice.SignUp}>SignUp</Link>
 
-                <Button onClick={() => signOut()} title='Sign Out' />
-            </>
+                <h2>How it works </h2>
+                
+                <AccordionContainer title='XP'>
+
+                <p>XP can be collected via a few activities and works and will decided via a teacher but is mainly collected towards your performance in the quizzes for classes. XP will be handed out in the following ways:
+                    </p>
+                    <PointsBoxList number={1} text='directly via your score on an quiz'/>
+                    <PointsBoxList number={2} text='Collecting any badges'/>
+                    <PointsBoxList number={3} text='completing an activity first (including filling out the consent forms first)'/>
+                    <PointsBoxList number={4} text='maintaining good communication with me during the experiment and providing feedback'/>
+
+                </AccordionContainer>
+
+                <AccordionContainer title='Badges'>
+                <p>Badges can be collected in acccodance with your performance in the quiz and with communicating with me in the study</p>
+                <p>The avaliable badges are:</p>
+
+                <PointsBoxList number={1} text='best performer in a quiz'/>
+                <PointsBoxList number={3} text='most improved'/>
+                <PointsBoxList number={4} text='best performer in a class'/>
+                <PointsBoxList number={5} text='best performer in the study'/>
+                <PointsBoxList number={6} text='most improved in the study'/>
+                <PointsBoxList number={7} text='completion badges for completing a quiz '/>
+                <PointsBoxList number={8} text='best communicator*'/>
+
+
+                <p>*This badge will awarded to the person who provides best feedback and communication about the study and website to me</p>
+                </AccordionContainer>
+
+
+
+
+
+
+        
 
         </>
     )

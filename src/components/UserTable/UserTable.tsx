@@ -3,7 +3,7 @@ import styles from '@components/UserTable/UserTable.module.scss';
 import Button from '@components/Button/Button';
 
 interface TableProps {
-    users: UserResponse[];
+    users: User[];
 }
 
 function Table(props: TableProps) {

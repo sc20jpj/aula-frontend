@@ -23,8 +23,8 @@
 .accordionHeader:hover {
     background-color: #ffffff;
     color: black;
-    background-color: #00296f;
-    color: #ffffff;
+    border-radius:  5px; 
+    border-bottom: 4px solid #00296f; /* 1px solid white border at the bottom */
 }
 
 .accordionContent {

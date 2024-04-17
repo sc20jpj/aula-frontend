@@ -8,7 +8,6 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import { store, persistor } from '@store/store'; // Assuming you have a Redux store with persistor configured
-import styles from './main.module.scss'
 
 Amplify.configure(amplifyconfig);
 
@@ -18,6 +17,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <App />
+ 
+
+      
       </PersistGate>
     </Provider>
 

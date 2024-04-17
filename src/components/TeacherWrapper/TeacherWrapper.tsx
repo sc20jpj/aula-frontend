@@ -61,6 +61,10 @@ function TeacherWrapper(props: TeacherWrapperProps) {
             url: RoutesChoice.AddModule,
             label: "Add module"
         },
+        {
+            url: RoutesChoice.AddBadge,
+            label: "Add badge"
+        },
 
     ]
     return (

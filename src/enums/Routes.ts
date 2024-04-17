@@ -9,10 +9,12 @@ enum RoutesChoice {
     ViewClasses='/classes',
     TeacherPortal='/teacher',
     AddLesson = '/teacher/add-lesson/:moduleId',
+    AddBadge = '/teacher/add-badge',
     ViewClassResults = '/teacher/view-class-results/:quizId',
     AddQuiz = '/teacher/add-quiz/:moduleId',
     TakeQuiz = '/teacher/take-quiz/:moduleId/:quizId',
-    ViewFullClass = '/teacher/view-full-class/:moduleId'
+    ViewFullClass = '/teacher/view-full-class/:moduleId',
+    Profile = '/profile'
 }
 
 export default RoutesChoice;

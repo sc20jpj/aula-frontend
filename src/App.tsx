@@ -20,6 +20,9 @@ import AddLesson from '@views/AddLesson/AddLesson';
 import AddQuiz from '@views/AddQuiz/AddQuiz';
 import TakeQuiz from '@views/TakeQuiz/TakeQuiz';
 import ViewClassResults from '@views/ViewClassResults/ViewClassResults';
+import AddBadge from '@views/AddBadge/AddBadge';
+import Profile from '@views/Profile/Profile';
+import   "./main.css"
 
 function App() {
   const state = useAppSelector(auth);
@@ -29,6 +32,9 @@ function App() {
 
 
   return (
+    <div className='app'>
+
+
     <Router>
       <Routes>
         <Route path={RoutesChoice.SignUp} element={<SignUp />} />
@@ -59,6 +65,11 @@ function App() {
 
         } />
 
+        <Route path={RoutesChoice.Profile} element={
+          <LoggedInWrapper studentOnly={true}>  <Profile /></LoggedInWrapper>
+
+        } />
+
 
         <Route path={RoutesChoice.TakeQuiz} element={
           <LoggedInWrapper studentOnly={true}>  <TakeQuiz /></LoggedInWrapper>
@@ -83,10 +94,16 @@ function App() {
 
         } />
 
+        <Route path={RoutesChoice.AddBadge} element={
+          <TeacherWrapper><AddBadge /></TeacherWrapper>
+
+        } />
+
 
 
       </Routes>
     </Router>
+    </div>
   );
 }
 

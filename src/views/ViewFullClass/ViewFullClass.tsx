@@ -27,7 +27,7 @@ function ViewFullClass() {
     const navigate = useNavigate()
 
     const [options, setOptions] = useState<Option[]>([])
-    const [usersOn, setUsersOn] = useState<UserResponse[]>([])
+    const [usersOn, setUsersOn] = useState<User[]>([])
     const [module, setModule] = useState<ModuleResponse>()
     const [teacherName, setTeacherName] = useState<string>()
 
@@ -209,10 +209,18 @@ function ViewFullClass() {
                 <>
                     <div className={styles.titleWrapper}>
                         <h1>{module.name}</h1>
+                        <hr />
                         {module.points && (
-                            <PointsBox points={module.points}></PointsBox>
+
+                            <div className={styles.xpBox}>
+                                <p>XP</p>
+                                <PointsBox points={module.points} />
+
+                            </div>
 
                         )}
+                        <hr className='rules'></hr> 
+                       
                     </div>
 
 
@@ -228,13 +236,14 @@ function ViewFullClass() {
                                 <>
                                     <div>
                                         <h2>Add To module</h2>
+
                                         <Select
                                             isClearable={true}
                                             isMulti={true}
                                             options={options}
                                             onChange={addUsersToModule}
-
                                         />
+
                                         {selectedUserModules && selectedUserModules.length > 0 && (
                                             <Button title='Add' onClick={() => sendUserModules()}></Button>
 
@@ -271,7 +280,7 @@ function ViewFullClass() {
 
                             {/* this could probably be a component */}
                             {lessons && lessons.length > 0 ? (
-                                <AccordionContainer title="Lessons">
+                                <AccordionContainer title="Training">
                                     {lessons.map((lesson, index) => (
 
                                         <AccordionContainer title={lesson.name}>
@@ -307,7 +316,7 @@ function ViewFullClass() {
                                                                 pluginRenderers={DocViewerRenderers}
                                                             />
                                                             <p>Please use this download button instead</p>
-                                                              <a href={document.s3_url}>Download</a>
+                                                            <a href={document.s3_url}>Download</a>
 
 
 
@@ -346,8 +355,8 @@ function ViewFullClass() {
                                             {quiz.user_quiz_take && !state.teacher && (
                                                 <>
 
-                                                    <div className={styles.score}>
-                                                        <p >Score</p>
+                                                    <div className={styles.xpBox}>
+                                                        <p >XP collected:</p>
                                                         <PointsBoxGroup
                                                             total_user_points={quiz.user_quiz_take.total_points}
                                                             total_points={quiz.user_quiz_take.total_user_points}

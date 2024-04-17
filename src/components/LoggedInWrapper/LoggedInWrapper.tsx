@@ -8,7 +8,7 @@ import React, { useEffect } from 'react';
 import Unauthorised from '@views/UnAuthorisedPage/UnAuthorisedPage';
 import VerficationCode from '@views/VerificationCode/VerificationCode';
 import NavBar from '@components/NavBar/NavBar';
-import { checkUser } from '@store/user/UserSlice';
+import { checkUser, user } from '@store/user/UserSlice';
 import styles from "@components/LoggedInWrapper/LoggedInWrapper.module.scss"
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -25,32 +25,43 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
     const location = useLocation();
     const dispatch = useAppDispatch();
     const state = useSelector(auth);
+    const userState = useSelector(user);
+
     const navigate = useNavigate();
     const { children, studentOnly } = props;
 
-    useEffect(() => {
-        dispatch(getCurrentSession())
-            .unwrap()
-            .then((response) => {
-                const res = dispatch(checkUser());
-                return res;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [location.pathname]); // Add location.pathname as a dependency
-    useEffect(() => {
-        dispatch(getCurrentSession())
-            .unwrap()
-            .then((response) => {
-                const res = dispatch(checkUser());
-                return res;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, []); // Add location.pathname as a dependency
+    // useEffect(() => {
+    //     dispatch(getCurrentSession())
+    //         .unwrap()
+    //         .then((response) => {
+    //             const res = dispatch(checkUser());
+    //             return res;
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }, [location.pathname]); // Add location.pathname as a dependency
 
+    // might want to change this but allows it so the ID never gets old
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            dispatch(getCurrentSession())
+                .unwrap()
+                .then((response) => {
+                    const res = dispatch(checkUser());
+                    return res;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }, 300000);
+    
+        return () => {
+            clearInterval(intervalId);
+        };
+    
+    }, []);
+    
 
 
 
@@ -63,11 +74,15 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
             },
             {
                 url: RoutesChoice.ViewClasses,
-                label: "View Classes" // Corrected label
+                label: "View classes"
             },
             {
                 url: RoutesChoice.AddModule,
-                label: "Add module" // Corrected label
+                label: "Add module"
+            },
+            {
+                url: RoutesChoice.AddBadge,
+                label: "Add badge"
             },
         ]
     }
@@ -90,12 +105,12 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
 
 
     return (
-        <>
-
-            
+        <div className={styles.page}>
 
 
-            
+
+
+
 
             {!state.loggedIn ? (
                 <Unauthorised />
@@ -104,10 +119,19 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
             ) : (
                 state.loggedIn && state.isSignUpSent && state.isSignUpComplete && (
                     <>
-                    
+
 
                         <div className={styles.container}>
-                        <NavBar  links={navBarLinks}/>
+
+                            {state.teacher ? (
+                                <NavBar links={navBarLinks} />
+
+                            ) : (
+                                <NavBar links={navBarLinks} profile_name={
+                                    userState?.name
+                                } />
+
+                            )}
                             <div className={styles.main}>
                                 {children}
                             </div>
@@ -122,7 +146,7 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
             )}
 
 
-        </>
+        </div>
     )
 }
 
