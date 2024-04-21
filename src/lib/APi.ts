@@ -14,7 +14,7 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(config => {
     const state = store.getState(); // Access the Redux state
     const accessToken = state.auth.idToken; // Assuming accessToken is stored under auth slice
-
+    
     if (config.headers) {
 
         if (accessToken) {

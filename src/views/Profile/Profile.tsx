@@ -8,7 +8,7 @@ import RoutesChoice from '@enums/Routes';
 import Button from '@components/Button/Button'
 import { useEffect, useState } from 'react';
 import { API } from '@lib/APi';
-import { user } from '@store/user/UserSlice';
+import { checkUser, user } from '@store/user/UserSlice';
 import ProfilePage from '@components/ProfilePage/ProfilePage';
 
 function Profile() {
@@ -22,6 +22,10 @@ function Profile() {
 
     useEffect(() => {
         console.log("teacher : ", state.teacher)
+        dispatch(checkUser()).then((res) =>{
+            
+        })
+        
         if (state.teacher) {
             navigate(RoutesChoice.TeacherPortal)
         }

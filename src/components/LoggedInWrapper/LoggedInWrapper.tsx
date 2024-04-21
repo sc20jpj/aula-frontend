@@ -30,17 +30,17 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
     const navigate = useNavigate();
     const { children, studentOnly } = props;
 
-    // useEffect(() => {
-    //     dispatch(getCurrentSession())
-    //         .unwrap()
-    //         .then((response) => {
-    //             const res = dispatch(checkUser());
-    //             return res;
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         });
-    // }, [location.pathname]); // Add location.pathname as a dependency
+    useEffect(() => {
+        dispatch(getCurrentSession())
+            .unwrap()
+            .then((response) => {
+                const res = dispatch(checkUser());
+                return res;
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [location.pathname]); // Add location.pathname as a dependency
 
     // might want to change this but allows it so the ID never gets old
     useEffect(() => {
