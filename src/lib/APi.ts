@@ -1,7 +1,7 @@
 import { CONFIG } from '@config/config';
 import { auth, getCurrentSession } from '@store/auth/authSlice';
 import { useAppDispatch } from '@store/hooks';
-import axios, { AxiosInstance, AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosError, AxiosResponse } from 'axios';
 import { useSelector } from 'react-redux';
 import { store } from "@store/store"
 
@@ -40,10 +40,10 @@ export class API {
 
         return new Promise<User>((resolve, reject) => {
             axiosInstance.post(`${CONFIG.BASE_URL}/users`, newUser)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -51,10 +51,10 @@ export class API {
     static getUser(): Promise<User> {
         return new Promise<User>((resolve, reject) => {
             axiosInstance.get(`${CONFIG.BASE_URL}/users/check-auth`)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -63,10 +63,10 @@ export class API {
     static getAllUsers(): Promise<UsersAllResponse> {
         return new Promise<UsersAllResponse>((resolve, reject) => {
             axiosInstance.get(`${CONFIG.BASE_URL}/users/all`)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -75,10 +75,10 @@ export class API {
     static getTest(): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             axiosInstance.get(`${CONFIG.BASE_URL}/users`)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -90,10 +90,10 @@ export class API {
         return new Promise<UserOnModuleResponse>((resolve, reject) => {
 
             axiosInstance.get(`${CONFIG.BASE_URL}/users/${moduleId}`)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -102,7 +102,7 @@ export class API {
     static postModule(newModule: Module): Promise<Module> {
         return new Promise<Module>((resolve, reject) => {
             axiosInstance.post(`${CONFIG.BASE_URL}/modules`, newModule)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
 
                 })
@@ -118,10 +118,10 @@ export class API {
     static getAllModules(): Promise<Module[]> {
         return new Promise<Module[]>((resolve, reject) => {
             axiosInstance.get(`${CONFIG.BASE_URL}/modules/all`)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data.modules);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -130,10 +130,10 @@ export class API {
     static getAllUserModules(userId: string): Promise<ModuleResponse[]> {
         return new Promise<ModuleResponse[]>((resolve, reject) => {
             axiosInstance.get(`${CONFIG.BASE_URL}/modules`)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data.modules);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -143,10 +143,10 @@ export class API {
     static getAllUserModulesonModule(moduleId: string): Promise<ModuleWithUserModulesResponse> {
         return new Promise<ModuleWithUserModulesResponse>((resolve, reject) => {
             axiosInstance.get(`${CONFIG.BASE_URL}/modules/all-user-modules/${moduleId}`)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -156,10 +156,10 @@ export class API {
         return new Promise<User[]>((resolve, reject) => {
 
             axiosInstance.post(`${CONFIG.BASE_URL}/user-modules/${moduleId}`, newUserModule)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data.users);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -169,10 +169,10 @@ export class API {
         return new Promise<any>((resolve, reject) => {
 
             axiosInstance.delete(`${CONFIG.BASE_URL}/modules/${moduleId}`)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -181,10 +181,10 @@ export class API {
     static getAllLessonsForModule(moduleId: string): Promise<ModuleWithLessonsResponse> {
         return new Promise<ModuleWithLessonsResponse>((resolve, reject) => {
             axiosInstance.get(`${CONFIG.BASE_URL}/lessons/all/${moduleId}`)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -194,10 +194,10 @@ export class API {
         return new Promise<LessonResponse>((resolve, reject) => {
 
             axiosInstance.post(`${CONFIG.BASE_URL}/lessons/${moduleId}`, newUserModule)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -207,10 +207,10 @@ export class API {
         return new Promise<Quiz>((resolve, reject) => {
 
             axiosInstance.post(`${CONFIG.BASE_URL}/quizzes/${moduleId}`, newQuiz)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -219,10 +219,10 @@ export class API {
     static getAllQuizzesforModule(moduleId: string): Promise<QuizResponse> {
         return new Promise<QuizResponse>((resolve, reject) => {
             axiosInstance.get(`${CONFIG.BASE_URL}/quizzes/all/${moduleId}`)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -232,10 +232,10 @@ export class API {
     static getFullQuiz(quizId: string): Promise<Quiz> {
         return new Promise<Quiz>((resolve, reject) => {
             axiosInstance.get(`${CONFIG.BASE_URL}/quizzes/${quizId}`)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -244,10 +244,10 @@ export class API {
     static takeQuiz(quizId: string, userQuestionsData: UserQuestion): Promise<UserQuizTake> {
         return new Promise<UserQuizTake>((resolve, reject) => {
             axiosInstance.post(`${CONFIG.BASE_URL}/quizzes/take/${quizId}`, userQuestionsData)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -256,10 +256,10 @@ export class API {
     static getAllUserQuizTakes(quizId: string): Promise<UserQuizTakeResponse> {
         return new Promise<UserQuizTakeResponse>((resolve, reject) => {
             axiosInstance.get(`${CONFIG.BASE_URL}/user_quiz_takes/all/${quizId}`)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
-                .catch((error) => {
+                .catch((error: AxiosError) => {
                     reject(error);
                 });
         });
@@ -269,7 +269,7 @@ export class API {
     static postBadge(newBadge: BadgeRequest): Promise<BadgeRequest> {
         return new Promise<BadgeRequest>((resolve, reject) => {
             axiosInstance.post(`${CONFIG.BASE_URL}/badges`, newBadge)
-                .then((res) => {
+                .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
                 .catch((error: AxiosError) => {
@@ -286,7 +286,7 @@ export class API {
         if (userId) {
             return new Promise<UserBadgesResponse>((resolve, reject) => {
                 axiosInstance.get(`${CONFIG.BASE_URL}/badges/all/${userId}}`)
-                    .then((res) => {
+                    .then((res: AxiosResponse) => {
                         resolve(res.data.data);
                     })
                     .catch((error: AxiosError) => {
@@ -300,7 +300,7 @@ export class API {
         else {
             return new Promise<UserBadgesResponse>((resolve, reject) => {
                 axiosInstance.get(`${CONFIG.BASE_URL}/badges/all`)
-                    .then((res) => {
+                    .then((res: AxiosResponse) => {
                         resolve(res.data.data);
                     })
                     .catch((error: AxiosError) => {
