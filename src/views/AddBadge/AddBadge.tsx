@@ -106,7 +106,7 @@ function AddBadge() {
         API.getAllUsers()
             .then((res) => {
                 const newOptions = res.users.map(user => ({
-                    value: user.id,
+                    value: user.id!,
                     label: user.name
                 }));
                 console.log(newOptions)

@@ -1,6 +1,6 @@
 
 interface User {
-    id: string,
+    id?: string,
     email: string,
     name: string,
     nickname: string,
@@ -18,10 +18,20 @@ interface UserOnModuleResponse {
     teacher: string
 }
 interface UserModuleRequest {
-    users: UserModule[]
+    users: UserIdList[]
 }
-interface UserModule{
+interface UserIdList{
     user_id: string,
+}
+interface UserModule extends UserIdList{
+    module_id: string
+    points: number
+}
+
+
+
+interface UserModuleResponse extends User {
+    user_module: UserModule
 }
 interface UserBadgesResponse extends User {
     badges: Badge[]

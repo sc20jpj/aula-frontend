@@ -1,7 +1,7 @@
 import { CONFIG } from '@config/config';
 import { auth, getCurrentSession } from '@store/auth/authSlice';
 import { useAppDispatch } from '@store/hooks';
-import axios, { AxiosInstance,AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosError } from 'axios';
 import { useSelector } from 'react-redux';
 import { store } from "@store/store"
 
@@ -14,7 +14,7 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(config => {
     const state = store.getState(); // Access the Redux state
     const accessToken = state.auth.idToken; // Assuming accessToken is stored under auth slice
-    
+
     if (config.headers) {
 
         if (accessToken) {
@@ -88,7 +88,7 @@ export class API {
 
     static getAllUsersOnModule(moduleId: string): Promise<UserOnModuleResponse> {
         return new Promise<UserOnModuleResponse>((resolve, reject) => {
-            
+
             axiosInstance.get(`${CONFIG.BASE_URL}/users/${moduleId}`)
                 .then((res) => {
                     resolve(res.data.data);
@@ -104,7 +104,7 @@ export class API {
             axiosInstance.post(`${CONFIG.BASE_URL}/modules`, newModule)
                 .then((res) => {
                     resolve(res.data.data);
-                    
+
                 })
                 .catch((error: AxiosError) => {
                     console.log(error.response?.status)
@@ -138,11 +138,24 @@ export class API {
                 });
         });
     }
-    
+
+
+    static getAllUserModulesonModule(moduleId: string): Promise<ModuleWithUserModulesResponse> {
+        return new Promise<ModuleWithUserModulesResponse>((resolve, reject) => {
+            axiosInstance.get(`${CONFIG.BASE_URL}/modules/all-user-modules/${moduleId}`)
+                .then((res) => {
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
     static postUserModules(moduleId: string, newUserModule: UserModuleRequest): Promise<User[]> {
         return new Promise<User[]>((resolve, reject) => {
 
-            axiosInstance.post(`${CONFIG.BASE_URL}/user-modules/${moduleId}`,newUserModule)
+            axiosInstance.post(`${CONFIG.BASE_URL}/user-modules/${moduleId}`, newUserModule)
                 .then((res) => {
                     resolve(res.data.data.users);
                 })
@@ -176,11 +189,11 @@ export class API {
                 });
         });
     }
-    
+
     static postLesson(moduleId: string, newUserModule: LessonRequest): Promise<LessonResponse> {
         return new Promise<LessonResponse>((resolve, reject) => {
 
-            axiosInstance.post(`${CONFIG.BASE_URL}/lessons/${moduleId}`,newUserModule)
+            axiosInstance.post(`${CONFIG.BASE_URL}/lessons/${moduleId}`, newUserModule)
                 .then((res) => {
                     resolve(res.data.data);
                 })
@@ -193,7 +206,7 @@ export class API {
     static postQuiz(moduleId: string, newQuiz: QuizRequest): Promise<Quiz> {
         return new Promise<Quiz>((resolve, reject) => {
 
-            axiosInstance.post(`${CONFIG.BASE_URL}/quizzes/${moduleId}`,newQuiz)
+            axiosInstance.post(`${CONFIG.BASE_URL}/quizzes/${moduleId}`, newQuiz)
                 .then((res) => {
                     resolve(res.data.data);
                 })
@@ -228,9 +241,9 @@ export class API {
         });
     }
 
-    static takeQuiz(quizId: string,userQuestionsData: UserQuestion): Promise<UserQuizTake> {
+    static takeQuiz(quizId: string, userQuestionsData: UserQuestion): Promise<UserQuizTake> {
         return new Promise<UserQuizTake>((resolve, reject) => {
-            axiosInstance.post(`${CONFIG.BASE_URL}/quizzes/take/${quizId}`,userQuestionsData)
+            axiosInstance.post(`${CONFIG.BASE_URL}/quizzes/take/${quizId}`, userQuestionsData)
                 .then((res) => {
                     resolve(res.data.data);
                 })
@@ -268,9 +281,9 @@ export class API {
         });
     }
 
-    static getBadgesforCurrentUser(userId?: string ): Promise<UserBadgesResponse> {
+    static getBadgesforCurrentUser(userId?: string): Promise<UserBadgesResponse> {
 
-        if (userId ) {
+        if (userId) {
             return new Promise<UserBadgesResponse>((resolve, reject) => {
                 axiosInstance.get(`${CONFIG.BASE_URL}/badges/all/${userId}}`)
                     .then((res) => {
@@ -284,7 +297,7 @@ export class API {
                     });
             });
         }
-        else{
+        else {
             return new Promise<UserBadgesResponse>((resolve, reject) => {
                 axiosInstance.get(`${CONFIG.BASE_URL}/badges/all`)
                     .then((res) => {
@@ -298,7 +311,7 @@ export class API {
                     });
             });
         }
-        }
+    }
 
 
 }

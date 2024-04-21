@@ -48,7 +48,7 @@ function TeacherWrapper(props: TeacherWrapperProps) {
     }, [location.pathname]); // Add location.pathname as a dependency
 
 
-    const navBarLinks: AppLinks[] = [
+    const navBarLinks: Link[] = [
         {
             url: RoutesChoice.TeacherPortal,
             label: "Home"
