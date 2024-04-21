@@ -47,7 +47,7 @@ function NavBar(props: NavBarProps) {
         )}
         { profile_name && (
           <div className={styles.profile}>
-                    <ProfileButton large={false} name={profile_name} link={RoutesChoice.Profile}></ProfileButton>
+                    <ProfileButton large={false} name={profile_name} link={RoutesChoice.Profile} ></ProfileButton >
 
           </div>
 
