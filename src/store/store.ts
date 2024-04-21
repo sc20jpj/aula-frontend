@@ -5,12 +5,11 @@ import storage from 'redux-persist/lib/storage';
 
 import authReducer from './auth/authSlice';
 import userReducer from "@store/user/UserSlice";
-import quizReducer from "@store/quiz/quizSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
-  quiz: quizReducer,
+
 });
 
 const persistConfig = {

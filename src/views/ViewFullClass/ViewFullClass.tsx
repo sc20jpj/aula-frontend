@@ -12,13 +12,11 @@ import { API } from '@lib/APi';
 import Select, { ActionMeta, OnChangeValue } from 'react-select'
 import RoutesChoice from '@enums/Routes';
 import AccordionContainer from '@components/AccordionContainer/AccodionContainer';
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import UserTable from '@components/UserTable/UserTable';
-import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
-import PointsBox from '@components/PointsBox/PointsBox';
-import styles from "@views/ViewFullClass/ViewFullClass.module.scss"
-import PointsBoxGroup from '@components/PointsBoxGroup/PointsBoxGroup';
+
 
 function ViewFullClass() {
 
@@ -27,14 +25,12 @@ function ViewFullClass() {
     const navigate = useNavigate()
 
     const [options, setOptions] = useState<Option[]>([])
-    const [usersOn, setUsersOn] = useState<User[]>([])
-    const [module, setModule] = useState<ModuleResponse>()
+    const [usersOn, setUsersOn] = useState<UserResponse[]>([])
+    const [module, setModule] = useState<ModuleRequest>()
     const [teacherName, setTeacherName] = useState<string>()
 
-    const [selectedUserModules, setSelectedUserModules] = useState<UserIdList[]>([]);
+    const [selectedUserModules, setSelectedUserModules] = useState<UserModule[]>([]);
     const [lessons, setLessons] = useState<LessonWithFiles[]>([]);
-    const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-
     const [loading, setLoading] = useState<Boolean>(false);
 
 
@@ -52,7 +48,7 @@ function ViewFullClass() {
             }
         } else if (actionMeta.action === "select-option") {
             newValue.forEach((option: Option) => {
-                const newUserModule: UserIdList = {
+                const newUserModule: UserModule = {
                     user_id: option.value,
                 };
                 setSelectedUserModules(prevUsers => [...prevUsers, newUserModule]);
@@ -63,52 +59,11 @@ function ViewFullClass() {
     }
 
 
-    const handleRedirectLesson = () => {
+    const handleRedirect = () => {
         if (moduleId) {
             console.log("Ran")
             console.log(moduleId)
             const path = generatePath(RoutesChoice.AddLesson, { moduleId });
-            navigate(path);
-
-        }
-
-    }
-
-    const handleRedirectQuiz = () => {
-        if (moduleId) {
-            console.log("Ran")
-            console.log(moduleId)
-            const path = generatePath(RoutesChoice.AddQuiz, { moduleId });
-            navigate(path);
-
-        }
-
-    }
-
-    const handleRedirectLeaderBoard = () => {
-        if (moduleId) {
-            console.log("Ran")
-            console.log(moduleId)
-            const path = generatePath(RoutesChoice.ViewClassLeaderboard, { moduleId });
-            navigate(path);
-
-        }
-
-    }
-
-
-    const handleRedirectTakeQuiz = (quizId: string) => {
-        if (moduleId) {
-            const path = generatePath(RoutesChoice.TakeQuiz, { moduleId, quizId, });
-            navigate(path);
-
-        }
-
-    }
-
-    const handleResultsRedirect = (quizId: string) => {
-        if (moduleId) {
-            const path = generatePath(RoutesChoice.ViewClassResults, { quizId, });
             navigate(path);
 
         }
@@ -137,32 +92,8 @@ function ViewFullClass() {
         API.getAllLessonsForModule(moduleId)
             .then((res) => {
 
-                const module: ModuleResponse = {
-                    name: res.name,
-                    code: res.code,
-                    points: res.points,
-                    teacher: res.teacher
-                }
-                console.log(res.points)
-                setModule(module)
 
-                setLessons(res.lessons)
-
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-
-
-    const getAlQuizzesForModule = async () => {
-
-
-        API.getAllQuizzesforModule(moduleId)
-            .then((res) => {
-
-                setQuizzes(res.quizzes);
-                console.log(quizzes)
+                setLessons(prevLessons => [...prevLessons, ...res.lessons]);
 
             })
             .catch((error) => {
@@ -180,27 +111,27 @@ function ViewFullClass() {
 
     useEffect(() => {
         if (moduleId) {
-            if (state.teacher) {
-                getUsersOnModule();
-            }
+            getUsersOnModule();
             getAllLessonsForModule();
-            getAlQuizzesForModule();
         }
     }, [moduleId]);
 
 
     const getUsersOnModule = () => {
+        console.log("moduleId is", moduleId)
 
+
+        console.log("moduleID is", moduleId)
         API.getAllUsersOnModule(moduleId)
             .then((res) => {
+                console.log("users on module")
 
                 setModule(res.module)
                 setTeacherName(res.teacher)
                 setUsersOn(res.users_on)
 
                 const newOptions = res.users_not_on.map(user => ({
-
-                    value: user.id!,
+                    value: user.id,
                     label: user.name
                 }));
 
@@ -217,47 +148,25 @@ function ViewFullClass() {
     return (
         <>
 
-            {module && (
+            {module && teacherName && (
                 <>
-                    <div className={styles.titleWrapper}>
-                        <h1>{module.name}</h1>
-                        
+                    <h1>{module.name}</h1>
 
-                        {module.points && (
-
-                            <div className={styles.xpBox}>
-                                <p>XP</p>
-                                <PointsBox points={module.points} />
-
-                            </div>
-
-                        )}
-                        <hr className='rules'></hr> 
-                       
-                    </div>
-
-                    <h3>{module.code}</h3>
-                    <p>Taught by {module.teacher}</p>
-
-                    <Button title='View leaderboard' onClick={() => handleRedirectLeaderBoard()} />
+                    <p>Taught by {teacherName}</p>
 
                     {state.teacher && (
                         <>
-                            <Button title='Add lesson' onClick={() => handleRedirectLesson()} />
-
-                            <Button title='Add Quiz' onClick={() => handleRedirectQuiz()} />
                             {options && options.length > 0 ? (
                                 <>
                                     <div>
                                         <h2>Add To module</h2>
-
                                         <Select
                                             isClearable={true}
                                             isMulti={true}
                                             options={options}
                                             onChange={addUsersToModule}
-                                        />
 
+                                        />
                                         {selectedUserModules && selectedUserModules.length > 0 && (
                                             <Button title='Add' onClick={() => sendUserModules()}></Button>
 
@@ -275,11 +184,13 @@ function ViewFullClass() {
                                 </AccordionContainer>
 
 
+
                             ) : (
                                 <p>There are no users signed up to this class yet</p>
                             )}
 
 
+                            <Button title='Add lesson' onClick={() => handleRedirect()} />
                         </>
 
                     )}
@@ -294,7 +205,7 @@ function ViewFullClass() {
 
                             {/* this could probably be a component */}
                             {lessons && lessons.length > 0 ? (
-                                <AccordionContainer title="Training">
+                                <AccordionContainer title="Lessons">
                                     {lessons.map((lesson, index) => (
 
                                         <AccordionContainer title={lesson.name}>
@@ -307,32 +218,29 @@ function ViewFullClass() {
                                                 <AccordionContainer key={docIndex} title={document.name}>
 
                                                     {document.file_type != "application/pdf" ? (
+                                                        <div>
+                                                            <DocViewer
+                                                                documents={[
+                                                                    { uri: document.s3_url, fileType: document.file_type }
+                                                                ]}
+                                                                prefetchMethod="GET"
+                                                                pluginRenderers={DocViewerRenderers}
+                                                            />
+
+
+
+                                                            <a href={document.s3_url}>Download</a>
+                                                        </div>
+
+                                                    ) : (
                                                         <>
                                                             <DocViewer
                                                                 documents={[
                                                                     { uri: document.s3_url, fileType: document.file_type }
                                                                 ]}
                                                                 prefetchMethod="GET"
-
                                                                 pluginRenderers={DocViewerRenderers}
                                                             />
-
-                                                            <a href={document.s3_url}>Download</a>
-                                                        </>
-
-                                                    ) : (
-                                                        <>
-                                                            <DocViewer
-                                                                documents={[
-                                                                    { uri: document.s3_url, fileType: "pdf" }
-                                                                ]}
-                                                                prefetchMethod="GET"
-                                                                pluginRenderers={DocViewerRenderers}
-                                                            />
-                                                            <p>Please use this download button instead</p>
-                                                            <a href={document.s3_url}>Download</a>
-
-
 
                                                         </>
 
@@ -349,50 +257,7 @@ function ViewFullClass() {
                             ) : state.teacher ? (
                                 <p>There are no lessons for this class yet</p>
                             ) : (
-                                <p>There are no lessons for this class yet</p>
-                            )}
-
-
-                            {/* this could probably be a component */}
-                            {quizzes && quizzes.length > 0 ? (
-                                <AccordionContainer title="Quizzes">
-                                    {quizzes.map((quiz, index) => (
-                                        <>
-                                            <h4>{quiz.title}</h4>
-                                            <h4>{quiz.description}</h4>
-                                            {!state.teacher && !quiz.user_quiz_take && (
-
-
-                                                <Button title='Take Quiz' onClick={() => handleRedirectTakeQuiz(quiz.id!)}></Button>
-
-                                            )}
-                                            {quiz.user_quiz_take && !state.teacher && (
-                                                <>
-
-                                                    <div className={styles.xpBox}>
-                                                        <p >XP collected:</p>
-                                                        <PointsBoxGroup
-                                                            total_user_points={quiz.user_quiz_take.total_points}
-                                                            total_points={quiz.user_quiz_take.total_user_points}
-                                                        />
-                                                    </div>
-                                                </>
-                                            )}
-
-
-                                            {state.teacher && (
-                                                <Button title='Results' onClick={() => handleResultsRedirect(quiz.id!)}></Button>
-                                            )}
-
-
-                                        </>
-
-                                    ))}
-                                </AccordionContainer>
-                            ) : state.teacher ? (
-                                <p>There are no quizzes for this class yet</p>
-                            ) : (
-                                <p>There are no quizzes for this class yet</p>
+                                <></>
                             )}
 
                         </>
@@ -401,6 +266,10 @@ function ViewFullClass() {
 
                 </>
             )}
+
+
+
+
 
         </>
     )

@@ -12,7 +12,7 @@ import { auth } from '@store/auth/authSlice';
 
 
 function ViewClasses() {
-    const [modules, setModules] = useState<ModuleResponse[]>();
+    const [modules, setModules] = useState<ModuleRequest[]>();
     const state = useSelector(auth);
 
     const navigate = useNavigate()
@@ -62,27 +62,25 @@ function ViewClasses() {
 
     };
     return (
-        <>
+
+
+
+        <div className={styles.moduleContainer} >
             <h1>Modules</h1>
-            <div className={styles.moduleContainer} >
 
+            {modules ? (
+                modules.map((module, index) => (
 
-                {modules ? (
-                    modules.map((module, index) => (
+                    <div key={index} className={styles.moduleWrapper}>
 
-                        <div key={index} className={styles.moduleWrapper}>
+                        <ModuleBox module={module} onClick={() => handleRedirect(module.id)} />
 
-                            <ModuleBox module={module} onClick={() => handleRedirect(module.id)} />
-
-                        </div>
-                    ))
-                ) : (
-                    <p>You haven't added any classes yet</p>
-                )}
-            </div>
-        </>
-
-
+                    </div>
+                ))
+            ) : (
+                <p>You haven't added any classes yet</p>
+            )}
+        </div>
     );
 }
 

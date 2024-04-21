@@ -1,3 +1,4 @@
+/* ModuleBox.module.scss */
 
 .tableContainer {
     width: 100%;
@@ -5,25 +6,27 @@
 }
 
 .table {
-    width: 90%;
+    width: 100%;
     border-collapse: collapse;
-    background-color: #eaf2f8; 
+    background-color: #eaf2f8; /* Light blue */
 }
 
 .table th,
 .table td {
-    padding: 2%;
+    padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #d0d0d0; 
-    box-shadow:3px 3px 5px 6px #ccc;
-    overflow: hidden;
+    border-bottom: 1px solid #d0d0d0; /* Light grey */
 }
 
 .table th {
-
-    background-color: #00296f; 
-    color: #ffffff;
-    font-weight: 500; /* Increased font weight for headers */
-
+    background-color: #00296f; /* Dark blue */
+    color: #ffffff; /* White text */
 }
 
+.table tbody tr:nth-child(even) {
+    background-color: #f0f6fc; /* Light blue */
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: #d9e8ff; /* Lighter blue */
+}
