@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // Assuming you're using React Router for navigation
 import Button from '@components/Button/Button';
-import styles from './NavBar.module.scss'; // Assuming correct path to NavBar styles
+import styles from '@components/NavBar/Navbar.module.scss'; // Assuming correct path to NavBar styles
 import ProfileButton from '@components/ProfileButton/ProfileButton';
 import RoutesChoice from '@enums/Routes';
 import { icon } from '@fortawesome/fontawesome-svg-core';
