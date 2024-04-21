@@ -50,7 +50,7 @@ function VerficationCode() {
                     confirmationCode: state.code
                 }
                 // this should only be used in local environments to sim a lambda trigger
-                const newUser: UserRequest = {
+                const newUser: User = {
                     email: state.email,
                     name: state.name,
                     nickname: state.nickname,

@@ -118,13 +118,8 @@ function SignUp() {
           <h1>Sign Up</h1>
           <>
             <TextInput title="email" isPassword={false} value={state.email} onChange={(value) => dispatch(setEmail(value))} />
-
-            <p>This is how you will appear to other users</p>
-
             <TextInput title="nickname" value={state.nickname} isPassword={false} onChange={(value) => dispatch(setNickname(value))} />
-            <p>This is how you will appear to teachers</p>
             <TextInput title="name" isPassword={false} value={state.name} onChange={(value) => dispatch(setName(value))} />
-
             <TextInput title="password" value={state.password} isPassword={true} onChange={(value) => dispatch(setPassword(value))} />
 
           </>

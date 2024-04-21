@@ -19,10 +19,10 @@ interface LessonRequest {
 interface LessonWithFiles {
     name: string
     description: string
-    files: Document[]
+    files: DocumentObject[]
 }
 
-interface Document {
+interface DocumentObject {
     id: string,
     name: string,
     s3_url: string,

@@ -26,12 +26,17 @@ function ModuleBox(props: ModuleBoxProps) {
                         {module.name}
 
                     </h1>
-
+                    
                     {module.points && module.points > 0 && (
+                        <div className={styles.xpBox}>
+                        <h2>XP</h2>
                         <PointsBox points={module.points} />
-                    )}
-                </div>
 
+                        </div>
+                    )}
+                    
+                </div>
+                <hr className={styles.line}/>
 
                 <div className={styles.content}>
                     <p>{module.code}</p>

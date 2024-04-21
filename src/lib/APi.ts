@@ -14,7 +14,7 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(config => {
     const state = store.getState(); // Access the Redux state
     const accessToken = state.auth.idToken; // Assuming accessToken is stored under auth slice
-
+    
     if (config.headers) {
 
         if (accessToken) {
@@ -36,9 +36,9 @@ axiosInstance.interceptors.request.use(config => {
 
 export class API {
 
-    static postNewUser(newUser: UserRequest): Promise<UserResponse> {
+    static postNewUser(newUser: User): Promise<User> {
 
-        return new Promise<UserResponse>((resolve, reject) => {
+        return new Promise<User>((resolve, reject) => {
             axiosInstance.post(`${CONFIG.BASE_URL}/users`, newUser)
                 .then((res) => {
                     resolve(res.data.data);
@@ -48,8 +48,8 @@ export class API {
                 });
         });
     }
-    static getUser(): Promise<UserResponse> {
-        return new Promise<UserResponse>((resolve, reject) => {
+    static getUser(): Promise<User> {
+        return new Promise<User>((resolve, reject) => {
             axiosInstance.get(`${CONFIG.BASE_URL}/users/check-auth`)
                 .then((res) => {
                     resolve(res.data.data);
@@ -59,6 +59,19 @@ export class API {
                 });
         });
     }
+
+    static getAllUsers(): Promise<UsersAllResponse> {
+        return new Promise<UsersAllResponse>((resolve, reject) => {
+            axiosInstance.get(`${CONFIG.BASE_URL}/users/all`)
+                .then((res) => {
+                    resolve(res.data.data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
     static getTest(): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             axiosInstance.get(`${CONFIG.BASE_URL}/users`)
@@ -126,8 +139,8 @@ export class API {
         });
     }
     
-    static postUserModules(moduleId: string, newUserModule: UserModuleRequest): Promise<UserResponse[]> {
-        return new Promise<UserResponse[]>((resolve, reject) => {
+    static postUserModules(moduleId: string, newUserModule: UserModuleRequest): Promise<User[]> {
+        return new Promise<User[]>((resolve, reject) => {
 
             axiosInstance.post(`${CONFIG.BASE_URL}/user-modules/${moduleId}`,newUserModule)
                 .then((res) => {
@@ -238,5 +251,54 @@ export class API {
                 });
         });
     }
+
+
+    static postBadge(newBadge: BadgeRequest): Promise<BadgeRequest> {
+        return new Promise<BadgeRequest>((resolve, reject) => {
+            axiosInstance.post(`${CONFIG.BASE_URL}/badges`, newBadge)
+                .then((res) => {
+                    resolve(res.data.data);
+                })
+                .catch((error: AxiosError) => {
+                    console.log(error.response?.status)
+                    if (error.response?.status == 409) {
+                        reject("Module already exists. Check the module code and try again.")
+                    }
+                });
+        });
+    }
+
+    static getBadgesforCurrentUser(userId?: string ): Promise<UserBadgesResponse> {
+
+        if (userId ) {
+            return new Promise<UserBadgesResponse>((resolve, reject) => {
+                axiosInstance.get(`${CONFIG.BASE_URL}/badges/all/${userId}}`)
+                    .then((res) => {
+                        resolve(res.data.data);
+                    })
+                    .catch((error: AxiosError) => {
+                        console.log(error.response?.status)
+                        if (error.response?.status == 409) {
+                            reject("Module already exists. Check the module code and try again.")
+                        }
+                    });
+            });
+        }
+        else{
+            return new Promise<UserBadgesResponse>((resolve, reject) => {
+                axiosInstance.get(`${CONFIG.BASE_URL}/badges/all`)
+                    .then((res) => {
+                        resolve(res.data.data);
+                    })
+                    .catch((error: AxiosError) => {
+                        console.log(error.response?.status)
+                        if (error.response?.status == 409) {
+                            reject("Module already exists. Check the module code and try again.")
+                        }
+                    });
+            });
+        }
+        }
+
 
 }

@@ -52,7 +52,7 @@ function AddStudent() {
         }
 
     }
-    const handleFiletoBase64 = (fileList: FileList | null) => {
+    const handleFiletoBase64 = (fileList: FileList |  null) => {
         if (fileList) {
             const filesArray = Object.values(fileList);
     
@@ -114,7 +114,7 @@ function AddStudent() {
                         <p>{error}</p>
                     )}
 
-                    <FileInput title='Upload files' onChange={(value) => handleFiletoBase64(value)}/>
+                    <FileInput multiple={true} title='Upload files' onChangeList ={(value) => handleFiletoBase64(value)}/>
                     <div className={styles.buttonContainer}>
                         
                         <Button title="submit" onClick={() => handleSubmit()}></Button>
