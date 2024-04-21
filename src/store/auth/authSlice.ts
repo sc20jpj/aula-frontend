@@ -247,6 +247,8 @@ export const AuthSlice = createSlice({
         })
         builder.addCase(sendSignUp.pending, (state, action) => {
             state.loading = true
+            
+            
         })
         builder.addCase(checkVerificatonCode.fulfilled, (state, action) => {
             state.isSignUpComplete = true
@@ -261,20 +263,16 @@ export const AuthSlice = createSlice({
             if (action.payload) {
                 state.idToken = action.payload.idToken?.toString()
                 const accessTokenString = action.payload?.accessToken?.toString()
-                
+
                 // this code isnt great its basically tricking the typescript compiler
                 // cognito lack of supprt for typescript necesitates this
- 
-                if (action.payload.idToken?.payload["email_verified"] == true) {
-                    state.isSignUpComplete = true
-                    state.isSignUpSent = true
-                }
-                console.log(action.payload.idToken?.payload["email_verified"])
                 if (typeof action.payload.accessToken.payload === 'object') {
                     const groups = action.payload.accessToken.payload["cognito:groups"];
                     if (Array.isArray(groups) && groups.includes("teachers")) {
                         state.teacher = true;
+                        console.log("is teacher")
                     } else {
+                        console.log("didn't work")
                         state.teacher = false;
                     }
                 }
