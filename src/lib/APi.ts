@@ -6,15 +6,15 @@ import { useSelector } from 'react-redux';
 import { store } from "@store/store"
 
 export const axiosInstance = axios.create({
-    // headers: {
-    // 	Accept: 'application/json',
-    // },
+
 });
 
-axiosInstance.interceptors.request.use(config => {
-    const state = store.getState(); // Access the Redux state
-    const accessToken = state.auth.idToken; // Assuming accessToken is stored under auth slice
 
+axiosInstance.interceptors.request.use(         
+// @ts-ignore
+config => {
+    const state = store.getState();
+    const accessToken = state.auth.idToken;
     if (config.headers) {
 
         if (accessToken) {
