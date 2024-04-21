@@ -8,7 +8,7 @@ interface BadgeImageProps {
 }
 
 function BadgeImage(props: BadgeImageProps) {
-    const { name, s3_url } = props;
+    const { s3_url } = props;
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value;

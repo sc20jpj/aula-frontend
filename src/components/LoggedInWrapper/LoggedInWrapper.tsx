@@ -11,7 +11,7 @@ import NavBar from '@components/NavBar/NavBar';
 import { checkUser, user } from '@store/user/UserSlice';
 import styles from "@components/LoggedInWrapper/LoggedInWrapper.module.scss"
 import { useLocation, useNavigate } from 'react-router-dom';
-
+import { IconDefinition, faHome, faHouse} from '@fortawesome/free-solid-svg-icons';
 
 interface LoggedInWrapperProps {
     children: React.ReactNode
@@ -65,7 +65,7 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
 
 
 
-    var navBarLinks: AppLinks[] = []
+    var navBarLinks: Link[] = []
     if (state.teacher) {
         navBarLinks = [
             {
@@ -75,6 +75,10 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
             {
                 url: RoutesChoice.ViewClasses,
                 label: "View classes"
+            },
+            {
+                url: RoutesChoice.ViewLeaderboard,
+                label: "View leaderboard" // Corrected label
             },
             {
                 url: RoutesChoice.AddModule,
@@ -87,14 +91,24 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
         ]
     }
     else {
+
+        var iconHomeDefinition: IconProps = {
+            icon: faHouse
+        }
         navBarLinks = [
             {
                 url: RoutesChoice.StudentPortal,
-                label: "Home"
+                label: "Home",
+                icon: iconHomeDefinition,
+                iconName: "fa-sharp fa-solid fa-house"
             },
             {
                 url: RoutesChoice.ViewClasses,
                 label: "View Classes" // Corrected label
+            },
+            {
+                url: RoutesChoice.ViewLeaderboard,
+                label: "View leaderboard" // Corrected label
             }
         ]
 
@@ -103,14 +117,8 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
 
 
 
-
     return (
         <div className={styles.page}>
-
-
-
-
-
 
             {!state.loggedIn ? (
                 <Unauthorised />
@@ -122,7 +130,7 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
 
 
                         <div className={styles.container}>
-
+                            
                             {state.teacher ? (
                                 <NavBar links={navBarLinks} />
 

@@ -4,11 +4,9 @@ import Button from '@components/Button/Button';
 import styles from './NavBar.module.scss'; // Assuming correct path to NavBar styles
 import ProfileButton from '@components/ProfileButton/ProfileButton';
 import RoutesChoice from '@enums/Routes';
+import { icon } from '@fortawesome/fontawesome-svg-core';
 
-interface Link {
-  label: string;
-  url: string;
-}
+
 
 interface NavBarProps {
   links?: Link[];
@@ -27,10 +25,25 @@ function NavBar(props: NavBarProps) {
     <nav className={styles.navBar}>
       <h1 className={styles.logo}>Aula</h1> {/* Add h1 tag for logo */}
       <div className={styles.links}>
+
         {links && (
           links.map((value, index) => (
-            <Button key={index} className={styles.navButton} title={value.label} onClick={() => handleRedirect(value.url)} />
+
+            value.iconName ? (
+              <Button 
+              key={index} 
+              className={styles.icon} 
+              title={value.label} 
+              icon={value.icon} 
+              iconName={value.iconName} 
+              onClick={() => handleRedirect(value.url)} />
+
+            ) : (
+              <Button key={index} className={styles.navButton} title={value.label} onClick={() => handleRedirect(value.url)} />
+
+            )
           ))
+
         )}
         { profile_name && (
           <div className={styles.profile}>

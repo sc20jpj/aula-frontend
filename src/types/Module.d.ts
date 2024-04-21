@@ -9,6 +9,10 @@ interface ModuleResponse  extends Module{
     points: number
 }
 
+interface ModuleWithUserModulesResponse extends Module {
+    users: UserModuleResponse[]
+}
+
 interface LessonRequest {
     name: string
     description: string

@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@store/hooks';
 import {
-    auth, getCurrentSession, getUserAttributes, sendSignOut,
+    auth, sendSignOut,
 } from '@store/auth/authSlice'
-import { Link, Route, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import RoutesChoice from '@enums/Routes';
 import Button from '@components/Button/Button'
 import { useEffect, useState } from 'react';
@@ -22,13 +22,13 @@ function Profile() {
 
     useEffect(() => {
         console.log("teacher : ", state.teacher)
-        dispatch(checkUser()).then((res) =>{
-            
+        dispatch(checkUser()).then((res) => {
+            if (state.teacher) {
+                navigate(RoutesChoice.TeacherPortal)
+            }
         })
-        
-        if (state.teacher) {
-            navigate(RoutesChoice.TeacherPortal)
-        }
+
+
     }, [])
 
 
@@ -48,11 +48,10 @@ function Profile() {
 
     const signOut = () => {
 
-
         dispatch(sendSignOut())
             .unwrap()
             .then((res) => {
-                navigate(RoutesChoice.SignIn)
+                navigate("")
             })
 
     }

@@ -31,7 +31,7 @@ function ViewFullClass() {
     const [module, setModule] = useState<ModuleResponse>()
     const [teacherName, setTeacherName] = useState<string>()
 
-    const [selectedUserModules, setSelectedUserModules] = useState<UserModule[]>([]);
+    const [selectedUserModules, setSelectedUserModules] = useState<UserIdList[]>([]);
     const [lessons, setLessons] = useState<LessonWithFiles[]>([]);
     const [quizzes, setQuizzes] = useState<Quiz[]>([]);
 
@@ -52,7 +52,7 @@ function ViewFullClass() {
             }
         } else if (actionMeta.action === "select-option") {
             newValue.forEach((option: Option) => {
-                const newUserModule: UserModule = {
+                const newUserModule: UserIdList = {
                     user_id: option.value,
                 };
                 setSelectedUserModules(prevUsers => [...prevUsers, newUserModule]);
@@ -79,6 +79,17 @@ function ViewFullClass() {
             console.log("Ran")
             console.log(moduleId)
             const path = generatePath(RoutesChoice.AddQuiz, { moduleId });
+            navigate(path);
+
+        }
+
+    }
+
+    const handleRedirectLeaderBoard = () => {
+        if (moduleId) {
+            console.log("Ran")
+            console.log(moduleId)
+            const path = generatePath(RoutesChoice.ViewClassLeaderboard, { moduleId });
             navigate(path);
 
         }
@@ -188,7 +199,8 @@ function ViewFullClass() {
                 setUsersOn(res.users_on)
 
                 const newOptions = res.users_not_on.map(user => ({
-                    value: user.id,
+
+                    value: user.id!,
                     label: user.name
                 }));
 
@@ -209,7 +221,8 @@ function ViewFullClass() {
                 <>
                     <div className={styles.titleWrapper}>
                         <h1>{module.name}</h1>
-                        <hr />
+                        
+
                         {module.points && (
 
                             <div className={styles.xpBox}>
@@ -223,9 +236,10 @@ function ViewFullClass() {
                        
                     </div>
 
-
+                    <h3>{module.code}</h3>
                     <p>Taught by {module.teacher}</p>
 
+                    <Button title='View leaderboard' onClick={() => handleRedirectLeaderBoard()} />
 
                     {state.teacher && (
                         <>

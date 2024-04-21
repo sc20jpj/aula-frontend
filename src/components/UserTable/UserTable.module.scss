@@ -5,22 +5,25 @@
 }
 
 .table {
-    width: 40%;
+    width: 90%;
     border-collapse: collapse;
     background-color: #eaf2f8; 
-
 }
 
 .table th,
 .table td {
-    padding: 12px;
+    padding: 2%;
     text-align: left;
     border-bottom: 1px solid #d0d0d0; 
-    
+    box-shadow:3px 3px 5px 6px #ccc;
+    overflow: hidden;
 }
 
 .table th {
+
     background-color: #00296f; 
     color: #ffffff;
+    font-weight: 500; /* Increased font weight for headers */
+
 }
 
