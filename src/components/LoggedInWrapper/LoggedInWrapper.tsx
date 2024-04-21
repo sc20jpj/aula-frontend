@@ -8,10 +8,10 @@ import React, { useEffect } from 'react';
 import Unauthorised from '@views/UnAuthorisedPage/UnAuthorisedPage';
 import VerficationCode from '@views/VerificationCode/VerificationCode';
 import NavBar from '@components/NavBar/NavBar';
-import { checkUser } from '@store/user/UserSlice';
+import { checkUser, user } from '@store/user/UserSlice';
 import styles from "@components/LoggedInWrapper/LoggedInWrapper.module.scss"
-import { useNavigate } from 'react-router-dom';
-
+import { useLocation, useNavigate } from 'react-router-dom';
+import { IconDefinition, faHome, faHouse} from '@fortawesome/free-solid-svg-icons';
 
 interface LoggedInWrapperProps {
     children: React.ReactNode
@@ -19,26 +19,53 @@ interface LoggedInWrapperProps {
 }
 function LoggedInWrapper(props: LoggedInWrapperProps) {
 
-    const dispatch = useAppDispatch()
-    const state = useSelector(auth);
-    const navigate = useNavigate()
-    const { children, studentOnly } = props;
 
+
+
+    const location = useLocation();
+    const dispatch = useAppDispatch();
+    const state = useSelector(auth);
+    const userState = useSelector(user);
+
+    const navigate = useNavigate();
+    const { children, studentOnly } = props;
 
     useEffect(() => {
         dispatch(getCurrentSession())
             .unwrap()
             .then((response) => {
-                const res = dispatch(checkUser())
-
-                return res
+                const res = dispatch(checkUser());
+                return res;
             })
             .catch((error) => {
-                console.log(error)
-            })
-    }, [])
+                console.log(error);
+            });
+    }, [location.pathname]); // Add location.pathname as a dependency
 
-    var navBarLinks: AppLinks[] = []
+    // might want to change this but allows it so the ID never gets old
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            dispatch(getCurrentSession())
+                .unwrap()
+                .then((response) => {
+                    const res = dispatch(checkUser());
+                    return res;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }, 300000);
+    
+        return () => {
+            clearInterval(intervalId);
+        };
+    
+    }, []);
+    
+
+
+
+    var navBarLinks: Link[] = []
     if (state.teacher) {
         navBarLinks = [
             {
@@ -47,23 +74,41 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
             },
             {
                 url: RoutesChoice.ViewClasses,
-                label: "View Classes" // Corrected label
+                label: "View classes"
+            },
+            {
+                url: RoutesChoice.ViewLeaderboard,
+                label: "View leaderboard" // Corrected label
             },
             {
                 url: RoutesChoice.AddModule,
-                label: "Add module" // Corrected label
+                label: "Add module"
+            },
+            {
+                url: RoutesChoice.AddBadge,
+                label: "Add badge"
             },
         ]
     }
     else {
+
+        var iconHomeDefinition: IconProps = {
+            icon: faHouse
+        }
         navBarLinks = [
             {
                 url: RoutesChoice.StudentPortal,
-                label: "Home"
+                label: "Home",
+                icon: iconHomeDefinition,
+                iconName: "fa-sharp fa-solid fa-house"
             },
             {
                 url: RoutesChoice.ViewClasses,
                 label: "View Classes" // Corrected label
+            },
+            {
+                url: RoutesChoice.ViewLeaderboard,
+                label: "View leaderboard" // Corrected label
             }
         ]
 
@@ -72,14 +117,8 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
 
 
 
-
     return (
-        <>
-
-            <NavBar links={navBarLinks} />
-
-
-
+        <div className={styles.page}>
 
             {!state.loggedIn ? (
                 <Unauthorised />
@@ -89,8 +128,18 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
                 state.loggedIn && state.isSignUpSent && state.isSignUpComplete && (
                     <>
 
-                        <div className={styles.container}>
 
+                        <div className={styles.container}>
+                            
+                            {state.teacher ? (
+                                <NavBar links={navBarLinks} />
+
+                            ) : (
+                                <NavBar links={navBarLinks} profile_name={
+                                    userState?.name
+                                } />
+
+                            )}
                             <div className={styles.main}>
                                 {children}
                             </div>
@@ -105,7 +154,7 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
             )}
 
 
-        </>
+        </div>
     )
 }
 

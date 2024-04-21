@@ -19,6 +19,12 @@
           "webClientId": "349crp05bok81br63iiaa19bg8",
           "nativeClientId": "349crp05bok81br63iiaa19bg8"
         }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d2l8iu89gbd712",
+          "type": "cicd"
+        }
       }
     }
   }

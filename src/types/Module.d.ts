@@ -1,14 +1,16 @@
-interface ModuleRequest {
+interface Module {
     id?: string
     name: string
     code: string
 }
 
-interface ModuleResponse {
-    id?: string
-    name: string
-    code: string
+interface ModuleResponse  extends Module{
     teacher: boolean
+    points: number
+}
+
+interface ModuleWithUserModulesResponse extends Module {
+    users: UserModuleResponse[]
 }
 
 interface LessonRequest {
@@ -21,18 +23,15 @@ interface LessonRequest {
 interface LessonWithFiles {
     name: string
     description: string
-    files: Document[]
+    files: DocumentObject[]
 }
 
-
-
-interface Document {
+interface DocumentObject {
     id: string,
     name: string,
     s3_url: string,
     file_type: string
 }
-
 
 interface Base64File {
     name: string

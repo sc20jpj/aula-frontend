@@ -1,28 +1,50 @@
 import { useNavigate } from 'react-router-dom';
 import styles from '@components/ModuleBox/ModuleBox.module.scss'
 import Button from '@components/Button/Button';
+import PointsBox from '@components/PointsBox/PointsBox';
 
 
 interface ModuleBoxProps {
-    module: ModuleRequest
+    module: ModuleResponse
     onClick?: () => void; // Change this to () => void for a generic function
 
 }
 
 function ModuleBox(props: ModuleBoxProps) {
 
-    const {  onClick,module } = props;
+    const { onClick, module } = props;
 
 
 
     return (
         <>
-            
+
             <div onClick={onClick} className={styles.moduleBox}>
-                <h1 className={styles.moduleTitle}>
-                    {module.name}
-                </h1>
-                <h2>{module.code}</h2>
+
+                <div className={styles.header}>
+                    <h1>
+                        {module.name}
+
+                    </h1>
+                    
+                    {module.points && module.points > 0 && (
+                        <div className={styles.xpBox}>
+                        <h2>XP</h2>
+                        <PointsBox points={module.points} />
+
+                        </div>
+                    )}
+                    
+                </div>
+                <hr className={styles.line}/>
+
+                <div className={styles.content}>
+                    <p>{module.code}</p>
+                    <p>Taught by {module.teacher}</p>
+
+                </div>
+
+
 
 
             </div>

@@ -25,14 +25,30 @@ function TeacherWrapper(props: TeacherWrapperProps) {
         dispatch(getCurrentSession())
             .unwrap()
             .then((response) => {
-                const res = dispatch(checkUser())
-                return res
+                const res = dispatch(checkUser());
+                return res;
             })
             .catch((error) => {
-                console.log(error)
+                console.log(error);
+            });
+
+
+            console.log("logged in is ",state.loggedIn,state.isSignUpSent)
+    }, []); // Add location.pathname as a dependency
+    useEffect(() => {
+        dispatch(getCurrentSession())
+            .unwrap()
+            .then((response) => {
+                const res = dispatch(checkUser());
+                return res;
             })
-    }, [])
-    const navBarLinks: AppLinks[] = [
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [location.pathname]); // Add location.pathname as a dependency
+
+
+    const navBarLinks: Link[] = [
         {
             url: RoutesChoice.TeacherPortal,
             label: "Home"
@@ -44,6 +60,10 @@ function TeacherWrapper(props: TeacherWrapperProps) {
         {
             url: RoutesChoice.AddModule,
             label: "Add module"
+        },
+        {
+            url: RoutesChoice.AddBadge,
+            label: "Add badge"
         },
 
     ]

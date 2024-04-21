@@ -9,7 +9,7 @@ import styles from "@views/AddModule/AddModule.module.scss"
 
 function AddModule() {
 
-    const [modules, setModules] = useState<ModuleRequest[]>();
+    const [modules, setModules] = useState<Module[]>();
     const navigate = useNavigate()
     const [name, setName] = useState<string>("")
     const [code, setCode] = useState<string>("")
@@ -25,7 +25,7 @@ function AddModule() {
             setError("Please enter a code")
         }
         else {
-            const module: ModuleRequest = {
+            const module: Module = {
                 name: name,
                 code: code
             }
