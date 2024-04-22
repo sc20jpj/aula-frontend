@@ -6,8 +6,6 @@ import ProfileButton from '@components/ProfileButton/ProfileButton';
 import RoutesChoice from '@enums/Routes';
 import { icon } from '@fortawesome/fontawesome-svg-core';
 
-
-
 interface NavBarProps {
   links?: Link[];
   profile_name?: string
