@@ -11,6 +11,7 @@ import Button from '@components/Button/Button';
 import { ConfirmSignInInput, ConfirmSignUpInput, ResendSignUpCodeInput } from 'aws-amplify/auth';
 import TextInput from '@components/Inputs/TextInput/TextInput';
 import { API } from '@lib/APi';
+import NavBar from '@components/NavBar/NavBar';
 
 function VerficationCode() {
 
@@ -88,6 +89,8 @@ function VerficationCode() {
 
     return (
         <>
+            <NavBar></NavBar>
+            
             <p>We have sent a verification code to {state.checkEmail}</p>
             <p>Please enter the code below to confirmed your sign up {state.checkEmail}</p>
 

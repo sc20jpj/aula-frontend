@@ -39,7 +39,7 @@ export class API {
     static postNewUser(newUser: User): Promise<User> {
 
         return new Promise<User>((resolve, reject) => {
-            axiosInstance.post(`${CONFIG.BASE_URL}/users`, newUser)
+            axiosInstance.post(`${CONFIG.BASE_URL}/users/new-user`, newUser)
                 .then((res: AxiosResponse) => {
                     resolve(res.data.data);
                 })
