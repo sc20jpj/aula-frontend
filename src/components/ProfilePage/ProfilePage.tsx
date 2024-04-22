@@ -12,6 +12,7 @@ interface ProfilePage {
 function ProfilePage(props: ProfilePage) {
     const { badges, user } = props;
 
+
     return (
         <div >
             <ProfileButton name={user.nickname} large={true}></ProfileButton>
@@ -30,23 +31,26 @@ function ProfilePage(props: ProfilePage) {
                 <>
                     <h2>Badges</h2>
 
+                    {badges.length > 0 ? (
+                        <AccordionContainer title='Badges'>
+                            <div className={styles.imageGroup}>
 
-                    <AccordionContainer title='Badges'>
-                        <div className={styles.imageGroup}>
-                            {badges.map((badge, key) => (
-                                <div className={styles.badgeContainer} key={key}>
-                                    <BadgeImage s3_url={badge.file.s3_url} />
-                                    <div className={styles.badgeContent}>
-                                        <h2>{badge.name}</h2>
-                                        <p>{badge.description}</p>
+                                {badges.map((badge, key) => (
+                                    <div className={styles.badgeContainer} key={key}>
+                                        <BadgeImage s3_url={badge.file.s3_url} />
+                                        <div className={styles.badgeContent}>
+                                            <h2>{badge.name}</h2>
+                                            <p>{badge.description}</p>
+                                        </div>
+
                                     </div>
+                                ))}
+                            </div>
 
-                                </div>
-                            ))}
-                        </div>
-
-                    </AccordionContainer>
-
+                        </AccordionContainer>
+                    ) : (
+                        <p>You have no badges yet </p>
+                    )}
 
                 </>
 

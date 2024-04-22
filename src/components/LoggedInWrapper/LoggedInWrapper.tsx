@@ -136,7 +136,7 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
 
                             ) : (
                                 <NavBar links={navBarLinks} profile_name={
-                                    userState?.name
+                                    userState?.nickname
                                 } />
 
                             )}

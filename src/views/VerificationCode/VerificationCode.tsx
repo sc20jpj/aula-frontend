@@ -12,7 +12,7 @@ import { ConfirmSignInInput, ConfirmSignUpInput, ResendSignUpCodeInput } from 'a
 import TextInput from '@components/Inputs/TextInput/TextInput';
 import { API } from '@lib/APi';
 import NavBar from '@components/NavBar/NavBar';
-
+import styles from "@views/SignIn/SignIn.module.scss"
 function VerficationCode() {
 
     const dispatch = useAppDispatch()
@@ -90,18 +90,25 @@ function VerficationCode() {
     return (
         <>
             <NavBar></NavBar>
-            
-            <p>We have sent a verification code to {state.checkEmail}</p>
-            <p>Please enter the code below to confirmed your sign up {state.checkEmail}</p>
+            <div className={styles.authContainer}>
+                <div className={styles.auth}>
 
-            <NumberInput title='Code' onChange={(value) => dispatch(setCode(value))}></NumberInput>
+                    <p>We have sent a verification code to {state.checkEmail}</p>
+                    <p>Please enter the code below to confirmed your sign up {state.checkEmail}</p>
 
-            <Button title="submit" onClick={() => handleCheckClick()}></Button>
+                    <NumberInput title='Code' onChange={(value) => dispatch(setCode(value))}></NumberInput>
+                    <div className={styles.buttonContainer}>
+                        <Button title="submit" onClick={() => handleCheckClick()}></Button>
 
-            <Button title="Resend code" onClick={() => handleResend()}></Button>
-            <Button title="Sign Up" onClick={() => navigate(RoutesChoice.SignUp)}></Button>
+                        <Button title="Resend code" onClick={() => handleResend()}></Button>
+                        <Button title="Sign Up" onClick={() => navigate(RoutesChoice.SignUp)}></Button>
 
-            <p>{error}</p>
+                    </div>
+
+                    <p>{error}</p>
+
+                </div>
+            </div>
         </>
     )
 }

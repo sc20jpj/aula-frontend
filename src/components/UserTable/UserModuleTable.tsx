@@ -37,13 +37,14 @@ function UserModuleTable(props: UserModuleTableProps) {
                     {
 
                         sortedUsers.map((user, index) => (
+                            
                             <tr key={index} className={index % 2 === 0 ? styles.lightBlueRow : styles.lighterBlueRow}>
-
+                                
                                 <td>{index + 1}</td>
                                 <td>{user.nickname}</td>
                                 <td className={styles.pointsBoxContainer}>
                                     <PointsBox
-                                        points={user.user_module.points}
+                                        points={user.user_module.points !== null? user.user_module.points  : 0 }
                                     />
                                 </td>
                             </tr>

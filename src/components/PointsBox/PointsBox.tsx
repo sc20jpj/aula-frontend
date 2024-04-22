@@ -12,7 +12,7 @@ function PointsBox(props: PointsBoxProps) {
 
     return (
         <div className={styles.circleBox}>
-            <span>{points}</span>
+            <span>{points ?  points : 0}</span>
         </div>
     );
 }
