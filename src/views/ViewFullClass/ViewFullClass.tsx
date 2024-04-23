@@ -221,7 +221,7 @@ function ViewFullClass() {
                 <>
                     <div className={styles.titleWrapper}>
                         <h1>{module.name}</h1>
-                        
+
 
                         {module.points && (
 
@@ -232,8 +232,8 @@ function ViewFullClass() {
                             </div>
 
                         )}
-                        <hr className='rules'></hr> 
-                       
+                        <hr className='rules'></hr>
+
                     </div>
 
                     <h3>{module.code}</h3>
@@ -372,8 +372,8 @@ function ViewFullClass() {
                                                     <div className={styles.xpBox}>
                                                         <p >XP collected:</p>
                                                         <PointsBoxGroup
-                                                            total_user_points={quiz.user_quiz_take.total_points}
-                                                            total_points={quiz.user_quiz_take.total_user_points}
+                                                            total_user_points={quiz.user_quiz_take.total_user_points}
+                                                            total_points={quiz.user_quiz_take.total_points}
                                                         />
                                                     </div>
                                                 </>
