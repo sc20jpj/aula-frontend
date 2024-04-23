@@ -44,7 +44,7 @@ function ViewClassResults() {
 
             <h1>{quizTitle} Results</h1>
             <h3>Below are the scores for this test</h3>
-            {userQuizTakes?.map((userQuizTake, index) => (
+            {userQuizTakes && (
                 <div className={styles.tableContainer}> {/* Apply the container style */}
                     <table className={styles.table}> {/* Apply the table style */}
                         <thead>
@@ -73,7 +73,7 @@ function ViewClassResults() {
 
 
 
-            ))}
+            )}
 
 
         </>
