@@ -76,8 +76,12 @@ function Profile() {
                     <ProfilePage badges={badges} user={chosenUser!} />
                 </>
             )}
+            {params.user_id ? (
+                <></>
+            ) : (
+                <Button onClick={() => signOut()} title='Sign Out' />
 
-            <Button onClick={() => signOut()} title='Sign Out' />
+            )}
 
 
         </>
