@@ -16,7 +16,7 @@ enum RoutesChoice {
     AddQuiz = '/teacher/add-quiz/:moduleId',
     TakeQuiz = '/teacher/take-quiz/:moduleId/:quizId',
     ViewFullClass = '/teacher/view-full-class/:moduleId',
-    Profile = '/profile'
+    Profile = '/profile/:userId?',
 }
 
 export default RoutesChoice;

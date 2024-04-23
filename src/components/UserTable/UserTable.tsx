@@ -1,7 +1,8 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, Route, generatePath, parsePath, useNavigate, useParams } from 'react-router-dom';
 import styles from '@components/UserTable/UserTable.module.scss';
 import Button from '@components/Button/Button';
 import PointsBox from '@components/PointsBox/PointsBox';
+import RoutesChoice from '@enums/Routes';
 
 interface UserTableProps {
     users: User[];
@@ -15,6 +16,21 @@ function UserTable(props: UserTableProps) {
 
     sortedUsers = [...users].sort((a, b) => b.points! - a.points!);
 
+    const navigate = useNavigate()
+    const params = useParams()
+
+
+    const handleProfileRedirect = (userId: string) => {
+        console.log(userId)
+        if (userId) {
+            
+            const path = generatePath(RoutesChoice.Profile, { userId });
+            navigate(path);
+        
+
+        }
+
+    }
 
     return (
         <div className={styles.tableContainer}>
@@ -47,14 +63,16 @@ function UserTable(props: UserTableProps) {
 
                         sortedUsers.map((user, index) => (
                             <tr key={index} className={index % 2 === 0 ? styles.lightBlueRow : styles.lighterBlueRow}>
-                                
+
                                 <td>{index+1}</td>
-                                <td>{user.nickname}</td>
+                                <td><button className={styles.Button} onClick={() => handleProfileRedirect(user.id!)}>{user.nickname} </button></td>
+
                                 <td className={styles.pointsBoxContainer}>
                                     <PointsBox
                                         points={user.points}
                                     />
                                 </td>
+                
                             </tr>
                         ))
 
@@ -62,7 +80,7 @@ function UserTable(props: UserTableProps) {
 
                         users.map((user, index) => (
                             <tr key={index} className={index % 2 === 0 ? styles.lightBlueRow : styles.lighterBlueRow}>
-                                <td>{user.name}</td>
+                                <td>{user.nickname}</td>
                                 <td>{user.email}</td>
                                 <td>{user.nickname}</td>
                             </tr>

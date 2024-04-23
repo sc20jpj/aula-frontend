@@ -4,6 +4,7 @@ import BadgeImage from '@components/BadgeImage/BadgeImage';
 import AccordionContainer from '@components/AccordionContainer/AccodionContainer';
 import styles from "@components/ProfilePage/ProfilePage.module.scss"
 import ProfileButton from '@components/ProfileButton/ProfileButton';
+import { useParams } from 'react-router-dom';
 interface ProfilePage {
     user: User
     badges: Badge[],
@@ -11,7 +12,7 @@ interface ProfilePage {
 
 function ProfilePage(props: ProfilePage) {
     const { badges, user } = props;
-
+    const params = useParams()
 
     return (
         <div >
@@ -49,7 +50,14 @@ function ProfilePage(props: ProfilePage) {
 
                         </AccordionContainer>
                     ) : (
-                        <p>You have no badges yet </p>
+
+                        params.userId ? (
+                            <p>{user.nickname} has no badges yet </p>
+
+                        ) : ( 
+                            <p>You have no badges yet </p>
+
+                        )
                     )}
 
                 </>

@@ -13,6 +13,7 @@ import TextInput from '@components/Inputs/TextInput/TextInput';
 import { API } from '@lib/APi';
 import NavBar from '@components/NavBar/NavBar';
 import styles from "@views/SignIn/SignIn.module.scss"
+
 function VerficationCode() {
 
     const dispatch = useAppDispatch()

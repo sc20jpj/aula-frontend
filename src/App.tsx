@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { auth, getCurrentSession } from '@store/auth/authSlice';
 import SignUp from '@views/SignUp/SignUp';
 import SignIn from '@views/SignIn/SignIn';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, generatePath } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import RoutesChoice from '@enums/Routes';
 import LoggedInWrapper from '@components/LoggedInWrapper/LoggedInWrapper';
@@ -30,8 +30,7 @@ function App() {
   const state = useAppSelector(auth);
   const dispatch = useAppDispatch();
 
-
-
+  
 
   return (
 
@@ -77,7 +76,7 @@ function App() {
 
           } />
 
-          <Route path={RoutesChoice.Profile} element={
+          <Route path={RoutesChoice.Profile}  element={
             <LoggedInWrapper studentOnly={true}>  <Profile /></LoggedInWrapper>
 
           } />

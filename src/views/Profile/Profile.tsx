@@ -3,7 +3,7 @@ import { useAppDispatch } from '@store/hooks';
 import {
     auth, sendSignOut,
 } from '@store/auth/authSlice'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import RoutesChoice from '@enums/Routes';
 import Button from '@components/Button/Button'
 import { useEffect, useState } from 'react';
@@ -14,34 +14,44 @@ import ProfilePage from '@components/ProfilePage/ProfilePage';
 function Profile() {
 
     const dispatch = useAppDispatch()
+    const params = useParams()
     const state = useSelector(auth);
     const navigate = useNavigate()
     const current_user = useSelector(user);
+    const [chosenUser, setUser] = useState<User | null>()
+
     const [badges, setBadges] = useState<Badge[]>()
 
 
-    useEffect(() => {
-        console.log("teacher : ", state.teacher)
-        dispatch(checkUser()).then((res) => {
-            if (state.teacher) {
-                navigate(RoutesChoice.TeacherPortal)
-            }
-        })
-
-
-    }, [])
 
 
     const getBadagesforUser = () => {
-
-
-        API.getBadgesforCurrentUser()
+        console.log(params)
+        if(params.userId ) {
+            API.getBadgesforCurrentUser(params.userId)
             .then((res) => {
+                setUser(res)
                 setBadges(res.badges)
             })
             .catch((res) => {
-
+    
             })
+        }
+        else{ 
+
+        API.getBadgesforCurrentUser()
+        .then((res) => {
+            if (current_user) {
+                
+                setUser(current_user)
+            }
+            setBadges(res.badges)
+        })
+        .catch((res) => {
+
+        })
+        }
+
 
     }
 
@@ -51,7 +61,7 @@ function Profile() {
         dispatch(sendSignOut())
             .unwrap()
             .then((res) => {
-                navigate("")
+                navigate(RoutesChoice.SignIn)
             })
 
     }
@@ -61,9 +71,9 @@ function Profile() {
 
     return (
         <>
-            {badges && current_user && (
+            {badges && current_user &&  (
                 <>
-                    <ProfilePage badges={badges} user={current_user} />
+                    <ProfilePage badges={badges} user={chosenUser!} />
                 </>
             )}
 

@@ -285,7 +285,7 @@ export class API {
 
         if (userId) {
             return new Promise<UserBadgesResponse>((resolve, reject) => {
-                axiosInstance.get(`${CONFIG.BASE_URL}/badges/all/${userId}}`)
+                axiosInstance.get(`${CONFIG.BASE_URL}/badges/all/${userId}`)
                     .then((res: AxiosResponse) => {
                         resolve(res.data.data);
                     })
