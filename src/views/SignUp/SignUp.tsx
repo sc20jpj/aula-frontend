@@ -39,7 +39,7 @@ function SignUp() {
   const isPasswordValid = (password: string) => {
 
 
-    const passwordRegex = /^(?=.*[!@#$%^&*()-_+=<>?]).*(?=.*\d).{8,}$/;
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])(?=.*[a-z]).{8,}$/;
 
     return passwordRegex.test(password);
   }
@@ -53,8 +53,10 @@ function SignUp() {
   const handleSignUpClick = async () => {
 
     // Replace with actual user input or data needed for sign-up
-
-    if (!state.nickname) {
+    if (!state.email) {
+      setError("Please enter an email ")
+    }
+    else if (!state.nickname) {
       setError("Please enter a nickname")
     }
     else if (!state.name) {
@@ -63,16 +65,13 @@ function SignUp() {
     else if (!state.password) {
       setError("Please enter a password")
     }
-    else if (!state.email) {
-      setError("Please enter an email ")
-    }
     else {
 
       if (isEmailValid(state.email) == false) {
         setError("Please enter a valid email")
       }
       else if (isPasswordValid(state.password) == false) {
-        setError("Please enter a valid password, Passwords must contain 8 characters a symbol and a number")
+        setError("Passwords must contain 8 characters a symbol and a number")
       }
 
       else {
@@ -123,8 +122,11 @@ function SignUp() {
             <TextInput title="password" value={state.password} isPassword={true} onChange={(value) => dispatch(setPassword(value))} />
 
           </>
+
+
           <div className={styles.buttonContainer}>
             <Button title="submit" onClick={() => handleSignUpClick()}></Button>
+
           </div>
           <p className={styles.error}>{error}</p>
 
