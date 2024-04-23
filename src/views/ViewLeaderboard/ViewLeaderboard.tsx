@@ -12,26 +12,31 @@ import styles from '@components/UserTable/UserTable.module.scss'; // Import your
 import PointsBox from '@components/PointsBox/PointsBox';
 import PointsBoxGroup from '@components/PointsBoxGroup/PointsBoxGroup';
 import UserTable from '@components/UserTable/UserTable';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 
 function ViewLeaderboard() {
     const [users, setUsers] = useState<User[]>();
     const state = useSelector(auth);
     const params = useParams()
+    const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
         getUsers();
     }, []);
 
     const getUsers = async () => {
-            API.getAllUsers()
-                .then((res) => {
-                    setUsers(res.users)
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        
+        API.getAllUsers()
+            .then((res) => {
+                setUsers(res.users)
+                setLoading(false)
+
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
 
     };
 
@@ -40,11 +45,17 @@ function ViewLeaderboard() {
 
             <h1>Aula leaderboard</h1>
             <p>here is the current leaderboard for the aula project across all classes</p>
+            {loading ? (
+                <>
+                    <FontAwesomeIcon icon={faSpinner} className='fa-spin' />
+                </>
+            ) : (
+                users && (
+                    <UserTable users={users} ordered={true} />
 
-            {users && (
-                <UserTable users={users} ordered={true} />
-
+                )
             )}
+
 
 
 

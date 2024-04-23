@@ -3,27 +3,40 @@ import styles from '@components/Inputs/CheckboxInput/CheckBoxInput.module.scss';
 
 interface CheckboxInputProps {
     title: string;
-    onChange: (value: boolean) => void;
+    onChange?: (value: boolean) => void;
+    onChangeChoice?: (questionId: string, choiceId: string) => void;
+    choiceId?: string;
+    questionId?: string
     checked?: boolean;
 }
 
 function CheckboxInput(props: CheckboxInputProps) {
-    const { title, onChange, checked } = props;
+    const { title, choiceId, questionId, onChangeChoice, onChange } = props;
+    var checked = props.checked
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.checked;
-        onChange(inputValue);
+        if (questionId && choiceId && onChangeChoice) {
+            onChangeChoice(questionId, choiceId)
+        }
+        else {
+            if (onChange) {
+                onChange(inputValue)
+
+            }
+        }
     };
 
     return (
         <div className={styles.checkBoxWrapper}>
-            
-                <input
-                    type='checkbox'
-                    className={styles.checkBoxInput}
-                    checked={checked}
-                    onChange={handleInputChange}
-                />
+
+            <input
+                type='checkbox'
+                className={styles.checkBoxInput}
+                checked={checked}
+
+                onChange={handleInputChange}
+            />
 
             <label className={styles.checkBoxLabel}>
                 <p>{title}</p>

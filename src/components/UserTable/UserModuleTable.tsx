@@ -11,7 +11,7 @@ function UserModuleTable(props: UserModuleTableProps) {
     const { users } = props;
     var sortedUsers: UserModuleResponse[];
 
-    sortedUsers = [...users].sort((a, b) => b.points! - a.points!);
+    sortedUsers = [...users].sort((a, b) => b.user_module.points! - a.user_module.points!);
 
 
     return (

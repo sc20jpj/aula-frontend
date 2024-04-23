@@ -9,6 +9,8 @@ import { useAppDispatch } from '@store/hooks';
 import { quizState, setQuiz, setQuizWithChoice, setQuizWithQuestions, takeQuiz, userQuestions, getQuiz, clearQuiz } from '@store/quiz/quizSlice';
 import styles from "@views/TakeQuiz/TakeQuiz.module.scss"
 import PointsBox from '@components/PointsBox/PointsBox';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 function TakeQuiz() {
 
@@ -19,6 +21,9 @@ function TakeQuiz() {
 
     const [description, setDescription] = useState<string>("")
     const [error, setError] = useState<string>("")
+
+    const [loading, setLoading] = useState<boolean>(true)
+
     const dispatch = useAppDispatch();
     const quiz = useSelector(quizState);
     const userQuestionChoices = useSelector(userQuestions)
@@ -31,12 +36,13 @@ function TakeQuiz() {
     const renderChoices = (question: Question) => {
         return (
             question.id && question.choices && question.choices.map((choice, choiceKey) => (
-                <div key={choiceKey} className={styles.choiceWrapper} onClick={() =>handleChoiceChange(question.id!, choice.id!)}>
+                <div key={choiceKey} className={styles.choiceWrapper} onClick={() => handleChoiceChange(question.id!, choice.id!)}>
                     <CheckboxInput
                         title={choice.description ? choice.description : ""}
-                        onChange={() => handleChoiceChange(question.id!, choice.id!)}
+                        onChangeChoice={() => handleChoiceChange(question.id!, choice.id!)}
                         checked={isChoiceChecked(question.id!, choice.id!)} // Check if the choice is checked based on userQuestions
                     />
+
                 </div>
             ))
         );
@@ -67,6 +73,8 @@ function TakeQuiz() {
             userQuestions: userQuestionChoices
         }
         console.log("userQuestion request is ", userQuestionRequest)
+        setLoading(true)
+
         dispatch(takeQuiz(userQuestionRequest))
             .unwrap()
             .then((res) => {
@@ -74,14 +82,19 @@ function TakeQuiz() {
                 dispatch(clearQuiz())
                 const path = generatePath(RoutesChoice.ViewFullClass, { moduleId });
                 navigate(path);
-                
+                setLoading(false)
+
+            })
+            .catch((error) => {
+                setLoading(false)
+                setError("there was an errorr with your quiz please contact an adminstrator")
             })
     }
 
 
     const handleChoiceChange = (questionId: string, choiceId: string) => {
         // Dispatch an action to update the Redux store with the selected choice
-        console.log("ran")
+        console.log("Choice change ran")
         dispatch(setQuizWithChoice({ questionId, choiceId }));
     }
 
@@ -96,8 +109,12 @@ function TakeQuiz() {
             console.log(params)
             if (!quiz) {
                 dispatch(getQuiz(params.quizId))
+                setLoading(false)
+
+
             }
             else {
+                setLoading(false)
 
             }
 
@@ -109,39 +126,46 @@ function TakeQuiz() {
 
     return (
         <>
-
-
             {quiz && quiz.id === params.quizId ? (
                 <div className={styles.container}>
                     <h1>{quiz.title}</h1>
                     <div className={styles.inputContainer}>
-                        {quiz.questions && quiz.questions.length !== 0 && (
-                            <div>
-                                {quiz.questions.map((question, key) => (
-                                    <div key={key}>
-
-                                        <div className={styles.questionBox}>
-                                            <h3>Question {key + 1}</h3>
-                                            <PointsBox points={question.points}></PointsBox>
-                                        </div>
-
-                                        <h4>{question.description}</h4>
-
-                                        {question.id && question.choices && (
-                                            <>
-                                                {renderChoices(question)}
-                                            </>
-                                        )}
+                        {loading ? (
+                            <>
+                                <FontAwesomeIcon icon={faSpinner} className='fa-spin' />
+                            </>
+                        ) : (
+                            <>
+                                {quiz.questions && quiz.questions.length !== 0 && (
+                                    <div>
+                                        {quiz.questions.map((question, key) => (
+                                            <div key={key}>
+                                                <div className={styles.questionBox}>
+                                                    <h3>Question {key + 1}</h3>
+                                                    <PointsBox points={question.points}></PointsBox>
+                                                </div>
+                                                <h4>{question.description}</h4>
+                                                {question.id && question.choices && (
+                                                    <>
+                                                        {renderChoices(question)}
+                                                    </>
+                                                )}
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
+                                )}
+                                {error && <p>{error}</p>}
+                            </>
+                        )}
+                        {loading ? (
+                            <>
+                                <FontAwesomeIcon icon={faSpinner} className='fa-spin' />
+                            </>
+                        ) : (
+                            <div className={styles.buttonContainer}>
+                                <Button title="submit" onClick={() => handleSubmit()}></Button>
                             </div>
                         )}
-                        {error && (
-                            <p>{error}</p>
-                        )}
-                        <div className={styles.buttonContainer}>
-                            <Button title="submit" onClick={() => handleSubmit()}></Button>
-                        </div>
                     </div>
                 </div>
             ) : (
@@ -150,9 +174,6 @@ function TakeQuiz() {
                 </>
             )}
         </>
-
-
-    )
+    );
 }
-
 export default TakeQuiz;

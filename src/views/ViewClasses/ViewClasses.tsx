@@ -9,11 +9,14 @@ import { useSelector } from 'react-redux';
 import { useNavigate, generatePath } from 'react-router-dom';
 import RoutesChoice from '@enums/Routes';
 import { auth } from '@store/auth/authSlice';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 
 function ViewClasses() {
     const [modules, setModules] = useState<ModuleResponse[]>();
     const state = useSelector(auth);
+    const [loading, setLoading] = useState<boolean>(true)
 
     const navigate = useNavigate()
     const current_user = useSelector(user)
@@ -24,7 +27,7 @@ function ViewClasses() {
     }, []);
 
     const getModules = async () => {
-
+        
         if (current_user?.id) {
             API.getAllUserModules(current_user?.id)
                 .then((res) => {
@@ -32,6 +35,7 @@ function ViewClasses() {
                         setModules(res);
 
                     }
+                    setLoading(false)
                 })
                 .catch((error) => {
                     console.log(error);
@@ -67,18 +71,30 @@ function ViewClasses() {
             <div className={styles.moduleContainer} >
 
 
-                {modules ? (
-                    modules.map((module, index) => (
 
-                        <div key={index} className={styles.moduleWrapper}>
+                    {loading ? (
+                        <>
+                            <FontAwesomeIcon icon={faSpinner} className='fa-spin' />
+                        </>
+                    ) : (
 
-                            <ModuleBox module={module} onClick={() => handleRedirect(module.id)} />
+                        modules  ? (
+                            modules.map((module, index) => (
 
-                        </div>
-                    ))
-                ) : (
-                    <p>You haven't added any classes yet</p>
-                )}
+                                <div key={index} className={styles.moduleWrapper}>
+    
+                                    <ModuleBox module={module} onClick={() => handleRedirect(module.id)} />
+    
+                                </div>
+                            ))
+                        ) : (
+                            <p>You have not be added to any classes yet </p>
+                        )
+
+                    )}
+
+
+
             </div>
         </>
 
