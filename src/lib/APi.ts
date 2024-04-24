@@ -10,50 +10,57 @@ export const axiosInstance = axios.create({
 
 });
 
-axiosInstance.interceptors.request.use(         
-// @ts-ignore
-config => {
-    const state = store.getState();
-    const accessToken = state.auth.idToken;
-    if (config.headers) {
+axiosInstance.interceptors.request.use(
+    // @ts-ignore
+    config => {
+        const state = store.getState();
+        const accessToken = state.auth.idToken;
+        if (config.headers) {
 
-        if (accessToken) {
-            config.headers['Authorization'] = `Bearer ${accessToken}`;
+            if (accessToken) {
+                config.headers['Authorization'] = `Bearer ${accessToken}`;
+            }
+
+
+            config.headers['Content-Type'] = 'application/json';
+
         }
-        
 
-        config.headers['Content-Type'] = 'application/json';
-        
-    }
-
-    return config;
-});
+        return config;
+    });
 
 
 
 axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
-      if (error.response && error.response.status === 401) {
-        // Access token has expired, refresh it
-        try {
-          const newAccessToken = await fetchAuthSession();
-          newAccessToken.tokens?.idToken
-          // Update the request headers with the new access token
-          error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
-          // Retry the original request
+        if (error.response && error.response.status === 401) {
+            // Access token has expired, refresh it
+            try {
+                const state = store.getState();
 
-          console.log("ran")
-          return axiosInstance(error.config);
-        } catch (refreshError) {
-          // Handle token refresh error
-          throw refreshError;
+                const newAccessToken = await fetchAuthSession();
+                state.auth.idToken = newAccessToken.tokens?.idToken?.toString()
+                newAccessToken.tokens?.idToken
+                if (newAccessToken == undefined ){
+                    state.auth.loggedIn = false;
+            
+                }
+                // Update the request headers with the new access token
+                error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                // Retry the original request
+
+                console.log("ran")
+                return axiosInstance(error.config);
+            } catch (refreshError) {
+                // Handle token refresh error
+                throw refreshError;
+            }
         }
-      }
-      return Promise.reject(error);
+        return Promise.reject(error);
     }
-  );
-  
+);
+
 
 
 export class API {
