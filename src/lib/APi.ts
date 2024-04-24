@@ -35,23 +35,23 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
         if (error.response && error.response.status === 401) {
-            // Access token has expired, refresh it
             try {
                 const state = store.getState();
 
                 const newAccessToken = await fetchAuthSession();
-                state.auth.idToken = newAccessToken.tokens?.idToken?.toString()
-                newAccessToken.tokens?.idToken
-                if (newAccessToken == undefined ){
+                if (newAccessToken == undefined) {
                     state.auth.loggedIn = false;
-            
-                }
-                // Update the request headers with the new access token
-                error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                // Retry the original request
+                    console.log("session expired")
 
-                console.log("ran")
-                return axiosInstance(error.config);
+                }
+                else {
+                    state.auth.idToken = newAccessToken.tokens?.idToken?.toString()
+                    error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
+
+                    console.log("ran")
+                    return axiosInstance(error.config);
+                }
+
             } catch (refreshError) {
                 // Handle token refresh error
                 throw refreshError;
