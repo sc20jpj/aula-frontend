@@ -1,3 +1,3 @@
 export const CONFIG = {
-    BASE_URL:  "http://127.0.0.1:5000"
+    BASE_URL:  "https://z9zd3873c0.execute-api.eu-west-2.amazonaws.com/dev"
 }
