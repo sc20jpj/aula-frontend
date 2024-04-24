@@ -119,7 +119,7 @@ function TakeQuiz() {
             }
 
         }
-    }, [params.quizId]);
+    }, []);
 
 
 
