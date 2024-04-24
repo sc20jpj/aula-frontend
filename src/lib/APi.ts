@@ -9,6 +9,30 @@ import { fetchAuthSession } from 'aws-amplify/auth';
 export const axiosInstance = axios.create({
 
 });
+axiosInstance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        if (error.response && error.response.status === 401) {
+            try {
+                const state = store.getState();
+
+                const newAccessToken = await fetchAuthSession({ forceRefresh: true });
+                var accessToken = newAccessToken.tokens?.idToken?.toString()
+                error.config.headers['Authorization'] = `Bearer ${accessToken}`;
+
+                console.log("ran")
+                console.log(accessToken)
+                return axiosInstance(error.config);
+
+
+            } catch (refreshError) {
+                // Handle token refresh error
+                throw refreshError;
+            }
+        }
+        return Promise.reject(error);
+    }
+);
 
 axiosInstance.interceptors.request.use(
     // @ts-ignore
@@ -31,29 +55,7 @@ axiosInstance.interceptors.request.use(
 
 
 
-axiosInstance.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-        if (error.response && error.response.status === 401) {
-            try {
-                const state = store.getState();
 
-                const newAccessToken = await fetchAuthSession({ forceRefresh: true });
-                var accessToken = newAccessToken.tokens?.idToken?.toString()
-                error.config.headers['Authorization'] = `Bearer ${accessToken}`;
-
-                console.log("ran")
-                return axiosInstance(error.config);
-
-
-            } catch (refreshError) {
-                // Handle token refresh error
-                throw refreshError;
-            }
-        }
-        return Promise.reject(error);
-    }
-);
 
 
 
