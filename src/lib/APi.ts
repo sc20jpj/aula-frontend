@@ -38,7 +38,7 @@ axiosInstance.interceptors.response.use(
         // Access token has expired, refresh it
         try {
           const newAccessToken = await fetchAuthSession();
-          newAccessToken.tokens?.accessToken
+          newAccessToken.tokens?.idToken
           // Update the request headers with the new access token
           error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
           // Retry the original request
