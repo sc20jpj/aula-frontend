@@ -4,11 +4,11 @@ import { useAppDispatch } from '@store/hooks';
 import axios, { AxiosInstance, AxiosError, AxiosResponse } from 'axios';
 import { useSelector } from 'react-redux';
 import { store } from "@store/store"
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 export const axiosInstance = axios.create({
 
 });
-
 
 axiosInstance.interceptors.request.use(         
 // @ts-ignore
@@ -20,18 +20,40 @@ config => {
         if (accessToken) {
             config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
-
+        
 
         config.headers['Content-Type'] = 'application/json';
-
-
-
+        
     }
 
     return config;
 });
 
 
+
+axiosInstance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      if (error.response && error.response.status === 401) {
+        // Access token has expired, refresh it
+        try {
+          const newAccessToken = await fetchAuthSession();
+          newAccessToken.tokens?.accessToken
+          // Update the request headers with the new access token
+          error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
+          // Retry the original request
+
+          console.log("ran")
+          return axiosInstance(error.config);
+        } catch (refreshError) {
+          // Handle token refresh error
+          throw refreshError;
+        }
+      }
+      return Promise.reject(error);
+    }
+  );
+  
 
 
 export class API {

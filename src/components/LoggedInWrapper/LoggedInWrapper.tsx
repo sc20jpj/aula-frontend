@@ -40,21 +40,23 @@ function LoggedInWrapper(props: LoggedInWrapperProps) {
             .catch((error) => {
                 console.log(error);
             });
-    }, [location.pathname]); // Add location.pathname as a dependency
+    }, []); // Add location.pathname as a dependency
+
+
 
     // might want to change this but allows it so the ID never gets old
+
     useEffect(() => {
         const intervalId = setInterval(() => {
             dispatch(getCurrentSession())
                 .unwrap()
                 .then((response) => {
-                    const res = dispatch(checkUser());
-                    return res;
+                    console.log(state.accessToken)
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-        }, 300000);
+        }, 30000);
     
         return () => {
             clearInterval(intervalId);
