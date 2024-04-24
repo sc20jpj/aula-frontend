@@ -107,16 +107,11 @@ function TakeQuiz() {
             setModuleId(params.moduleId)
 
             console.log(params)
-            if (!quiz) {
-                dispatch(getQuiz(params.quizId))
-                setLoading(false)
+
+            dispatch(getQuiz(params.quizId))
+            setLoading(false)
 
 
-            }
-            else {
-                setLoading(false)
-
-            }
 
         }
     }, []);
@@ -126,9 +121,10 @@ function TakeQuiz() {
 
     return (
         <>
-            {quiz && quiz.id === params.quizId ? (
+            {quiz  ? (
                 <div className={styles.container}>
                     <h1>{quiz.title}</h1>
+                    <p>{quiz.description}</p>
                     <div className={styles.inputContainer}>
                         {loading ? (
                             <>
@@ -170,7 +166,7 @@ function TakeQuiz() {
                 </div>
             ) : (
                 <>
-                    <p>You can only take one quiz at a time. Please finish the current quiz {quiz?.title} </p>
+                    <p>issue launching the quiz please retake </p>
                 </>
             )}
         </>
