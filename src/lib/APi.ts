@@ -36,12 +36,12 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         if (error.response && error.response.status === 401) {
             try {
-                const state = store.getState();
+                const state = store.getState(); 
 
-                const newAccessToken = await fetchAuthSession();
+                const newAccessToken = await fetchAuthSession({forceRefresh: true});
                 if (newAccessToken == undefined) {
-                    state.auth.loggedIn = false;
-                    console.log("session expired")
+                    state.auth.loggedIn = false; 
+                    console.log("session")
 
                 }
                 else {
