@@ -39,8 +39,8 @@ axiosInstance.interceptors.response.use(
                 const state = store.getState();
 
                 const newAccessToken = await fetchAuthSession({ forceRefresh: true });
-
-                error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                var accessToken = newAccessToken.tokens?.idToken?.toString()
+                error.config.headers['Authorization'] = `Bearer ${accessToken}`;
 
                 console.log("ran")
                 return axiosInstance(error.config);
