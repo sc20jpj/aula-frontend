@@ -36,21 +36,15 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         if (error.response && error.response.status === 401) {
             try {
-                const state = store.getState(); 
+                const state = store.getState();
 
-                const newAccessToken = await fetchAuthSession({forceRefresh: true});
-                if (newAccessToken == undefined) {
-                    state.auth.loggedIn = false; 
-                    console.log("session")
+                const newAccessToken = await fetchAuthSession({ forceRefresh: true });
 
-                }
-                else {
-                    state.auth.idToken = newAccessToken.tokens?.idToken?.toString()
-                    error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
 
-                    console.log("ran")
-                    return axiosInstance(error.config);
-                }
+                console.log("ran")
+                return axiosInstance(error.config);
+
 
             } catch (refreshError) {
                 // Handle token refresh error
